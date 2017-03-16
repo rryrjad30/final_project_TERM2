@@ -1,3 +1,7 @@
+
+import javax.swing.SpinnerModel;
+import javax.swing.SpinnerNumberModel;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -16,9 +20,17 @@ public class JdialogDataPenyewa extends javax.swing.JDialog {
     public JdialogDataPenyewa(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        SpinnerModel tanggal = new SpinnerNumberModel(1,1,31,1);
+        SpinnerModel bulan = new SpinnerNumberModel(1,1,12,1);
+        SpinnerModel tahun = new SpinnerNumberModel(1,1950,2017,1);
+        spiTanggal.setModel(tanggal);
+        spiBulan.setModel(bulan);
+        spiTahun.setModel(tahun);
         
         setLocationRelativeTo(null);
     }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -39,7 +51,6 @@ public class JdialogDataPenyewa extends javax.swing.JDialog {
         lblHp = new javax.swing.JLabel();
         txtNama = new javax.swing.JTextField();
         txtTempatLahir = new javax.swing.JTextField();
-        txtTanggalLahir = new javax.swing.JTextField();
         rdoLaki = new javax.swing.JRadioButton();
         rdoPerempuan = new javax.swing.JRadioButton();
         btnCreate = new javax.swing.JButton();
@@ -49,8 +60,6 @@ public class JdialogDataPenyewa extends javax.swing.JDialog {
         lblAlamatPenyewa = new javax.swing.JLabel();
         txtAlamatPenyewa = new javax.swing.JTextField();
         txtIDPenyewa = new javax.swing.JTextField();
-        txtBulanLahir = new javax.swing.JTextField();
-        txtTahunLahir = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         lblNoHp = new javax.swing.JLabel();
@@ -59,6 +68,9 @@ public class JdialogDataPenyewa extends javax.swing.JDialog {
         btnNormal = new javax.swing.JRadioButton();
         btnSpesial = new javax.swing.JRadioButton();
         btnBack = new javax.swing.JButton();
+        spiTanggal = new javax.swing.JSpinner();
+        spiBulan = new javax.swing.JSpinner();
+        spiTahun = new javax.swing.JSpinner();
         lblLogo = new javax.swing.JLabel();
         lblLibrary = new javax.swing.JLabel();
         lblAlamat = new javax.swing.JLabel();
@@ -117,8 +129,6 @@ public class JdialogDataPenyewa extends javax.swing.JDialog {
 
         txtTempatLahir.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
 
-        txtTanggalLahir.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-
         BtnGroup.add(rdoLaki);
         rdoLaki.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         rdoLaki.setText("Laki- Laki");
@@ -148,10 +158,6 @@ public class JdialogDataPenyewa extends javax.swing.JDialog {
 
         txtIDPenyewa.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         txtIDPenyewa.setText("...");
-
-        txtBulanLahir.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-
-        txtTahunLahir.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
 
         jLabel1.setText("-");
 
@@ -203,28 +209,27 @@ public class JdialogDataPenyewa extends javax.swing.JDialog {
                             .addComponent(txtTempatLahir)
                             .addComponent(txtAlamatPenyewa)
                             .addGroup(pnlDataPenyewaLayout.createSequentialGroup()
-                                .addComponent(txtTanggalLahir, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(spiTanggal, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 9, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtBulanLahir, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(spiBulan, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 9, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtTahunLahir, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(spiTahun, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(txtNoHP, javax.swing.GroupLayout.PREFERRED_SIZE, 324, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(pnlDataPenyewaLayout.createSequentialGroup()
                                 .addComponent(btnNormal)
                                 .addGap(71, 71, 71)
-                                .addComponent(btnSpesial)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(btnSpesial))))
                     .addGroup(pnlDataPenyewaLayout.createSequentialGroup()
                         .addComponent(lblJenisKelamin)
                         .addGap(18, 18, 18)
                         .addComponent(rdoLaki)
                         .addGap(71, 71, 71)
-                        .addComponent(rdoPerempuan)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(rdoPerempuan)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
                 .addGroup(pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(btnCreate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -261,13 +266,14 @@ public class JdialogDataPenyewa extends javax.swing.JDialog {
                                     .addComponent(lblTempatLahir)
                                     .addComponent(txtTempatLahir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(txtTanggalLahir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(lblHp)
-                                    .addComponent(txtBulanLahir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtTahunLahir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel1)
-                                    .addComponent(jLabel2))
+                                .addGroup(pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(spiTanggal, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(lblHp)
+                                        .addComponent(jLabel1)
+                                        .addComponent(jLabel2)
+                                        .addComponent(spiBulan, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(spiTahun, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addGroup(pnlDataPenyewaLayout.createSequentialGroup()
@@ -293,7 +299,7 @@ public class JdialogDataPenyewa extends javax.swing.JDialog {
                         .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnBack, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtIDPenyewa, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -397,14 +403,14 @@ public class JdialogDataPenyewa extends javax.swing.JDialog {
     private javax.swing.JPanel pnlDataPenyewa;
     private javax.swing.JRadioButton rdoLaki;
     private javax.swing.JRadioButton rdoPerempuan;
+    private javax.swing.JSpinner spiBulan;
+    private javax.swing.JSpinner spiTahun;
+    private javax.swing.JSpinner spiTanggal;
     private javax.swing.JTable tblPenyewa;
     private javax.swing.JTextField txtAlamatPenyewa;
-    private javax.swing.JTextField txtBulanLahir;
     private javax.swing.JTextField txtIDPenyewa;
     private javax.swing.JTextField txtNama;
     private javax.swing.JTextField txtNoHP;
-    private javax.swing.JTextField txtTahunLahir;
-    private javax.swing.JTextField txtTanggalLahir;
     private javax.swing.JTextField txtTempatLahir;
     // End of variables declaration//GEN-END:variables
 }

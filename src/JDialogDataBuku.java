@@ -60,6 +60,7 @@ public class JDialogDataBuku extends javax.swing.JDialog {
         lblKeterangan = new javax.swing.JLabel();
         txtKeterangan = new javax.swing.JTextField();
         btnBack = new javax.swing.JButton();
+        btnSearch = new javax.swing.JButton();
         lblLogo = new javax.swing.JLabel();
         lblLibrary = new javax.swing.JLabel();
         lblAlamat = new javax.swing.JLabel();
@@ -162,6 +163,8 @@ public class JDialogDataBuku extends javax.swing.JDialog {
             }
         });
 
+        btnSearch.setText("Search");
+
         javax.swing.GroupLayout pnlDataBukuLayout = new javax.swing.GroupLayout(pnlDataBuku);
         pnlDataBuku.setLayout(pnlDataBukuLayout);
         pnlDataBukuLayout.setHorizontalGroup(
@@ -216,7 +219,9 @@ public class JDialogDataBuku extends javax.swing.JDialog {
                                 .addComponent(lblSearch)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap(138, Short.MAX_VALUE))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnSearch)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlDataBukuLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnBack, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -260,7 +265,8 @@ public class JDialogDataBuku extends javax.swing.JDialog {
                         .addGap(25, 25, 25)
                         .addGroup(pnlDataBukuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblSearch)
-                            .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnSearch))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel3)))
                 .addGroup(pnlDataBukuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -354,6 +360,7 @@ public class JDialogDataBuku extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack;
+    private javax.swing.JButton btnSearch;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane2;
