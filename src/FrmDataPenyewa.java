@@ -28,6 +28,7 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         pnlDataPenyewa = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblPenyewa = new javax.swing.JTable();
@@ -116,9 +117,11 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
 
         txtTempatLahir.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
 
+        buttonGroup1.add(rdoLaki);
         rdoLaki.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         rdoLaki.setText("Laki- Laki");
 
+        buttonGroup1.add(rdoPerempuan);
         rdoPerempuan.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         rdoPerempuan.setText("Perempuan");
 
@@ -166,9 +169,11 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
         lblJenis.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lblJenis.setText("Jenis Penyewa");
 
+        buttonGroup1.add(btnNormal);
         btnNormal.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnNormal.setText("Normal");
 
+        buttonGroup1.add(btnSpesial);
         btnSpesial.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnSpesial.setText("Spesial");
 
@@ -216,9 +221,9 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
                                     .addComponent(txtIDPenyewa, javax.swing.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE)
                                     .addComponent(txtNama)))
                             .addGroup(pnlDataPenyewaLayout.createSequentialGroup()
-                                .addGap(65, 65, 65)
+                                .addGap(17, 17, 17)
                                 .addComponent(rdoLaki)
-                                .addGap(71, 71, 71)
+                                .addGap(37, 37, 37)
                                 .addComponent(rdoPerempuan))
                             .addGroup(pnlDataPenyewaLayout.createSequentialGroup()
                                 .addGap(17, 17, 17)
@@ -252,7 +257,7 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
                         .addGroup(pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(pnlDataPenyewaLayout.createSequentialGroup()
                                 .addComponent(btnNormal)
-                                .addGap(93, 93, 93)
+                                .addGap(50, 50, 50)
                                 .addComponent(btnSpesial))
                             .addComponent(txtNoHP, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
@@ -282,10 +287,9 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
                                     .addComponent(lblNama)
                                     .addComponent(txtNama, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(lblJenisKelamin)
-                                        .addComponent(rdoPerempuan))
+                                .addGroup(pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(lblJenisKelamin)
+                                    .addComponent(rdoPerempuan)
                                     .addComponent(rdoLaki))
                                 .addGap(2, 2, 2)
                                 .addGroup(pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -312,10 +316,9 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
                             .addComponent(txtNoHP, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblNoHp))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(btnNormal)
-                                .addComponent(lblJenis))
+                        .addGroup(pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnNormal)
+                            .addComponent(lblJenis)
                             .addComponent(btnSpesial))))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -366,6 +369,7 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
     private javax.swing.JRadioButton btnNormal;
     private javax.swing.JRadioButton btnSpesial;
     private javax.swing.JButton btnUpdate;
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;

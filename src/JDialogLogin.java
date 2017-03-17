@@ -91,14 +91,12 @@ public class JDialogLogin extends javax.swing.JDialog {
         }
         if (!txtUsername.getText().trim().equals("admin") || !PassField.getText().trim().equals("admin")) {
             Sutil.mse(this, "Username or Password not match!");
-        } else if (txtUsername.getText().trim().equals("") || PassField.getText().trim().equals("")) {
-            Sutil.mse(this, "Username or Password can not empty!");
-        } else {
             txtUsername.setText("");
             PassField.setText("");
-            this.dispose();
-            FrmMain main = new FrmMain();
-            main.setVisible(true);
+        } else if (txtUsername.getText().trim().equals("") || PassField.getText().trim().equals("")) {
+            Sutil.mse(this, "Username or Password can not empty!");
+            txtUsername.setText("");
+            PassField.setText("");
         }
     }//GEN-LAST:event_btnLogInActionPerformed
 

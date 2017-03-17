@@ -132,7 +132,7 @@ public class FrmDataBuku extends javax.swing.JFrame {
         lblKategoriBuku.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lblKategoriBuku.setText("Kategori Buku");
 
-        spnTahun.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        spnTahun.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
         lblISBN.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lblISBN.setText("ISBN");
