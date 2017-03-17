@@ -71,12 +71,15 @@ public class JdialogDataPenyewa extends javax.swing.JDialog {
         spiTanggal = new javax.swing.JSpinner();
         spiBulan = new javax.swing.JSpinner();
         spiTahun = new javax.swing.JSpinner();
+        lblNama1 = new javax.swing.JLabel();
         lblLogo = new javax.swing.JLabel();
         lblLibrary = new javax.swing.JLabel();
         lblAlamat = new javax.swing.JLabel();
         lblBack = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setBackground(new java.awt.Color(255, 255, 255));
+        setForeground(new java.awt.Color(255, 255, 255));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         pnlDataPenyewa.setBackground(new java.awt.Color(255, 255, 255));
@@ -108,16 +111,16 @@ public class JdialogDataPenyewa extends javax.swing.JDialog {
         });
         jScrollPane1.setViewportView(tblPenyewa);
 
-        lblNama.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        lblNama.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lblNama.setText("Nama");
 
-        lblJenisKelamin.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        lblJenisKelamin.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lblJenisKelamin.setText("Jenis Kelamin");
 
-        lblTempatLahir.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        lblTempatLahir.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lblTempatLahir.setText("Tempat Lahir");
 
-        lblHp.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        lblHp.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lblHp.setText("Tanggal Lahir");
 
         txtNama.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
@@ -130,85 +133,118 @@ public class JdialogDataPenyewa extends javax.swing.JDialog {
         txtTempatLahir.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
 
         BtnGroup.add(rdoLaki);
-        rdoLaki.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        rdoLaki.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         rdoLaki.setText("Laki- Laki");
 
         BtnGroup.add(rdoPerempuan);
-        rdoPerempuan.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        rdoPerempuan.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         rdoPerempuan.setText("Perempuan");
 
-        btnCreate.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        btnCreate.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnCreate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/add.png"))); // NOI18N
         btnCreate.setText("Create");
 
-        btnUpdate.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        btnUpdate.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnUpdate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/update.png"))); // NOI18N
         btnUpdate.setText("Update");
 
-        btnDelete.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        btnDelete.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/delete.png"))); // NOI18N
         btnDelete.setText("Delete");
 
         lblUserPict.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/user.png"))); // NOI18N
 
-        lblAlamatPenyewa.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        lblAlamatPenyewa.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lblAlamatPenyewa.setText("Alamat");
 
         txtAlamatPenyewa.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        txtAlamatPenyewa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtAlamatPenyewaActionPerformed(evt);
+            }
+        });
 
+        txtIDPenyewa.setEditable(false);
         txtIDPenyewa.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        txtIDPenyewa.setText("...");
+        txtIDPenyewa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtIDPenyewaActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("-");
 
         jLabel2.setText("-");
 
-        lblNoHp.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        lblNoHp.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lblNoHp.setText("No. Hp");
 
         txtNoHP.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
 
-        lblJenis.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        lblJenis.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lblJenis.setText("Jenis Penyewa");
 
         BtnGroup.add(btnNormal);
-        btnNormal.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        btnNormal.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnNormal.setText("Normal");
 
         BtnGroup.add(btnSpesial);
-        btnSpesial.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        btnSpesial.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnSpesial.setText("Spesial");
 
-        btnBack.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        btnBack.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnBack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/undo.png"))); // NOI18N
-        btnBack.setText("Back to Menu");
+        btnBack.setText("Menu");
         btnBack.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBackActionPerformed(evt);
             }
         });
 
+        lblNama1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblNama1.setText("ID_Nama");
+
         javax.swing.GroupLayout pnlDataPenyewaLayout = new javax.swing.GroupLayout(pnlDataPenyewa);
         pnlDataPenyewa.setLayout(pnlDataPenyewaLayout);
         pnlDataPenyewaLayout.setHorizontalGroup(
             pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlDataPenyewaLayout.createSequentialGroup()
-                .addGap(36, 36, 36)
+            .addGroup(pnlDataPenyewaLayout.createSequentialGroup()
+                .addGroup(pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlDataPenyewaLayout.createSequentialGroup()
+                        .addGap(29, 29, 29)
+                        .addGroup(pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(pnlDataPenyewaLayout.createSequentialGroup()
+                                    .addGroup(pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(lblNama)
+                                        .addComponent(lblJenisKelamin)
+                                        .addComponent(lblTempatLahir)
+                                        .addComponent(lblNama1)
+                                        .addComponent(lblAlamatPenyewa))
+                                    .addGap(1, 1, 1))
+                                .addComponent(lblNoHp, javax.swing.GroupLayout.Alignment.TRAILING))
+                            .addComponent(lblJenis)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlDataPenyewaLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(lblHp)))
                 .addGroup(pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlDataPenyewaLayout.createSequentialGroup()
                         .addGroup(pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblNama)
-                            .addComponent(lblTempatLahir)
-                            .addComponent(lblHp)
-                            .addComponent(lblAlamatPenyewa, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(lblNoHp, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(lblJenis, javax.swing.GroupLayout.Alignment.TRAILING))
-                        .addGap(18, 18, 18)
-                        .addGroup(pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtNama)
-                            .addComponent(txtTempatLahir)
-                            .addComponent(txtAlamatPenyewa)
                             .addGroup(pnlDataPenyewaLayout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addGroup(pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtIDPenyewa, javax.swing.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE)
+                                    .addComponent(txtNama, javax.swing.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE)))
+                            .addGroup(pnlDataPenyewaLayout.createSequentialGroup()
+                                .addGap(65, 65, 65)
+                                .addComponent(rdoLaki)
+                                .addGap(71, 71, 71)
+                                .addComponent(rdoPerempuan))
+                            .addGroup(pnlDataPenyewaLayout.createSequentialGroup()
+                                .addGap(17, 17, 17)
+                                .addComponent(txtTempatLahir, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(pnlDataPenyewaLayout.createSequentialGroup()
+                                .addGap(18, 18, 18)
                                 .addComponent(spiTanggal, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 9, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -218,95 +254,95 @@ public class JdialogDataPenyewa extends javax.swing.JDialog {
                                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 9, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(spiTahun, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(txtNoHP, javax.swing.GroupLayout.PREFERRED_SIZE, 324, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(pnlDataPenyewaLayout.createSequentialGroup()
+                                .addGap(17, 17, 17)
+                                .addComponent(txtAlamatPenyewa, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
+                        .addGroup(pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(btnCreate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnUpdate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btnBack, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(42, 42, 42)
+                        .addComponent(lblUserPict, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(69, 69, 69))
+                    .addGroup(pnlDataPenyewaLayout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(pnlDataPenyewaLayout.createSequentialGroup()
                                 .addComponent(btnNormal)
-                                .addGap(71, 71, 71)
-                                .addComponent(btnSpesial))))
-                    .addGroup(pnlDataPenyewaLayout.createSequentialGroup()
-                        .addComponent(lblJenisKelamin)
-                        .addGap(18, 18, 18)
-                        .addComponent(rdoLaki)
-                        .addGap(71, 71, 71)
-                        .addComponent(rdoPerempuan)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
-                .addGroup(pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(btnCreate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnUpdate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(btnBack, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblUserPict, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(60, 60, 60))
+                                .addGap(93, 93, 93)
+                                .addComponent(btnSpesial))
+                            .addComponent(txtNoHP, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
             .addComponent(jScrollPane1)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlDataPenyewaLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(txtIDPenyewa, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
         );
         pnlDataPenyewaLayout.setVerticalGroup(
             pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlDataPenyewaLayout.createSequentialGroup()
-                .addGap(42, 42, 42)
+                .addGap(33, 33, 33)
                 .addGroup(pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlDataPenyewaLayout.createSequentialGroup()
-                        .addGroup(pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblNama)
-                            .addComponent(txtNama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnCreate, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnBack, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pnlDataPenyewaLayout.createSequentialGroup()
                         .addGroup(pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(pnlDataPenyewaLayout.createSequentialGroup()
                                 .addGroup(pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(lblJenisKelamin)
-                                    .addComponent(rdoLaki)
-                                    .addComponent(rdoPerempuan))
+                                    .addComponent(txtIDPenyewa, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblNama1))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(lblTempatLahir)
-                                    .addComponent(txtTempatLahir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(lblNama)
+                                    .addComponent(txtNama, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(spiTanggal, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(lblHp)
-                                        .addComponent(jLabel1)
-                                        .addComponent(jLabel2)
-                                        .addComponent(spiBulan, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(spiTahun, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(lblJenisKelamin)
+                                        .addComponent(rdoPerempuan))
+                                    .addComponent(rdoLaki))
+                                .addGap(2, 2, 2)
                                 .addGroup(pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(lblHp)
                                     .addGroup(pnlDataPenyewaLayout.createSequentialGroup()
                                         .addGroup(pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                            .addComponent(txtAlamatPenyewa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(lblAlamatPenyewa))
-                                        .addGap(40, 40, 40))
-                                    .addGroup(pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(txtNoHP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(lblNoHp))))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlDataPenyewaLayout.createSequentialGroup()
-                                .addComponent(lblUserPict, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(12, 12, 12)))
+                                            .addComponent(lblTempatLahir)
+                                            .addComponent(txtTempatLahir, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(spiTanggal, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGroup(pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                .addComponent(jLabel1)
+                                                .addComponent(jLabel2)
+                                                .addComponent(spiBulan, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(spiTahun, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(txtAlamatPenyewa, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblAlamatPenyewa)))
+                            .addComponent(lblUserPict, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblJenis)
-                            .addComponent(btnNormal)
-                            .addComponent(btnSpesial)))
-                    .addGroup(pnlDataPenyewaLayout.createSequentialGroup()
-                        .addComponent(btnCreate, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnBack, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtIDPenyewa, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(60, 60, 60))
+                            .addComponent(txtNoHP, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblNoHp))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(btnNormal)
+                                .addComponent(lblJenis))
+                            .addComponent(btnSpesial))))
+                .addGap(42, 42, 42)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
-        getContentPane().add(pnlDataPenyewa, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 128, 1050, 600));
+        getContentPane().add(pnlDataPenyewa, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 130, 1050, 550));
 
         lblLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/logo.png"))); // NOI18N
         getContentPane().add(lblLogo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 0, 110, 110));
@@ -335,6 +371,14 @@ public class JdialogDataPenyewa extends javax.swing.JDialog {
      dispose();
     }//GEN-LAST:event_btnBackActionPerformed
 
+    private void txtIDPenyewaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIDPenyewaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtIDPenyewaActionPerformed
+
+    private void txtAlamatPenyewaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtAlamatPenyewaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtAlamatPenyewaActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup BtnGroup;
     private javax.swing.JButton btnBack;
@@ -355,6 +399,7 @@ public class JdialogDataPenyewa extends javax.swing.JDialog {
     private javax.swing.JLabel lblLibrary;
     private javax.swing.JLabel lblLogo;
     private javax.swing.JLabel lblNama;
+    private javax.swing.JLabel lblNama1;
     private javax.swing.JLabel lblNoHp;
     private javax.swing.JLabel lblTempatLahir;
     private javax.swing.JLabel lblUserPict;
