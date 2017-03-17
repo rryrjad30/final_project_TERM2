@@ -43,31 +43,31 @@ public class JDialogLogin extends javax.swing.JDialog {
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
         getContentPane().add(PassField, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 200, 300, -1));
 
-        btnRegister.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        btnRegister.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnRegister.setText("Register");
         btnRegister.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRegisterActionPerformed(evt);
             }
         });
-        getContentPane().add(btnRegister, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 260, 120, 50));
+        getContentPane().add(btnRegister, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 270, 100, 30));
 
-        btnLogIn.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        btnLogIn.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnLogIn.setText("Log in");
         btnLogIn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnLogInActionPerformed(evt);
             }
         });
-        getContentPane().add(btnLogIn, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 260, 120, 50));
+        getContentPane().add(btnLogIn, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 270, 100, 30));
         getContentPane().add(txtUsername, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 150, 300, -1));
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Username");
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 150, 120, 20));
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Password");
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 200, 120, 20));
@@ -104,7 +104,7 @@ public class JDialogLogin extends javax.swing.JDialog {
 
     private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed
         // TODO add your handling code here:
-        JDialogRegister register = new JDialogRegister(this, true);
+        FrmRegister register = new FrmRegister();
         register.setVisible(true);
     }//GEN-LAST:event_btnRegisterActionPerformed
 
