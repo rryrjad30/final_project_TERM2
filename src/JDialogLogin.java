@@ -18,8 +18,10 @@ public class JDialogLogin extends javax.swing.JDialog {
         initComponents();
         setLocationRelativeTo(null);
         instance = this;
+        txtUsername.setText("admin");
+        PassField.setText("admin");
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -40,7 +42,7 @@ public class JDialogLogin extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        getContentPane().add(PassField, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 200, 300, -1));
+        getContentPane().add(PassField, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 190, 270, -1));
 
         btnRegister.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnRegister.setText("Register");
@@ -49,7 +51,7 @@ public class JDialogLogin extends javax.swing.JDialog {
                 btnRegisterActionPerformed(evt);
             }
         });
-        getContentPane().add(btnRegister, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 270, 100, 30));
+        getContentPane().add(btnRegister, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 220, 100, 30));
 
         btnLogIn.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnLogIn.setText("Log in");
@@ -58,25 +60,25 @@ public class JDialogLogin extends javax.swing.JDialog {
                 btnLogInActionPerformed(evt);
             }
         });
-        getContentPane().add(btnLogIn, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 270, 100, 30));
-        getContentPane().add(txtUsername, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 150, 300, -1));
+        getContentPane().add(btnLogIn, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 220, 100, 30));
+        getContentPane().add(txtUsername, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 160, 270, -1));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Username");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 150, 120, 20));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 160, 120, 20));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Password");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 200, 120, 20));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 190, 120, 20));
 
         lblWelcome.setFont(new java.awt.Font("Tahoma", 1, 42)); // NOI18N
         lblWelcome.setForeground(new java.awt.Color(255, 255, 255));
         lblWelcome.setText("Welcome to Library");
-        getContentPane().add(lblWelcome, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 60, 440, 60));
+        getContentPane().add(lblWelcome, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 40, 440, 60));
 
-        lblPict.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/Login.jpg"))); // NOI18N
+        lblPict.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/login pict.jpg"))); // NOI18N
         getContentPane().add(lblPict, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -3, 700, -1));
 
         pack();
