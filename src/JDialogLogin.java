@@ -14,8 +14,7 @@ public class JDialogLogin extends javax.swing.JDialog {
 
     public static JDialogLogin instance;
 
-    public JDialogLogin(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
+    public JDialogLogin() {
         initComponents();
         setLocationRelativeTo(null);
         instance = this;
@@ -112,8 +111,12 @@ public class JDialogLogin extends javax.swing.JDialog {
     public static void main(String args[]) {
 
         try {
-            String LAF_QUAQUA_OSX = "ch.randelshofer.quaqua.QuaquaLookAndFeel";
-            javax.swing.UIManager.setLookAndFeel(LAF_QUAQUA_OSX);
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Metal".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
         } catch (ClassNotFoundException ex) {
             java.util.logging.Logger.getLogger(JDialogLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
@@ -131,7 +134,7 @@ public class JDialogLogin extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                JDialogLogin dialog = new JDialogLogin(new javax.swing.JFrame(), true);
+                JDialogLogin dialog = new JDialogLogin();
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
