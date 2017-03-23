@@ -48,7 +48,7 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
     private void loadAllDatabase() {
         try {
 
-            String sql = "SELECT * FROM Students";
+            String sql = "SELECT * FROM datapenyewa";
             PreparedStatement pstatement = conn.prepareStatement(sql);
 
             ResultSet rs = pstatement.executeQuery();
@@ -57,12 +57,14 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
                     DefaultTableModel tableModel = (DefaultTableModel) tblPenyewa.getModel();
 
                     Object data[] = {
-                        rs.getString("NAME"),
-                        rs.getString("GENDER"),
-                        rs.getString("EMAIL"),
-                        rs.getInt("SYEAR"),
-                        rs.getDouble("TUITIONFEE"),
-                        rs.getBoolean("Active")
+                        rs.getString("idpenyewa"),
+                        rs.getString("nama"),
+                        rs.getString("jeniskelamin"),
+                        rs.getString("tempatlahir"),
+                        rs.getString("tanggallahir"),
+                        rs.getString("nohp"),
+                        rs.getString("alamat"),
+                        rs.getString("jenispenyewa")
                     };
                     tableModel.addRow(data);
                 }
