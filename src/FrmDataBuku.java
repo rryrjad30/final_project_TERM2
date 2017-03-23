@@ -92,6 +92,7 @@ public class FrmDataBuku extends javax.swing.JFrame {
             System.out.println("Error:\n" + ex.getLocalizedMessage());
         }
     }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -114,7 +115,7 @@ public class FrmDataBuku extends javax.swing.JFrame {
         txtJudulBuku = new javax.swing.JTextField();
         txtPengarang = new javax.swing.JTextField();
         txtPenerbit = new javax.swing.JTextField();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        cboKategoriBuku = new javax.swing.JComboBox<>();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblDataBuku = new javax.swing.JTable();
         jLabel3 = new javax.swing.JLabel();
@@ -169,11 +170,11 @@ public class FrmDataBuku extends javax.swing.JFrame {
 
         txtPenerbit.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
 
-        jComboBox1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "NOVEL", "NON- FIKSI", "KOMIK", "EDUKASI" }));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+        cboKategoriBuku.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        cboKategoriBuku.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "NOVEL", "NON- FIKSI", "KOMIK", "EDUKASI" }));
+        cboKategoriBuku.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
+                cboKategoriBukuActionPerformed(evt);
             }
         });
 
@@ -220,6 +221,11 @@ public class FrmDataBuku extends javax.swing.JFrame {
         lblStok.setText("Stok");
 
         txtStok.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        txtStok.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtStokActionPerformed(evt);
+            }
+        });
 
         btnSearch.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnSearch.setText("Search");
@@ -227,6 +233,11 @@ public class FrmDataBuku extends javax.swing.JFrame {
         btnCreate.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnCreate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/add.png"))); // NOI18N
         btnCreate.setText("Create");
+        btnCreate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCreateActionPerformed(evt);
+            }
+        });
 
         btnUpdate.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnUpdate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/update.png"))); // NOI18N
@@ -282,7 +293,7 @@ public class FrmDataBuku extends javax.swing.JFrame {
                                         .addComponent(txtPengarang, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(txtJudulBuku, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(txtPenerbit, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(jComboBox1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(cboKategoriBuku, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(spnTahun, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addComponent(txtIDBuku, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(18, 18, 18)
@@ -342,7 +353,7 @@ public class FrmDataBuku extends javax.swing.JFrame {
                                     .addComponent(lblTahunTerbit))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(pnlDataBukuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(cboKategoriBuku, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(lblKategoriBuku))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(pnlDataBukuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -388,9 +399,9 @@ public class FrmDataBuku extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+    private void cboKategoriBukuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboKategoriBukuActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+    }//GEN-LAST:event_cboKategoriBukuActionPerformed
 
     private void btnBack1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBack1ActionPerformed
         dispose();
@@ -398,7 +409,23 @@ public class FrmDataBuku extends javax.swing.JFrame {
 
     private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
         // TODO add your handling code here:
+        txtIDBuku.setText("");
+        txtJudulBuku.setText("");
+        txtPengarang.setText("");
+        txtPenerbit.setText("");
+        spnTahun.setValue(1990);
+        cboKategoriBuku.setSelectedIndex(0);
+        txtISBN.setText("");
+        txtStok.setText("");
     }//GEN-LAST:event_btnNewActionPerformed
+
+    private void txtStokActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtStokActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtStokActionPerformed
+
+    private void btnCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnCreateActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack1;
@@ -407,7 +434,7 @@ public class FrmDataBuku extends javax.swing.JFrame {
     private javax.swing.JButton btnNew;
     private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnUpdate;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<String> cboKategoriBuku;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblAlamat;
