@@ -1,4 +1,13 @@
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
+import util.DbConn;
 import util.Sutil;
 
 /*
@@ -13,15 +22,15 @@ import util.Sutil;
 public class JDialogLogin extends javax.swing.JDialog {
 
     public static JDialogLogin instance;
+    private Connection conn;
 
     public JDialogLogin() {
         initComponents();
+        databaseConnection();
         setLocationRelativeTo(null);
         instance = this;
-        txtUsername.setText("admin");
-        PassField.setText("admin");
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -31,7 +40,7 @@ public class JDialogLogin extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        PassField = new javax.swing.JPasswordField();
+        txtPassword = new javax.swing.JPasswordField();
         btnRegister = new javax.swing.JButton();
         btnLogIn = new javax.swing.JButton();
         txtUsername = new javax.swing.JTextField();
@@ -42,7 +51,7 @@ public class JDialogLogin extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        getContentPane().add(PassField, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 190, 270, -1));
+        getContentPane().add(txtPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 190, 270, -1));
 
         btnRegister.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnRegister.setText("Register");
@@ -85,19 +94,16 @@ public class JDialogLogin extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLogInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogInActionPerformed
-        if (txtUsername.getText().trim().equals("admin") && PassField.getText().trim().equals("admin")) {
-            FrmMain main = new FrmMain();
-            dispose();
-            main.setVisible(true);
+        databaseConnection();
+        if (txtUsername.getText().equals("") && txtPassword.getText().equals("")) {
+            util.Sutil.mse(this, "Username and Password can't be empty !");
+        } else if (txtUsername.getText().equals("")) {
+            util.Sutil.mse(this, "Username can't be empty !");
+        } else if(txtPassword.getText().equals("")){
+            util.Sutil.mse(this, "Password can't be empty !");
         }
-        if (!txtUsername.getText().trim().equals("admin") || !PassField.getText().trim().equals("admin")) {
-            Sutil.mse(this, "Username or Password not match!");
-            txtUsername.setText("");
-            PassField.setText("");
-        } else if (txtUsername.getText().trim().equals("") || PassField.getText().trim().equals("")) {
-            Sutil.mse(this, "Username or Password can not empty!");
-            txtUsername.setText("");
-            PassField.setText("");
+        else {
+            executeLogIn();
         }
     }//GEN-LAST:event_btnLogInActionPerformed
 
@@ -106,6 +112,46 @@ public class JDialogLogin extends javax.swing.JDialog {
         FrmRegister register = new FrmRegister();
         register.setVisible(true);
     }//GEN-LAST:event_btnRegisterActionPerformed
+
+    private void databaseConnection() {
+        try {
+            Class.forName(DbConn.JDBC_CLASS);
+            conn = DriverManager.getConnection(DbConn.JDBC_URL,
+                    DbConn.JDBC_USERNAME,
+                    DbConn.JDBC_PASSWORD);
+
+            if (conn != null) {
+                System.out.println("Connected to DB!\n");
+            }
+        } catch (SQLException | ClassNotFoundException ex) {
+            System.out.println("Error:\n" + ex.getLocalizedMessage());
+        }
+    }
+
+    private void executeLogIn() {
+        try {
+
+            String sql = "SELECT * FROM registerdata WHERE username = ? and passwords = ?";
+            PreparedStatement pstatement = conn.prepareStatement(sql);
+            pstatement.setString(1, txtUsername.getText());
+            pstatement.setString(2, txtPassword.getText());
+            
+            ResultSet rs = pstatement.executeQuery();
+            if (rs.next()) {
+                FrmMain main = new FrmMain();
+                main.setVisible(true);
+                dispose();
+            } else {
+                util.Sutil.mse(this, "Username or password invalid !");
+            }
+
+            rs.close();
+            pstatement.close();
+            conn.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(JDialogLogin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     /**
      * @param args the command line arguments
@@ -117,16 +163,24 @@ public class JDialogLogin extends javax.swing.JDialog {
                 if ("Metal".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(JDialogLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(JDialogLogin.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(JDialogLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(JDialogLogin.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(JDialogLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(JDialogLogin.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(JDialogLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(JDialogLogin.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>
@@ -149,13 +203,13 @@ public class JDialogLogin extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPasswordField PassField;
     private javax.swing.JButton btnLogIn;
     private javax.swing.JButton btnRegister;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel lblPict;
     private javax.swing.JLabel lblWelcome;
+    private javax.swing.JPasswordField txtPassword;
     private javax.swing.JTextField txtUsername;
     // End of variables declaration//GEN-END:variables
 }

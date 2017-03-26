@@ -1,4 +1,13 @@
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
+import util.DbConn;
 import util.Sutil;
 
 /*
@@ -6,20 +15,59 @@ import util.Sutil;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author COMPUTER
  */
 public class FrmRegister extends javax.swing.JFrame {
 
+    private Connection conn;
+
     /**
      * Creates new form FrmRegister
      */
     public FrmRegister() {
         initComponents();
-        
+        databaseConnection();
         setLocationRelativeTo(null);
+    }
+
+    private void insertToDatabase(String username, String passwords, String confirmpassword) {
+        try {
+
+            String sql = "INSERT INTO `registerdata` "
+                    + "(username, passwords, confirmpassword)"
+                    + "VALUES (?,?,?);";
+            PreparedStatement pstatement = conn.prepareStatement(sql);
+            pstatement.setString(1, username);
+            pstatement.setString(2, passwords);
+            pstatement.setString(3, confirmpassword);
+
+            pstatement.executeUpdate();
+            System.out.println("Record insert.");
+
+            pstatement.close();
+            conn.close();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(FrmDataPenyewa.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    private void databaseConnection() {
+        try {
+            Class.forName(DbConn.JDBC_CLASS);
+            conn = DriverManager.getConnection(DbConn.JDBC_URL,
+                    DbConn.JDBC_USERNAME,
+                    DbConn.JDBC_PASSWORD);
+
+            if (conn != null) {
+                System.out.println("Connected to DB!\n");
+            }
+        } catch (SQLException | ClassNotFoundException ex) {
+            System.out.println("Error:\n" + ex.getLocalizedMessage());
+        }
     }
 
     /**
@@ -137,7 +185,17 @@ public class FrmRegister extends javax.swing.JFrame {
 
     private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed
         // TODO add your handling code here:
-        Sutil.msg(this, "Registered !");
+        String username = txtUsername.getText();
+        String passwords = txtPassword.getText();
+        String confirmpassword = txtConfirmPassword.getText();
+
+        if (username.equals("") || passwords.equals("") || confirmpassword.equals("")) {
+            Sutil.msg(this, "Can not empty !");
+        } else {
+            insertToDatabase(username, passwords, confirmpassword);
+            Sutil.msg(this, "Registered !");
+            dispose();
+        }
     }//GEN-LAST:event_btnRegisterActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -3,6 +3,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -47,7 +48,6 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
 
     private void loadAllDatabase() {
         try {
-
             String sql = "SELECT * FROM datapenyewa";
             PreparedStatement pstatement = conn.prepareStatement(sql);
 
@@ -77,7 +77,6 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(FrmDataPenyewa.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
 
     private void databaseConnection() {
@@ -89,6 +88,39 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
 
             if (conn != null) {
                 System.out.println("Connected to DB!\n");
+            }
+        } catch (SQLException | ClassNotFoundException ex) {
+            System.out.println("Error:\n" + ex.getLocalizedMessage());
+        }
+    }
+
+    private void createDatabase(String idpenyewa, String nama, String gender, String tempatlahir, Long nohp, String alamat, String jenispenyewa) {
+        try {
+            Class.forName(DbConn.JDBC_CLASS);
+            Connection conn = DriverManager.getConnection(DbConn.JDBC_URL,
+                    DbConn.JDBC_USERNAME,
+                    DbConn.JDBC_PASSWORD);
+
+            if (conn != null) {
+                System.out.println("Connected to DB!\n");
+
+                String sql = "INSERT INTO `datapenyewa` "
+                        + "(idpenyewa, nama, jeniskelamin, tempatlahir, nohp, alamat, jenispenyewa)"
+                        + "VALUES (?,?,?,?,?,?,?);";
+                PreparedStatement pstatement = conn.prepareStatement(sql);
+                pstatement.setString(1, idpenyewa);
+                pstatement.setString(2, nama);
+                pstatement.setString(3, gender);
+                pstatement.setString(4, tempatlahir);
+                pstatement.setString(5, Long.toString(nohp));
+                pstatement.setString(6, alamat);
+                pstatement.setString(7, jenispenyewa);
+
+                pstatement.executeUpdate();
+                System.out.println("Record insert.");
+
+                pstatement.close();
+                conn.close();
             }
         } catch (SQLException | ClassNotFoundException ex) {
             System.out.println("Error:\n" + ex.getLocalizedMessage());
@@ -468,21 +500,54 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
     }//GEN-LAST:event_btnNewActionPerformed
 
     public void createIdPenyewa() {
-        //untuk normal atau special
-        String normalSpecial = "";
-        if (rdoNormal.isSelected()) {
-            normalSpecial = "N";
-            txtIDPenyewa.setText(normalSpecial + " - " + idNumberNormal);
-            idNumberNormal++;
-        } else if (rdoSpesial.isSelected()) {
-            normalSpecial = "S";
-            txtIDPenyewa.setText(normalSpecial + " - " + idNumberSpecial);
-            idNumberSpecial++;
-        } else {
-            normalSpecial = "";
-            txtIDPenyewa.setText("None - " + idNumberNone);
-            idNumberNone++;
+        
+        try {
+            String sql = "SELECT * FROM datapenyewa where idpenyewa = 'N-%%'";
+            PreparedStatement pstatement = conn.prepareStatement(sql);
+
+            ResultSet rs = pstatement.executeQuery();
+            if (rs.isBeforeFirst()) { // check is resultset not empty
+                while (rs.next()) {
+                    DefaultTableModel tableModel = (DefaultTableModel) tblPenyewa.getModel();
+
+                    Object data[] = {
+                        rs.getString("idpenyewa"),
+                        rs.getString("nama"),
+                        rs.getString("jeniskelamin"),
+                        rs.getString("tempatlahir"),
+                        rs.getString("tanggallahir"),
+                        rs.getString("nohp"),
+                        rs.getString("alamat"),
+                        rs.getString("jenispenyewa")
+                    };
+                    tableModel.addRow(data);
+                }
+            } else {
+                util.Sutil.msg(this, "Record Empty");
+            }
+
+            rs.close();
+            pstatement.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(FrmDataPenyewa.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        //untuk normal atau special
+//        String normal = "";
+//        String normalSpecial = "";
+//        if (rdoNormal.isSelected()) {
+//            normalSpecial = "N";
+//            while(idNumberNormal)
+//            if (!idNumberNormal.equals()) {
+//                txtIDPenyewa.setText(normalSpecial + " - " + idNumberNormal);
+//                idNumberNormal++;
+//            }
+//            
+//        } else if (rdoSpesial.isSelected()) {
+//            normalSpecial = "S";
+//            txtIDPenyewa.setText(normalSpecial + " - " + idNumberSpecial);
+//            idNumberSpecial++;
+//        }
         //--
     }
 
@@ -510,18 +575,10 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
         //--
 
         createIdPenyewa();
+        createDatabase(txtIDPenyewa.getText(), txtNama.getText(), gender,
+                txtTempatLahir.getText(), Long.parseLong(txtNoHP.getText()), txtAlamatPenyewa.getText(),
+                normalspecial);
 
-        Object data[] = {txtIDPenyewa.getText(),
-            txtNama.getText(),
-            gender,
-            txtTempatLahir.getText(),
-            txtTanggalLahir.getText(),
-            txtAlamatPenyewa.getText(),
-            txtNoHP.getText(),
-            normalspecial
-        };
-        DefaultTableModel tableModel = (DefaultTableModel) tblPenyewa.getModel();
-        tableModel.addRow(data);
     }
 
     public void toUpdateData() {

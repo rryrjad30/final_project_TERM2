@@ -7,8 +7,11 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JSpinner.NumberEditor;
+import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import util.DbConn;
 
@@ -17,7 +20,6 @@ import util.DbConn;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author LENOVO
@@ -25,25 +27,46 @@ import util.DbConn;
 public class FrmDataBuku extends javax.swing.JFrame {
 
     private Connection conn;
-    
+
     /**
      * Creates new form FrmDataBuku
      */
     public FrmDataBuku() {
         initComponents();
         spinnerTahunTerbit();
+        tableSelectionListener();
         databaseConnection();
         loadAllDatabase();
         setLocationRelativeTo(null);
     }
-    
-    private void spinnerTahunTerbit(){
+
+    public void tableSelectionListener() {
+        ListSelectionListener listener = new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent e) {
+                int row = tblDataBuku.getSelectedRow();
+                if (row >= 0) {
+                    txtIDBuku.setText(tblDataBuku.getValueAt(row, 0).toString());
+                    txtJudulBuku.setText(tblDataBuku.getValueAt(row, 1).toString());
+                    txtPengarang.setText(tblDataBuku.getValueAt(row, 2).toString());
+                    txtPenerbit.setText(tblDataBuku.getValueAt(row, 3).toString());
+                    spnTahun.setValue(tblDataBuku.getValueAt(row, 4));
+                    cboKategoriBuku.getModel().setSelectedItem(tblDataBuku.getValueAt(row, 5).toString());
+                    txtISBN.setText(tblDataBuku.getValueAt(row, 6).toString());
+//                    txtStok.setText(tblDataBuku.getValueAt(row, 7).toString());
+                }
+            }
+        };
+        tblDataBuku.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        tblDataBuku.getSelectionModel().addListSelectionListener(listener);
+    }
+
+    private void spinnerTahunTerbit() {
         SpinnerModel tahunTerbit = new SpinnerNumberModel(1990, 1990, 2017, 1);
         spnTahun.setModel(tahunTerbit);
         NumberEditor editor = new NumberEditor(spnTahun, "#");
         spnTahun.setEditor(editor);
     }
-    
+
     private void loadAllDatabase() {
         try {
 
@@ -61,8 +84,9 @@ public class FrmDataBuku extends javax.swing.JFrame {
                         rs.getString("pengarang"),
                         rs.getString("penerbit"),
                         rs.getInt("tahunterbit"),
-                        rs.getLong("isbn"),
-                        rs.getString("kategori")
+                        rs.getString("kategori"),
+                        rs.getLong("isbn")
+//                        rs.getInt("stok")
                     };
                     tableModel.addRow(data);
                 }
@@ -75,7 +99,6 @@ public class FrmDataBuku extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(FrmDataPenyewa.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
 
     private void databaseConnection() {
@@ -92,7 +115,106 @@ public class FrmDataBuku extends javax.swing.JFrame {
             System.out.println("Error:\n" + ex.getLocalizedMessage());
         }
     }
-    
+
+    private void createDatabase(String idbuku, String judulbuku, String pengarang, String penerbit, int tahunterbit, String kategori, long isbn) {
+        try {
+            Class.forName(DbConn.JDBC_CLASS);
+            Connection conn = DriverManager.getConnection(DbConn.JDBC_URL,
+                    DbConn.JDBC_USERNAME,
+                    DbConn.JDBC_PASSWORD);
+
+            if (conn != null) {
+                System.out.println("Connected to DB!\n");
+
+                String sql = "INSERT INTO `databuku` "
+                        + "(idbuku, judulbuku, pengarang, penerbit, tahunterbit, kategori, isbn)"
+                        + "VALUES (?,?,?,?,?,?,?);";
+
+                PreparedStatement pstatement = conn.prepareStatement(sql);
+                pstatement.setString(1, idbuku);
+                pstatement.setString(2, judulbuku);
+                pstatement.setString(3, pengarang);
+                pstatement.setString(4, penerbit);
+                pstatement.setString(5, Integer.toString(tahunterbit));
+                pstatement.setString(6, kategori);
+                pstatement.setString(7, Long.toString(isbn));
+
+//                pstatement.setString(8, txtStok.getText());
+                pstatement.executeUpdate();
+                System.out.println("Record insert.");
+
+                pstatement.close();
+                conn.close();
+            }
+        } catch (SQLException | ClassNotFoundException ex) {
+            System.out.println("Error:\n" + ex.getLocalizedMessage());
+        }
+    }
+
+    private void updateDatabase(String idbuku, String judulbuku, String pengarang, String penerbit, int tahunterbit, String kategori, long isbn) {
+        try {
+            Class.forName(DbConn.JDBC_CLASS);
+            Connection conn = DriverManager.getConnection(DbConn.JDBC_URL,
+                    DbConn.JDBC_USERNAME,
+                    DbConn.JDBC_PASSWORD);
+
+            if (conn != null) {
+                System.out.println("Connected to DB!\n");
+
+                String sql = "UPDATE `databuku` set "
+                        + "judulbuku = '" + judulbuku + "' , "
+                        + "pengarang = '" + pengarang + "' , "
+                        + "penerbit = '" + penerbit + "' , "
+                        + "tahunterbit = '" + tahunterbit + "' , "
+                        + "kategori = '" + kategori + "' , "
+                        + "isbn = '" + isbn + "' "
+                        + "where idbuku = '" + idbuku + "';";
+
+                PreparedStatement pstatement = conn.prepareStatement(sql);
+
+                pstatement.executeUpdate();
+                System.out.println("Updated.");
+
+                pstatement.close();
+
+                conn.close();
+            }
+        } catch (SQLException | ClassNotFoundException ex) {
+            System.out.println(ex);
+        }
+    }
+
+    private void deleteDatabase(String idbuku, String judulbuku, String pengarang, String penerbit, int tahunterbit, String kategori, long isbn) {
+        try {
+            Class.forName(DbConn.JDBC_CLASS);
+            Connection conn = DriverManager.getConnection(DbConn.JDBC_URL,
+                    DbConn.JDBC_USERNAME,
+                    DbConn.JDBC_PASSWORD);
+
+            if (conn != null) {
+                System.out.println("Connected to DB!\n");
+
+                String sql = "DELETE FROM `databuku` where "
+                        + "idbuku = '" + idbuku + "' , "
+                        + "judulbuku = '" + judulbuku + "' , "
+                        + "pengarang = '" + pengarang + "' , "
+                        + "penerbit = '" + penerbit + "' , "
+                        + "tahunterbit = '" + tahunterbit + "' , "
+                        + "kategori = '" + kategori + "' , "
+                        + "isbn = '" + isbn + "';";
+
+                PreparedStatement pstatement = conn.prepareStatement(sql);
+
+                pstatement.execute();
+                System.out.println("Deleted.");
+
+                pstatement.close();
+                conn.close();
+            }
+        } catch (SQLException | ClassNotFoundException ex) {
+            System.out.println(ex);
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -109,8 +231,6 @@ public class FrmDataBuku extends javax.swing.JFrame {
         lblPengarang = new javax.swing.JLabel();
         lblPenerbit = new javax.swing.JLabel();
         lblTahunTerbit = new javax.swing.JLabel();
-        lblSearch = new javax.swing.JLabel();
-        txtSearch = new javax.swing.JTextField();
         txtIDBuku = new javax.swing.JTextField();
         txtJudulBuku = new javax.swing.JTextField();
         txtPengarang = new javax.swing.JTextField();
@@ -125,7 +245,6 @@ public class FrmDataBuku extends javax.swing.JFrame {
         txtISBN = new javax.swing.JTextField();
         lblStok = new javax.swing.JLabel();
         txtStok = new javax.swing.JTextField();
-        btnSearch = new javax.swing.JButton();
         btnCreate = new javax.swing.JButton();
         btnUpdate = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
@@ -136,7 +255,7 @@ public class FrmDataBuku extends javax.swing.JFrame {
         lblAlamat = new javax.swing.JLabel();
         lblBack = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         pnlDataBuku.setBackground(new java.awt.Color(255, 255, 255));
@@ -157,10 +276,6 @@ public class FrmDataBuku extends javax.swing.JFrame {
         lblTahunTerbit.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lblTahunTerbit.setText("Tahun Terbit");
 
-        lblSearch.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        lblSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/search.png"))); // NOI18N
-        lblSearch.setText("Search");
-
         txtIDBuku.setEditable(false);
         txtIDBuku.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
 
@@ -171,6 +286,7 @@ public class FrmDataBuku extends javax.swing.JFrame {
         txtPenerbit.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
 
         cboKategoriBuku.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        cboKategoriBuku.setMaximumRowCount(99);
         cboKategoriBuku.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "NOVEL", "NON- FIKSI", "KOMIK", "EDUKASI" }));
         cboKategoriBuku.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -202,7 +318,9 @@ public class FrmDataBuku extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        tblDataBuku.setColumnSelectionAllowed(true);
         jScrollPane2.setViewportView(tblDataBuku);
+        tblDataBuku.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/Buku.png"))); // NOI18N
 
@@ -227,9 +345,6 @@ public class FrmDataBuku extends javax.swing.JFrame {
             }
         });
 
-        btnSearch.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnSearch.setText("Search");
-
         btnCreate.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnCreate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/add.png"))); // NOI18N
         btnCreate.setText("Create");
@@ -242,10 +357,20 @@ public class FrmDataBuku extends javax.swing.JFrame {
         btnUpdate.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnUpdate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/update.png"))); // NOI18N
         btnUpdate.setText("Update");
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
 
         btnDelete.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/delete.png"))); // NOI18N
         btnDelete.setText("Delete");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
 
         btnBack1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnBack1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/undo.png"))); // NOI18N
@@ -303,33 +428,16 @@ public class FrmDataBuku extends javax.swing.JFrame {
                             .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnBack1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnNew, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
-                .addGroup(pnlDataBukuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlDataBukuLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(133, 133, 133))
-                    .addGroup(pnlDataBukuLayout.createSequentialGroup()
-                        .addComponent(lblSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnSearch)))
-                .addContainerGap())
+                .addGap(42, 42, 42)
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(236, Short.MAX_VALUE))
         );
         pnlDataBukuLayout.setVerticalGroup(
             pnlDataBukuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlDataBukuLayout.createSequentialGroup()
-                .addGap(23, 23, 23)
                 .addGroup(pnlDataBukuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlDataBukuLayout.createSequentialGroup()
-                        .addGroup(pnlDataBukuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnSearch))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel3))
-                    .addGroup(pnlDataBukuLayout.createSequentialGroup()
+                        .addGap(23, 23, 23)
                         .addGroup(pnlDataBukuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(pnlDataBukuLayout.createSequentialGroup()
                                 .addGroup(pnlDataBukuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -372,7 +480,10 @@ public class FrmDataBuku extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(pnlDataBukuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtStok, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblStok))))
+                            .addComponent(lblStok)))
+                    .addGroup(pnlDataBukuLayout.createSequentialGroup()
+                        .addGap(50, 50, 50)
+                        .addComponent(jLabel3)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 65, Short.MAX_VALUE)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -409,14 +520,7 @@ public class FrmDataBuku extends javax.swing.JFrame {
 
     private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
         // TODO add your handling code here:
-        txtIDBuku.setText("");
-        txtJudulBuku.setText("");
-        txtPengarang.setText("");
-        txtPenerbit.setText("");
-        spnTahun.setValue(1990);
-        cboKategoriBuku.setSelectedIndex(0);
-        txtISBN.setText("");
-        txtStok.setText("");
+        executeNew();
     }//GEN-LAST:event_btnNewActionPerformed
 
     private void txtStokActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtStokActionPerformed
@@ -425,14 +529,80 @@ public class FrmDataBuku extends javax.swing.JFrame {
 
     private void btnCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
         // TODO add your handling code here:
+        executeCreate();
     }//GEN-LAST:event_btnCreateActionPerformed
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        // TODO add your handling code here:
+        executeUpdate();
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        // TODO add your handling code here:
+        executeDelete();
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void executeNew() {
+        txtIDBuku.setText("");
+        txtJudulBuku.setText("");
+        txtPengarang.setText("");
+        txtPenerbit.setText("");
+        spnTahun.setValue(1990);
+        cboKategoriBuku.setSelectedIndex(0);
+        txtISBN.setText("");
+        txtStok.setText("");
+    }
+
+    private void executeCreate() {
+        createDatabase(txtIDBuku.getText(), txtJudulBuku.getText(), txtPengarang.getText(),
+                 txtPenerbit.getText(), Integer.parseInt((String) spnTahun.getValue()),
+                 (String) (cboKategoriBuku.getSelectedItem()), Long.parseLong(txtISBN.getText()));
+
+        Object data[] = {txtIDBuku.getText(), txtJudulBuku.getText(), txtPengarang.getText(),
+             txtPenerbit.getText(), spnTahun.getValue(), cboKategoriBuku.getSelectedItem(), txtISBN.getText()};
+        DefaultTableModel tableModel = (DefaultTableModel) tblDataBuku.getModel();
+        tableModel.addRow(data);
+    }
+
+    private void executeUpdate() {
+        updateDatabase(txtIDBuku.getText(), txtJudulBuku.getText(), txtPengarang.getText(),
+                 txtPenerbit.getText(), Integer.parseInt((String) spnTahun.getValue()),
+                 (String) (cboKategoriBuku.getSelectedItem()), Long.parseLong(txtISBN.getText()));
+
+        DefaultTableModel tableModel = (DefaultTableModel) tblDataBuku.getModel();
+        int row = tblDataBuku.getSelectedRow();
+        if (row >= 0) {
+            tableModel.setValueAt(txtIDBuku.getText(), row, 0);
+            tableModel.setValueAt(txtJudulBuku.getText(), row, 1);
+            tableModel.setValueAt(txtPengarang.getText(), row, 2);
+            tableModel.setValueAt(txtPenerbit.getText(), row, 3);
+            tableModel.setValueAt(String.valueOf(spnTahun.getValue()), row, 4);
+            tableModel.setValueAt(Long.parseLong(txtISBN.getText()), row, 5);
+            tableModel.setValueAt(String.valueOf(cboKategoriBuku.getSelectedItem()), row, 6);
+        } else {
+            System.out.println("Update Error");
+        }
+    }
+
+    private void executeDelete() {
+        deleteDatabase(txtIDBuku.getText(), txtJudulBuku.getText(), txtPengarang.getText(),
+                 txtPenerbit.getText(), Integer.parseInt((String) spnTahun.getValue()),
+                 (String) (cboKategoriBuku.getSelectedItem()), Long.parseLong(txtISBN.getText()));
+
+        DefaultTableModel tableModel = (DefaultTableModel) tblDataBuku.getModel();
+        int row = tblDataBuku.getSelectedRow();
+        if (row >= 0) {
+            tableModel.removeRow(row);
+        } else {
+            util.Sutil.mse(this, "Delete Error");
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack1;
     private javax.swing.JButton btnCreate;
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnNew;
-    private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JComboBox<String> cboKategoriBuku;
     private javax.swing.JLabel jLabel3;
@@ -447,7 +617,6 @@ public class FrmDataBuku extends javax.swing.JFrame {
     private javax.swing.JLabel lblLogo;
     private javax.swing.JLabel lblPenerbit;
     private javax.swing.JLabel lblPengarang;
-    private javax.swing.JLabel lblSearch;
     private javax.swing.JLabel lblStok;
     private javax.swing.JLabel lblTahunTerbit;
     private javax.swing.JPanel pnlDataBuku;
@@ -458,7 +627,6 @@ public class FrmDataBuku extends javax.swing.JFrame {
     private javax.swing.JTextField txtJudulBuku;
     private javax.swing.JTextField txtPenerbit;
     private javax.swing.JTextField txtPengarang;
-    private javax.swing.JTextField txtSearch;
     private javax.swing.JTextField txtStok;
     // End of variables declaration//GEN-END:variables
 }
