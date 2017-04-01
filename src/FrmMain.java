@@ -1,7 +1,20 @@
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
+import util.DbConn;
 import util.Sutil;
 
 /*
@@ -15,26 +28,236 @@ import util.Sutil;
  */
 public class FrmMain extends javax.swing.JFrame {
 
+    private Connection conn;
+
     /**
      * Creates new form FrmMain
      */
-    public FrmMain() {
+    public FrmMain(Connection conn) {
+        this.conn = conn;
         initComponents();
-        dateFormat();
+
+        String username = JDialogLogin.txtUsername.getText();
+        txtUsernameMain.setText(username);
+        tableSelectionListener();
+
+        lblDenda.setText("<html>* Normal : Rp 10.000/hari<br>* Special : Rp 7.000/hari</html>");
+
+        databaseConnection();
+        loadAllDatabase();
+
+        idTransaksi();
 
         setLocationRelativeTo(null);
     }
 
-    private void dateFormat() {
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        Date date = new Date();
-        txtTanggalPinjam.setText(dateFormat.format(date));
-        txtTanggalPengembalian.setText(dateFormat.format(date));
+    public void tableSelectionListener() {
+        ListSelectionListener listener = new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent e) {
+                int row = tblTransaksi.getSelectedRow();
+                if (row >= 0) {
+                    try {
+                        txtIdTransaksi.setText(tblTransaksi.getValueAt(row, 0).toString());
+                        txtIdPenyewa.setText(tblTransaksi.getValueAt(row, 1).toString());
+                        txtNama.setText(getNamebyIdPenyewa(Integer.valueOf(txtIdPenyewa.getText())));
+                        txtIdBuku.setText(tblTransaksi.getValueAt(row, 2).toString());
+                        txtJudulBuku.setText(getBookbyIdBuku(Integer.valueOf(txtIdBuku.getText())));
+                        Date datePinjam = new SimpleDateFormat("dd-MM-yyyy").parse((String) tblTransaksi.getValueAt(row, 3));
+                        dtcTanggalPinjam.setDate(datePinjam);
+                        Date datePengembalian = new SimpleDateFormat("dd-MM-yyyy").parse((String) tblTransaksi.getValueAt(row, 4));
+                        dtcTanggalPengembalian.setDate(datePengembalian);
+                    } catch (SQLException ex) {
+                        Logger.getLogger(FrmMain.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (ParseException ex) {
+                        Logger.getLogger(FrmMain.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        };
+        tblTransaksi.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        tblTransaksi.getSelectionModel().addListSelectionListener(listener);
+    }
+
+    private String getNamebyIdPenyewa(int idpenyewa) throws SQLException {
+        String Name = "";
+        String sqlPenyewaLookup = "Select nama from datapenyewa where idpenyewa = ? ;";
+
+        PreparedStatement pstPenyewaLookup = conn.prepareStatement(sqlPenyewaLookup);
+        pstPenyewaLookup.setInt(1, idpenyewa);
+
+        ResultSet rsPenyewaLookup = pstPenyewaLookup.executeQuery();
+        while (rsPenyewaLookup.next()) {
+            Name = rsPenyewaLookup.getString("nama");
+        }
+        return Name;
+    }
+
+    private String getBookbyIdBuku(int idbuku) throws SQLException {
+        String judulbuku = "";
+        String sqlBukuLookup = "Select judulbuku from databuku where idbuku = ? ;";
+
+        PreparedStatement pstBukuLookup = conn.prepareStatement(sqlBukuLookup);
+        pstBukuLookup.setInt(1, idbuku);
+
+        ResultSet rsBukuLookup = pstBukuLookup.executeQuery();
+        while (rsBukuLookup.next()) {
+            judulbuku = rsBukuLookup.getString("judulbuku");
+        }
+        return judulbuku;
+    }
+
+    private void idTransaksi() {
+        try {
+            String sql = "SELECT max(idtransaksi) FROM transaksi;";
+            Integer lastDataValue = 0;
+            PreparedStatement pstatement = conn.prepareStatement(sql);
+
+            ResultSet rs = pstatement.executeQuery();
+            if (rs.isBeforeFirst()) { // check is resultset not empty
+
+                while (rs.next()) {
+                    lastDataValue = rs.getInt("max(idtransaksi)");
+                };
+                // tableModel.addRow(data);
+            } else {
+                util.Sutil.msg(this, "Record Empty");
+            }
+            ++lastDataValue;
+            txtIdTransaksi.setText(lastDataValue.toString());
+
+            rs.close();
+            pstatement.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(FrmDataPenyewa.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void deleteDatabase(String username, int idtransaksi, int idpenyewa, int idbuku,
+            Date tanggalpinjam, Date tanggalpengembalian) {
+        try {
+            Class.forName(DbConn.JDBC_CLASS);
+            Connection conn = DriverManager.getConnection(DbConn.JDBC_URL,
+                    DbConn.JDBC_USERNAME,
+                    DbConn.JDBC_PASSWORD);
+
+            if (conn != null) {
+                System.out.println("Connected to DB!\n");
+
+                String sql = "DELETE FROM transaksi where "
+                        + "username = '" + username + "' , "
+                        + "idtransaksi = '" + idtransaksi + "' , "
+                        + "idpenyewa = '" + idpenyewa + "' , "
+                        + "idbuku = '" + idbuku + "' , "
+                        + "tanggalpinjam = '" + tanggalpinjam + "' , "
+                        + "tanggalpengembalian = '" + tanggalpengembalian + "';";
+
+                PreparedStatement pstatement = conn.prepareStatement(sql);
+
+                pstatement.execute();
+                System.out.println("Deleted.");
+
+                pstatement.close();
+                conn.close();
+            }
+        } catch (SQLException | ClassNotFoundException ex) {
+            System.out.println(ex);
+        }
+    }
+
+    private void createDatabase(String username, int idpenyewa, int idbuku,
+            Date tanggalpinjam, Date tanggalpengembalian) throws ParseException {
+        try {
+//            Class.forName(DbConn.JDBC_CLASS);
+            Connection conn = DriverManager.getConnection(DbConn.JDBC_URL,
+                    DbConn.JDBC_USERNAME,
+                    DbConn.JDBC_PASSWORD);
+
+            if (conn != null) {
+                System.out.println("Connected to DB!\n");
+
+                String sql = "INSERT INTO transaksi "
+                        + "(username, idpenyewa, idbuku, tanggalpinjam, tanggalpengembalian)"
+                        + "VALUES (?,?,?,?,? + interval 3 day);";
+
+                PreparedStatement pstatement = conn.prepareStatement(sql);
+                pstatement.setString(1, username);
+                pstatement.setInt(2, idpenyewa);
+                pstatement.setInt(3, idbuku);
+
+                SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+                String tanggalpinjam1 = sdf.format(tanggalpinjam);
+                String tanggalpengembalian1 = sdf.format(tanggalpengembalian);
+
+                Date tanggalpinjam2 = sdf.parse(tanggalpinjam1);
+                Date tanggalpengembalian2 = sdf.parse(tanggalpengembalian1);
+
+                java.sql.Date sqlDate = new java.sql.Date(tanggalpinjam2.getTime());
+                java.sql.Date sqlDate1 = new java.sql.Date(tanggalpengembalian2.getTime());
+
+                pstatement.setDate(4, sqlDate);
+                pstatement.setDate(5, sqlDate1);
+
+                pstatement.executeUpdate();
+                System.out.println("Record insert.");
+
+                pstatement.close();
+                conn.close();
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error:\n" + ex.getLocalizedMessage());
+        }
     }
 
     @Override
     public void dispose() {
         executeExit();
+    }
+
+    private void loadAllDatabase() {
+        removeTableData();
+        try {
+            String sql = "SELECT username, idtransaksi, idpenyewa, idbuku"
+                    + ", date_format(tanggalpinjam, '%d-%m-%Y') as tanggalpinjam"
+                    + ", date_format(tanggalpengembalian, '%d-%m-%Y') as tanggalpengembalian FROM transaksi;";
+            PreparedStatement pstatement = conn.prepareStatement(sql);
+
+            ResultSet rs = pstatement.executeQuery();
+            if (rs.isBeforeFirst()) { // check is resultset not empty
+                while (rs.next()) {
+                    DefaultTableModel tableModel = (DefaultTableModel) tblTransaksi.getModel();
+
+                    Object data[] = {
+                        rs.getInt("idtransaksi"),
+                        rs.getInt("idpenyewa"),
+                        rs.getInt("idbuku"),
+                        rs.getString("tanggalpinjam"),
+                        rs.getString("tanggalpengembalian")
+                    };
+                    tableModel.addRow(data);
+                }
+            } else {
+                util.Sutil.msg(this, "Record Empty");
+            }
+
+            rs.close();
+            pstatement.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(FrmDataPenyewa.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void databaseConnection() {
+        try {
+            conn = DriverManager.getConnection(DbConn.JDBC_URL,
+                    DbConn.JDBC_USERNAME,
+                    DbConn.JDBC_PASSWORD);
+
+            if (conn != null) {
+                System.out.println("Connected to DB!\n");
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error:\n" + ex.getLocalizedMessage());
+        }
     }
 
     /**
@@ -54,23 +277,27 @@ public class FrmMain extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         txtIdTransaksi = new javax.swing.JTextField();
-        txtIdNama = new javax.swing.JTextField();
+        txtIdPenyewa = new javax.swing.JTextField();
         txtIdBuku = new javax.swing.JTextField();
-        txtJenisPenyewa = new javax.swing.JTextField();
-        btnSearchDataPenyewa = new javax.swing.JButton();
-        pinjam = new javax.swing.JButton();
+        txtNama = new javax.swing.JTextField();
+        btnCariDataPenyewa = new javax.swing.JButton();
         jLabel12 = new javax.swing.JLabel();
-        btnSearchDataBuku = new javax.swing.JButton();
+        btnCariDataBuku = new javax.swing.JButton();
         lblDenda = new javax.swing.JLabel();
-        txtTanggalPinjam = new javax.swing.JTextField();
-        txtTanggalPengembalian = new javax.swing.JTextField();
+        btnNew = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
+        btnTransaction = new javax.swing.JButton();
+        txtJudulBuku = new javax.swing.JTextField();
+        dtcTanggalPinjam = new com.toedter.calendar.JDateChooser();
+        dtcTanggalPengembalian = new com.toedter.calendar.JDateChooser();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblTransaksi = new javax.swing.JTable();
+        jLabel7 = new javax.swing.JLabel();
+        txtUsernameMain = new javax.swing.JTextField();
         jMenuBar1 = new javax.swing.JMenuBar();
         MenuFile = new javax.swing.JMenu();
         MenuLogout = new javax.swing.JMenuItem();
@@ -105,9 +332,7 @@ public class FrmMain extends javax.swing.JFrame {
 
         jLabel1.setText("ID Transaksi");
 
-        jLabel2.setText("ID Nama");
-
-        jLabel3.setText("Jenis Penyewa");
+        jLabel2.setText("ID Penyewa");
 
         jLabel4.setText("ID Buku");
 
@@ -117,83 +342,122 @@ public class FrmMain extends javax.swing.JFrame {
 
         txtIdTransaksi.setEditable(false);
 
-        txtIdNama.setEditable(false);
-        txtIdNama.addActionListener(new java.awt.event.ActionListener() {
+        txtIdPenyewa.setEditable(false);
+        txtIdPenyewa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtIdNamaActionPerformed(evt);
+                txtIdPenyewaActionPerformed(evt);
             }
         });
 
         txtIdBuku.setEditable(false);
 
-        txtJenisPenyewa.setEditable(false);
+        txtNama.setEditable(false);
 
-        btnSearchDataPenyewa.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnSearchDataPenyewa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/search.png"))); // NOI18N
-        btnSearchDataPenyewa.setText("Search");
-        btnSearchDataPenyewa.addActionListener(new java.awt.event.ActionListener() {
+        btnCariDataPenyewa.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnCariDataPenyewa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/search.png"))); // NOI18N
+        btnCariDataPenyewa.setText("Cari");
+        btnCariDataPenyewa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSearchDataPenyewaActionPerformed(evt);
+                btnCariDataPenyewaActionPerformed(evt);
             }
         });
-
-        pinjam.setText("Pinjam");
 
         jLabel12.setText("Denda");
 
-        btnSearchDataBuku.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnSearchDataBuku.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/search.png"))); // NOI18N
-        btnSearchDataBuku.setText("Search");
-        btnSearchDataBuku.addActionListener(new java.awt.event.ActionListener() {
+        btnCariDataBuku.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnCariDataBuku.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/search.png"))); // NOI18N
+        btnCariDataBuku.setText("Cari");
+        btnCariDataBuku.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSearchDataBukuActionPerformed(evt);
+                btnCariDataBukuActionPerformed(evt);
             }
         });
 
-        lblDenda.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        btnNew.setText("New");
+        btnNew.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNewActionPerformed(evt);
+            }
+        });
 
-        txtTanggalPinjam.setEditable(false);
+        btnDelete.setText("Delete");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
 
-        txtTanggalPengembalian.setEditable(false);
+        btnTransaction.setText("Save");
+        btnTransaction.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTransactionActionPerformed(evt);
+            }
+        });
+
+        txtJudulBuku.setEditable(false);
+
+        dtcTanggalPinjam.setToolTipText("");
+        dtcTanggalPinjam.setDateFormatString("dd-MM-yyyy");
+
+        dtcTanggalPengembalian.setDateFormatString("dd-MM-yyyy");
+        dtcTanggalPengembalian.setDoubleBuffered(false);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(26, 26, 26)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addGap(18, 18, 18)
-                        .addComponent(txtIdBuku, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnSearchDataBuku, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel6)
-                            .addComponent(jLabel12)
-                            .addComponent(jLabel3))
-                        .addGap(18, 18, 18)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                        .addGap(26, 26, 26)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addComponent(jLabel5)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(dtcTanggalPinjam, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addComponent(jLabel6)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(dtcTanggalPengembalian, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(txtIdTransaksi)
-                                    .addComponent(txtIdNama)
-                                    .addComponent(txtJenisPenyewa, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(125, 125, 125)
+                                .addComponent(lblDenda, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap(74, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel1)
+                                    .addComponent(jLabel4))
                                 .addGap(18, 18, 18)
-                                .addComponent(btnSearchDataPenyewa, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(lblDenda, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                    .addGap(175, 175, 175)
-                                    .addComponent(pinjam, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(txtTanggalPinjam, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtTanggalPengembalian, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(84, Short.MAX_VALUE))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(txtIdPenyewa, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
+                                            .addComponent(txtIdTransaksi))
+                                        .addGap(18, 18, 18)
+                                        .addComponent(txtNama, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(20, 20, 20)
+                                        .addComponent(btnCariDataPenyewa, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(btnNew, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(btnTransaction, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(txtIdBuku, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(txtJudulBuku, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(20, 20, 20)
+                                        .addComponent(btnCariDataBuku, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel12)
+                                .addGap(483, 483, 483)))))
+                .addGap(94, 94, 94))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -204,51 +468,52 @@ public class FrmMain extends javax.swing.JFrame {
                     .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtIdNama, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtIdPenyewa, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
-                    .addComponent(btnSearchDataPenyewa, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnCariDataPenyewa, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtNama, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtJenisPenyewa, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
                     .addComponent(txtIdBuku, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSearchDataBuku, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4))
+                    .addComponent(txtJudulBuku, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCariDataBuku, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(txtTanggalPinjam, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(txtTanggalPengembalian, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(dtcTanggalPinjam, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(lblDenda, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel12))
-                .addGap(18, 18, 18)
-                .addComponent(pinjam, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(dtcTanggalPengembalian, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel12)
+                    .addComponent(lblDenda, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnNew, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnTransaction, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, 720, 330));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, 720, 330));
 
-        jTable1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblTransaksi.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        tblTransaksi.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "ID_Transaksi", "ID_Nama", "Jenis Penyewa", "ID_Buku", "Tanggal Pinjam", "Tanggal Pengembalian", "Denda"
+                "ID Transaksi", "ID Penyewa", "ID Buku", "Tanggal Pinjam", "Tanggal Pengembalian"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class
+                java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Object.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false
+                false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -259,9 +524,17 @@ public class FrmMain extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        tblTransaksi.setColumnSelectionAllowed(true);
+        jScrollPane1.setViewportView(tblTransaksi);
+        tblTransaksi.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 470, 720, 158));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 500, 720, 158));
+
+        jLabel7.setText("Username : ");
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 120, -1, -1));
+
+        txtUsernameMain.setEditable(false);
+        getContentPane().add(txtUsernameMain, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 120, 70, -1));
 
         MenuFile.setText("File");
 
@@ -350,25 +623,44 @@ public class FrmMain extends javax.swing.JFrame {
         executeDataBuku();
     }//GEN-LAST:event_MenuDataBukuActionPerformed
 
-    private void txtIdNamaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdNamaActionPerformed
+    private void txtIdPenyewaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdPenyewaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtIdNamaActionPerformed
+    }//GEN-LAST:event_txtIdPenyewaActionPerformed
 
-    private void btnSearchDataPenyewaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchDataPenyewaActionPerformed
+    private void btnCariDataPenyewaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariDataPenyewaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnSearchDataPenyewaActionPerformed
+        JDialogTabelPenyewa dlgtblpenyewa = new JDialogTabelPenyewa(this, true, conn);
+        dlgtblpenyewa.setVisible(true);
+    }//GEN-LAST:event_btnCariDataPenyewaActionPerformed
 
-    private void btnSearchDataBukuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchDataBukuActionPerformed
+    private void btnCariDataBukuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariDataBukuActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnSearchDataBukuActionPerformed
+        JDialogTabelBuku dlgtblbuku = new JDialogTabelBuku(this, true, conn);
+        dlgtblbuku.setVisible(true);
+    }//GEN-LAST:event_btnCariDataBukuActionPerformed
+
+    private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
+        // TODO add your handling code here:
+        executeNew();
+    }//GEN-LAST:event_btnNewActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        // TODO add your handling code here:
+        executeDelete();
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void btnTransactionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTransactionActionPerformed
+        // TODO add your handling code here:
+        executeSave();
+    }//GEN-LAST:event_btnTransactionActionPerformed
 
     private void executeDataBuku() {
-        FrmDataBuku buku = new FrmDataBuku();
+        FrmDataBuku buku = new FrmDataBuku(conn);
         buku.setVisible(true);
     }
 
     private void executeDataPenyewa() {
-        FrmDataPenyewa data = new FrmDataPenyewa();
+        FrmDataPenyewa data = new FrmDataPenyewa(conn);
         data.setVisible(true);
     }
 
@@ -394,6 +686,55 @@ public class FrmMain extends javax.swing.JFrame {
                 + "\n               William");
     }
 
+    public static void pilihDataPenyewa(String idpenyewa, String nama) {
+        txtIdPenyewa.setText(idpenyewa);
+        txtNama.setText(nama);
+    }
+
+    public static void pilihDataBuku(String idbuku, String judulbuku) {
+        txtIdBuku.setText(idbuku);
+        txtJudulBuku.setText(judulbuku);
+    }
+
+    private void executeNew() {
+        txtIdTransaksi.setText("");
+        txtIdPenyewa.setText("");
+        txtNama.setText("");
+        txtIdBuku.setText("");
+        txtJudulBuku.setText("");
+        dtcTanggalPinjam.cleanup();
+        dtcTanggalPengembalian.cleanup();
+    }
+
+    private void executeDelete() {
+//        deleteDatabase(username, WIDTH, WIDTH, WIDTH, tanggalpinjam, tanggalpengembalian);
+    }
+
+    private void executeSave() {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+            String tanggalpinjam = sdf.format(dtcTanggalPinjam.getDate());
+            String tanggalpengembalian = sdf.format(dtcTanggalPengembalian.getDate());
+
+            Date tanggalpinjam1 = sdf.parse(tanggalpinjam);
+            Date tanggalpengembalian1 = sdf.parse(tanggalpengembalian);
+
+            createDatabase(txtUsernameMain.getText(), Integer.parseInt(txtIdPenyewa.getText()),
+                    Integer.parseInt(txtIdBuku.getText()),
+                    tanggalpinjam1, tanggalpengembalian1);
+            
+            loadAllDatabase();
+
+        } catch (ParseException ex) {
+            Logger.getLogger(FrmMain.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void removeTableData() {
+        DefaultTableModel tableModel = (DefaultTableModel) tblTransaksi.getModel();
+        tableModel.setRowCount(0);
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem MenuAbout;
     private javax.swing.JMenu MenuData;
@@ -403,31 +744,35 @@ public class FrmMain extends javax.swing.JFrame {
     private javax.swing.JMenu MenuFile;
     private javax.swing.JMenu MenuHelp;
     private javax.swing.JMenuItem MenuLogout;
-    private javax.swing.JButton btnSearchDataBuku;
-    private javax.swing.JButton btnSearchDataPenyewa;
+    private javax.swing.JButton btnCariDataBuku;
+    private javax.swing.JButton btnCariDataPenyewa;
+    private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnNew;
+    private javax.swing.JButton btnTransaction;
     private javax.swing.ButtonGroup buttonGroup1;
+    private static com.toedter.calendar.JDateChooser dtcTanggalPengembalian;
+    private static com.toedter.calendar.JDateChooser dtcTanggalPinjam;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JLabel lblAlamat;
     private javax.swing.JLabel lblBack;
     private javax.swing.JLabel lblDenda;
     private javax.swing.JLabel lblLibrary;
     private javax.swing.JLabel lblLogo;
-    private javax.swing.JButton pinjam;
-    private javax.swing.JTextField txtIdBuku;
-    private javax.swing.JTextField txtIdNama;
-    private javax.swing.JTextField txtIdTransaksi;
-    private javax.swing.JTextField txtJenisPenyewa;
-    private javax.swing.JTextField txtTanggalPengembalian;
-    private javax.swing.JTextField txtTanggalPinjam;
+    private javax.swing.JTable tblTransaksi;
+    public static javax.swing.JTextField txtIdBuku;
+    public static javax.swing.JTextField txtIdPenyewa;
+    public javax.swing.JTextField txtIdTransaksi;
+    public static javax.swing.JTextField txtJudulBuku;
+    public static javax.swing.JTextField txtNama;
+    private javax.swing.JTextField txtUsernameMain;
     // End of variables declaration//GEN-END:variables
 }

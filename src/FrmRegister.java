@@ -26,7 +26,8 @@ public class FrmRegister extends javax.swing.JFrame {
     /**
      * Creates new form FrmRegister
      */
-    public FrmRegister() {
+    public FrmRegister(Connection conn) {
+        this.conn = conn;
         initComponents();
         databaseConnection();
         setLocationRelativeTo(null);
@@ -57,7 +58,6 @@ public class FrmRegister extends javax.swing.JFrame {
 
     private void databaseConnection() {
         try {
-            Class.forName(DbConn.JDBC_CLASS);
             conn = DriverManager.getConnection(DbConn.JDBC_URL,
                     DbConn.JDBC_USERNAME,
                     DbConn.JDBC_PASSWORD);
@@ -65,7 +65,7 @@ public class FrmRegister extends javax.swing.JFrame {
             if (conn != null) {
                 System.out.println("Connected to DB!\n");
             }
-        } catch (SQLException | ClassNotFoundException ex) {
+        } catch (SQLException ex) {
             System.out.println("Error:\n" + ex.getLocalizedMessage());
         }
     }

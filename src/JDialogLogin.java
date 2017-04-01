@@ -1,4 +1,5 @@
 
+import java.awt.Color;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -24,11 +25,14 @@ public class JDialogLogin extends javax.swing.JDialog {
     public static JDialogLogin instance;
     private Connection conn;
 
-    public JDialogLogin() {
+    public JDialogLogin(java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
         initComponents();
         databaseConnection();
         setLocationRelativeTo(null);
         instance = this;
+        
+//        btnLogIn.setBackground(Color.YELLOW);
     }
 
     /**
@@ -109,13 +113,13 @@ public class JDialogLogin extends javax.swing.JDialog {
 
     private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed
         // TODO add your handling code here:
-        FrmRegister register = new FrmRegister();
+        FrmRegister register = new FrmRegister(conn);
         register.setVisible(true);
     }//GEN-LAST:event_btnRegisterActionPerformed
 
     private void databaseConnection() {
         try {
-            Class.forName(DbConn.JDBC_CLASS);
+            
             conn = DriverManager.getConnection(DbConn.JDBC_URL,
                     DbConn.JDBC_USERNAME,
                     DbConn.JDBC_PASSWORD);
@@ -123,7 +127,7 @@ public class JDialogLogin extends javax.swing.JDialog {
             if (conn != null) {
                 System.out.println("Connected to DB!\n");
             }
-        } catch (SQLException | ClassNotFoundException ex) {
+        } catch (SQLException ex) {
             System.out.println("Error:\n" + ex.getLocalizedMessage());
         }
     }
@@ -131,14 +135,15 @@ public class JDialogLogin extends javax.swing.JDialog {
     private void executeLogIn() {
         try {
 
-            String sql = "SELECT * FROM registerdata WHERE username = ? and passwords = ?";
+            String sql = "SELECT * FROM registerdata WHERE username = ? and password = ?";
             PreparedStatement pstatement = conn.prepareStatement(sql);
             pstatement.setString(1, txtUsername.getText());
             pstatement.setString(2, txtPassword.getText());
             
             ResultSet rs = pstatement.executeQuery();
             if (rs.next()) {
-                FrmMain main = new FrmMain();
+                FrmMain main = new FrmMain(conn);
+                //main.name = txtUsername.getText().toString();
                 main.setVisible(true);
                 dispose();
             } else {
@@ -159,6 +164,7 @@ public class JDialogLogin extends javax.swing.JDialog {
     public static void main(String args[]) {
 
         try {
+            Class.forName(DbConn.JDBC_CLASS);
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Metal".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
@@ -190,7 +196,7 @@ public class JDialogLogin extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                JDialogLogin dialog = new JDialogLogin();
+                JDialogLogin dialog = new JDialogLogin(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -210,6 +216,6 @@ public class JDialogLogin extends javax.swing.JDialog {
     private javax.swing.JLabel lblPict;
     private javax.swing.JLabel lblWelcome;
     private javax.swing.JPasswordField txtPassword;
-    private javax.swing.JTextField txtUsername;
+    public static javax.swing.JTextField txtUsername;
     // End of variables declaration//GEN-END:variables
 }

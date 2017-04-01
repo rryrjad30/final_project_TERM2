@@ -27,9 +27,6 @@
   <SubComponents>
     <Container class="javax.swing.JPanel" name="pnlDataBuku">
       <Properties>
-        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="ff" green="ff" red="ff" type="rgb"/>
-        </Property>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
             <TitledBorder title="Data Buku">
@@ -54,7 +51,6 @@
                       <Component id="lblKategoriBuku" alignment="1" min="-2" max="-2" attributes="0"/>
                       <Component id="lblPenerbit" alignment="1" min="-2" max="-2" attributes="0"/>
                       <Component id="lblPengarang" alignment="1" min="-2" max="-2" attributes="0"/>
-                      <Component id="lblJudulBuku" alignment="1" min="-2" max="-2" attributes="0"/>
                       <Component id="lblIDBuku" alignment="1" min="-2" max="-2" attributes="0"/>
                       <Component id="lblStok" alignment="1" min="-2" max="-2" attributes="0"/>
                       <Component id="lblISBN" alignment="1" min="-2" max="-2" attributes="0"/>
@@ -62,29 +58,33 @@
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="txtStok" alignment="0" min="-2" pref="325" max="-2" attributes="0"/>
+                      <Group type="102" alignment="0" attributes="0">
+                          <Component id="txtStok" min="-2" pref="325" max="-2" attributes="0"/>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Component id="btnBack1" min="-2" pref="150" max="-2" attributes="0"/>
+                      </Group>
                       <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="txtISBN" alignment="0" min="-2" pref="325" max="-2" attributes="0"/>
-                              <Group type="103" alignment="0" groupAlignment="1" attributes="0">
-                                  <Group type="103" alignment="1" groupAlignment="0" attributes="0">
-                                      <Group type="103" alignment="0" groupAlignment="0" attributes="0">
-                                          <Component id="txtPengarang" alignment="1" min="-2" pref="325" max="-2" attributes="0"/>
-                                          <Component id="txtJudulBuku" alignment="1" min="-2" pref="325" max="-2" attributes="0"/>
-                                          <Component id="txtPenerbit" alignment="1" min="-2" pref="325" max="-2" attributes="0"/>
-                                      </Group>
-                                      <Component id="cboKategoriBuku" alignment="1" min="-2" pref="325" max="-2" attributes="0"/>
-                                      <Component id="spnTahun" alignment="0" min="-2" pref="80" max="-2" attributes="0"/>
+                              <Group type="103" alignment="0" groupAlignment="0" attributes="0">
+                                  <Group type="103" alignment="0" groupAlignment="0" attributes="0">
+                                      <Component id="txtPengarang" alignment="1" min="-2" pref="325" max="-2" attributes="0"/>
+                                      <Component id="txtPenerbit" alignment="1" min="-2" pref="325" max="-2" attributes="0"/>
                                   </Group>
-                                  <Component id="txtIDBuku" alignment="1" min="-2" pref="325" max="-2" attributes="0"/>
+                                  <Component id="cboKategoriBuku" alignment="1" min="-2" pref="325" max="-2" attributes="0"/>
                               </Group>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="txtIDBuku" min="-2" pref="50" max="-2" attributes="0"/>
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                  <Component id="txtJudulBuku" min="-2" pref="255" max="-2" attributes="0"/>
+                              </Group>
+                              <Component id="yrcTahunTerbit" alignment="0" min="-2" pref="70" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="btnCreate" min="-2" pref="150" max="-2" attributes="0"/>
                               <Component id="btnUpdate" min="-2" pref="150" max="-2" attributes="0"/>
                               <Component id="btnDelete" min="-2" pref="150" max="-2" attributes="0"/>
-                              <Component id="btnBack1" min="-2" pref="150" max="-2" attributes="0"/>
                               <Component id="btnNew" alignment="1" min="-2" pref="150" max="-2" attributes="0"/>
                           </Group>
                       </Group>
@@ -109,11 +109,6 @@
                                   </Group>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="txtJudulBuku" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
-                                      <Component id="lblJudulBuku" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="3" attributes="0">
                                       <Component id="txtPengarang" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
                                       <Component id="lblPengarang" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
@@ -123,9 +118,9 @@
                                       <Component id="lblPenerbit" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="spnTahun" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
-                                      <Component id="lblTahunTerbit" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="lblTahunTerbit" min="-2" max="-2" attributes="0"/>
+                                      <Component id="yrcTahunTerbit" min="-2" pref="25" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="3" attributes="0">
@@ -137,23 +132,26 @@
                                       <Component id="txtISBN" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
                                       <Component id="lblISBN" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="txtStok" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                                      <Component id="lblStok" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
-                                  <Component id="btnNew" min="-2" pref="30" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="btnNew" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                                      <Component id="txtJudulBuku" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
                                   <Component id="btnCreate" min="-2" pref="30" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
                                   <Component id="btnUpdate" min="-2" pref="30" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
                                   <Component id="btnDelete" min="-2" pref="30" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
                                   <Component id="btnBack1" min="-2" pref="30" max="-2" attributes="0"/>
                               </Group>
-                          </Group>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="txtStok" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
-                              <Component id="lblStok" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
@@ -161,7 +159,7 @@
                           <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
-                  <EmptySpace pref="65" max="32767" attributes="0"/>
+                  <EmptySpace pref="81" max="32767" attributes="0"/>
                   <Component id="jScrollPane2" min="-2" pref="164" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -175,14 +173,6 @@
               <Font name="Tahoma" size="14" style="0"/>
             </Property>
             <Property name="text" type="java.lang.String" value="ID Buku"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JLabel" name="lblJudulBuku">
-          <Properties>
-            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Tahoma" size="14" style="0"/>
-            </Property>
-            <Property name="text" type="java.lang.String" value="Judul Buku"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="lblPengarang">
@@ -286,7 +276,7 @@
                   </Table>
                 </Property>
                 <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
-                  <TableColumnModel selectionModel="2">
+                  <TableColumnModel selectionModel="1">
                     <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                       <Title/>
                       <Editor/>
@@ -355,16 +345,6 @@
               <Font name="Tahoma" size="14" style="0"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Kategori Buku"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JSpinner" name="spnTahun">
-          <Properties>
-            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Tahoma" size="14" style="0"/>
-            </Property>
-            <Property name="editor" type="javax.swing.JComponent" editor="org.netbeans.modules.form.editors.SpinnerEditorEditor">
-              <SpinnerEditor format="0000" type="3"/>
-            </Property>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="lblISBN">
@@ -469,6 +449,8 @@
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnNewActionPerformed"/>
           </Events>
+        </Component>
+        <Component class="com.toedter.calendar.JYearChooser" name="yrcTahunTerbit">
         </Component>
       </SubComponents>
     </Container>
