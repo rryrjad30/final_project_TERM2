@@ -7,9 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.table.DefaultTableModel;
 import util.DbConn;
-import util.Sutil;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -25,13 +23,12 @@ public class JDialogLogin extends javax.swing.JDialog {
     public static JDialogLogin instance;
     private Connection conn;
 
-    public JDialogLogin(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
+    public JDialogLogin() {
+        instance = this;
         initComponents();
         databaseConnection();
         setLocationRelativeTo(null);
-        instance = this;
-        
+
 //        btnLogIn.setBackground(Color.YELLOW);
     }
 
@@ -99,14 +96,16 @@ public class JDialogLogin extends javax.swing.JDialog {
 
     private void btnLogInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogInActionPerformed
         databaseConnection();
-        if (txtUsername.getText().equals("") && txtPassword.getText().equals("")) {
+        String username = txtUsername.getText().trim();
+        String password = txtPassword.getText().trim();
+
+        if (username.equals("") && password.equals("")) {
             util.Sutil.mse(this, "Username and Password can't be empty !");
-        } else if (txtUsername.getText().equals("")) {
+        } else if (username.equals("")) {
             util.Sutil.mse(this, "Username can't be empty !");
-        } else if(txtPassword.getText().equals("")){
+        } else if (password.equals("")) {
             util.Sutil.mse(this, "Password can't be empty !");
-        }
-        else {
+        } else if(!username.equals("") && !password.equals("")){
             executeLogIn();
         }
     }//GEN-LAST:event_btnLogInActionPerformed
@@ -119,7 +118,7 @@ public class JDialogLogin extends javax.swing.JDialog {
 
     private void databaseConnection() {
         try {
-            
+
             conn = DriverManager.getConnection(DbConn.JDBC_URL,
                     DbConn.JDBC_USERNAME,
                     DbConn.JDBC_PASSWORD);
@@ -139,12 +138,14 @@ public class JDialogLogin extends javax.swing.JDialog {
             PreparedStatement pstatement = conn.prepareStatement(sql);
             pstatement.setString(1, txtUsername.getText());
             pstatement.setString(2, txtPassword.getText());
-            
+
             ResultSet rs = pstatement.executeQuery();
             if (rs.next()) {
+                
                 FrmMain main = new FrmMain(conn);
-                //main.name = txtUsername.getText().toString();
                 main.setVisible(true);
+                txtUsername.setText("");
+                txtPassword.setText("");
                 dispose();
             } else {
                 util.Sutil.mse(this, "Username or password invalid !");
@@ -157,7 +158,7 @@ public class JDialogLogin extends javax.swing.JDialog {
             Logger.getLogger(JDialogLogin.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
     /**
      * @param args the command line arguments
      */
@@ -196,7 +197,7 @@ public class JDialogLogin extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                JDialogLogin dialog = new JDialogLogin(new javax.swing.JFrame(), true);
+                JDialogLogin dialog = new JDialogLogin();
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

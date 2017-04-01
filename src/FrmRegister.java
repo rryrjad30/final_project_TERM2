@@ -2,13 +2,10 @@
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.table.DefaultTableModel;
 import util.DbConn;
-import util.Sutil;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -89,7 +86,7 @@ public class FrmRegister extends javax.swing.JFrame {
         btnRegister = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -185,15 +182,17 @@ public class FrmRegister extends javax.swing.JFrame {
 
     private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed
         // TODO add your handling code here:
-        String username = txtUsername.getText();
-        String passwords = txtPassword.getText();
+        String username = txtUsername.getText().trim();
+        String passwords = txtPassword.getText().trim();
         String confirmpassword = txtConfirmPassword.getText();
 
         if (username.equals("") || passwords.equals("") || confirmpassword.equals("")) {
-            Sutil.msg(this, "Can not empty !");
-        } else {
+            util.Sutil.mse(this, "Can not empty !");
+        } else if (!passwords.equals(confirmpassword)) {
+            util.Sutil.mse(this, "Password and Confirm Password must sama !");
+        } else if(!username.equals("") && !passwords.equals("") && !confirmpassword.equals("") && passwords.equals(confirmpassword)){
             insertToDatabase(username, passwords, confirmpassword);
-            Sutil.msg(this, "Registered !");
+            util.Sutil.msg(this, "Registered !");
             dispose();
         }
     }//GEN-LAST:event_btnRegisterActionPerformed

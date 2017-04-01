@@ -4,7 +4,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -15,7 +14,9 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import util.DbConn;
-import util.Sutil;
+import Data.JDialogTransaksi;
+import Data.JDialogPenyewa;
+import Data.JDialogBuku;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -39,6 +40,7 @@ public class FrmMain extends javax.swing.JFrame {
 
         String username = JDialogLogin.txtUsername.getText();
         txtUsernameMain.setText(username);
+        
         tableSelectionListener();
 
         lblDenda.setText("<html>* Normal : Rp 10.000/hari<br>* Special : Rp 7.000/hari</html>");
@@ -62,8 +64,10 @@ public class FrmMain extends javax.swing.JFrame {
                         txtNama.setText(getNamebyIdPenyewa(Integer.valueOf(txtIdPenyewa.getText())));
                         txtIdBuku.setText(tblTransaksi.getValueAt(row, 2).toString());
                         txtJudulBuku.setText(getBookbyIdBuku(Integer.valueOf(txtIdBuku.getText())));
+
                         Date datePinjam = new SimpleDateFormat("dd-MM-yyyy").parse((String) tblTransaksi.getValueAt(row, 3));
                         dtcTanggalPinjam.setDate(datePinjam);
+
                         Date datePengembalian = new SimpleDateFormat("dd-MM-yyyy").parse((String) tblTransaksi.getValueAt(row, 4));
                         dtcTanggalPengembalian.setDate(datePengembalian);
                     } catch (SQLException ex) {
@@ -132,8 +136,7 @@ public class FrmMain extends javax.swing.JFrame {
         }
     }
 
-    private void deleteDatabase(String username, int idtransaksi, int idpenyewa, int idbuku,
-            Date tanggalpinjam, Date tanggalpengembalian) {
+    private void deleteDatabase(int idtransaksi) {
         try {
             Class.forName(DbConn.JDBC_CLASS);
             Connection conn = DriverManager.getConnection(DbConn.JDBC_URL,
@@ -144,12 +147,7 @@ public class FrmMain extends javax.swing.JFrame {
                 System.out.println("Connected to DB!\n");
 
                 String sql = "DELETE FROM transaksi where "
-                        + "username = '" + username + "' , "
-                        + "idtransaksi = '" + idtransaksi + "' , "
-                        + "idpenyewa = '" + idpenyewa + "' , "
-                        + "idbuku = '" + idbuku + "' , "
-                        + "tanggalpinjam = '" + tanggalpinjam + "' , "
-                        + "tanggalpengembalian = '" + tanggalpengembalian + "';";
+                        + "idtransaksi = '" + idtransaksi + "' ;";
 
                 PreparedStatement pstatement = conn.prepareStatement(sql);
 
@@ -206,11 +204,6 @@ public class FrmMain extends javax.swing.JFrame {
         } catch (SQLException ex) {
             System.out.println("Error:\n" + ex.getLocalizedMessage());
         }
-    }
-
-    @Override
-    public void dispose() {
-        executeExit();
     }
 
     private void loadAllDatabase() {
@@ -300,11 +293,16 @@ public class FrmMain extends javax.swing.JFrame {
         txtUsernameMain = new javax.swing.JTextField();
         jMenuBar1 = new javax.swing.JMenuBar();
         MenuFile = new javax.swing.JMenu();
-        MenuLogout = new javax.swing.JMenuItem();
-        MenuExit = new javax.swing.JMenuItem();
+        MniAdmin = new javax.swing.JMenuItem();
+        jSeparator1 = new javax.swing.JPopupMenu.Separator();
+        MniLogout = new javax.swing.JMenuItem();
         MenuData = new javax.swing.JMenu();
-        MenuDataPenyewa = new javax.swing.JMenuItem();
-        MenuDataBuku = new javax.swing.JMenuItem();
+        mniTransaksi = new javax.swing.JMenuItem();
+        mniPenyewa = new javax.swing.JMenuItem();
+        mniBuku = new javax.swing.JMenuItem();
+        MenuRegister = new javax.swing.JMenu();
+        MniDataPenyewa = new javax.swing.JMenuItem();
+        MniDataBuku = new javax.swing.JMenuItem();
         MenuHelp = new javax.swing.JMenu();
         MenuAbout = new javax.swing.JMenuItem();
 
@@ -355,7 +353,7 @@ public class FrmMain extends javax.swing.JFrame {
 
         btnCariDataPenyewa.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnCariDataPenyewa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/search.png"))); // NOI18N
-        btnCariDataPenyewa.setText("Cari");
+        btnCariDataPenyewa.setText("Search");
         btnCariDataPenyewa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCariDataPenyewaActionPerformed(evt);
@@ -366,13 +364,14 @@ public class FrmMain extends javax.swing.JFrame {
 
         btnCariDataBuku.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnCariDataBuku.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/search.png"))); // NOI18N
-        btnCariDataBuku.setText("Cari");
+        btnCariDataBuku.setText("Search");
         btnCariDataBuku.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCariDataBukuActionPerformed(evt);
             }
         });
 
+        btnNew.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/new.png"))); // NOI18N
         btnNew.setText("New");
         btnNew.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -380,6 +379,7 @@ public class FrmMain extends javax.swing.JFrame {
             }
         });
 
+        btnDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/delete.png"))); // NOI18N
         btnDelete.setText("Delete");
         btnDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -387,6 +387,7 @@ public class FrmMain extends javax.swing.JFrame {
             }
         });
 
+        btnTransaction.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/update.png"))); // NOI18N
         btnTransaction.setText("Save");
         btnTransaction.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -530,59 +531,94 @@ public class FrmMain extends javax.swing.JFrame {
 
         getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 500, 720, 158));
 
-        jLabel7.setText("Username : ");
-        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 120, -1, -1));
+        jLabel7.setText("Username");
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 120, -1, -1));
 
         txtUsernameMain.setEditable(false);
         getContentPane().add(txtUsernameMain, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 120, 70, -1));
 
         MenuFile.setText("File");
 
-        MenuLogout.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
-        MenuLogout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/logout.png"))); // NOI18N
-        MenuLogout.setText("Logout");
-        MenuLogout.addActionListener(new java.awt.event.ActionListener() {
+        MniAdmin.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F3, java.awt.event.InputEvent.CTRL_MASK));
+        MniAdmin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/administrator.png"))); // NOI18N
+        MniAdmin.setText("User");
+        MniAdmin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                MenuLogoutActionPerformed(evt);
+                MniAdminActionPerformed(evt);
             }
         });
-        MenuFile.add(MenuLogout);
+        MenuFile.add(MniAdmin);
+        MenuFile.add(jSeparator1);
 
-        MenuExit.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, java.awt.event.InputEvent.ALT_MASK));
-        MenuExit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/exit.png"))); // NOI18N
-        MenuExit.setText("Exit");
-        MenuExit.addActionListener(new java.awt.event.ActionListener() {
+        MniLogout.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
+        MniLogout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/logout.png"))); // NOI18N
+        MniLogout.setText("Logout");
+        MniLogout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                MenuExitActionPerformed(evt);
+                MniLogoutActionPerformed(evt);
             }
         });
-        MenuFile.add(MenuExit);
+        MenuFile.add(MniLogout);
 
         jMenuBar1.add(MenuFile);
 
         MenuData.setText("Data");
 
-        MenuDataPenyewa.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_MASK));
-        MenuDataPenyewa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/User Icon.png"))); // NOI18N
-        MenuDataPenyewa.setText("Data Penyewa");
-        MenuDataPenyewa.addActionListener(new java.awt.event.ActionListener() {
+        mniTransaksi.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.CTRL_MASK));
+        mniTransaksi.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/textfile.png"))); // NOI18N
+        mniTransaksi.setText("Transaksi");
+        mniTransaksi.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                MenuDataPenyewaActionPerformed(evt);
+                mniTransaksiActionPerformed(evt);
             }
         });
-        MenuData.add(MenuDataPenyewa);
+        MenuData.add(mniTransaksi);
 
-        MenuDataBuku.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_B, java.awt.event.InputEvent.CTRL_MASK));
-        MenuDataBuku.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/Buku Icon.png"))); // NOI18N
-        MenuDataBuku.setText("Data Buku");
-        MenuDataBuku.addActionListener(new java.awt.event.ActionListener() {
+        mniPenyewa.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_MASK));
+        mniPenyewa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/User Icon.png"))); // NOI18N
+        mniPenyewa.setText("Penyewa");
+        mniPenyewa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                MenuDataBukuActionPerformed(evt);
+                mniPenyewaActionPerformed(evt);
             }
         });
-        MenuData.add(MenuDataBuku);
+        MenuData.add(mniPenyewa);
+
+        mniBuku.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_B, java.awt.event.InputEvent.CTRL_MASK));
+        mniBuku.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/Buku Icon.png"))); // NOI18N
+        mniBuku.setText("Book");
+        mniBuku.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mniBukuActionPerformed(evt);
+            }
+        });
+        MenuData.add(mniBuku);
 
         jMenuBar1.add(MenuData);
+
+        MenuRegister.setText("Register");
+
+        MniDataPenyewa.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        MniDataPenyewa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/User Icon.png"))); // NOI18N
+        MniDataPenyewa.setText("Penyewa");
+        MniDataPenyewa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MniDataPenyewaActionPerformed(evt);
+            }
+        });
+        MenuRegister.add(MniDataPenyewa);
+
+        MniDataBuku.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_B, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        MniDataBuku.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/Buku Icon.png"))); // NOI18N
+        MniDataBuku.setText("Buku");
+        MniDataBuku.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MniDataBukuActionPerformed(evt);
+            }
+        });
+        MenuRegister.add(MniDataBuku);
+
+        jMenuBar1.add(MenuRegister);
 
         MenuHelp.setText("Help");
 
@@ -607,21 +643,17 @@ public class FrmMain extends javax.swing.JFrame {
         executeAbout();
     }//GEN-LAST:event_MenuAboutActionPerformed
 
-    private void MenuLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuLogoutActionPerformed
+    private void MniLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MniLogoutActionPerformed
         executeLogout();
-    }//GEN-LAST:event_MenuLogoutActionPerformed
+    }//GEN-LAST:event_MniLogoutActionPerformed
 
-    private void MenuExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuExitActionPerformed
-        executeExit();
-    }//GEN-LAST:event_MenuExitActionPerformed
-
-    private void MenuDataPenyewaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuDataPenyewaActionPerformed
+    private void MniDataPenyewaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MniDataPenyewaActionPerformed
         executeDataPenyewa();
-    }//GEN-LAST:event_MenuDataPenyewaActionPerformed
+    }//GEN-LAST:event_MniDataPenyewaActionPerformed
 
-    private void MenuDataBukuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuDataBukuActionPerformed
+    private void MniDataBukuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MniDataBukuActionPerformed
         executeDataBuku();
-    }//GEN-LAST:event_MenuDataBukuActionPerformed
+    }//GEN-LAST:event_MniDataBukuActionPerformed
 
     private void txtIdPenyewaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdPenyewaActionPerformed
         // TODO add your handling code here:
@@ -654,6 +686,42 @@ public class FrmMain extends javax.swing.JFrame {
         executeSave();
     }//GEN-LAST:event_btnTransactionActionPerformed
 
+    private void MniAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MniAdminActionPerformed
+        // TODO add your handling code here:
+        FrmUser user = new FrmUser(conn);
+        user.setVisible(true);
+    }//GEN-LAST:event_MniAdminActionPerformed
+
+    private void mniPenyewaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniPenyewaActionPerformed
+        // TODO add your handling code here:
+        seeDataPenyewa();
+    }//GEN-LAST:event_mniPenyewaActionPerformed
+
+    private void mniTransaksiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniTransaksiActionPerformed
+        // TODO add your handling code here:
+        seeDataTransaksi();
+    }//GEN-LAST:event_mniTransaksiActionPerformed
+
+    private void mniBukuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniBukuActionPerformed
+        // TODO add your handling code here:
+        seeDataBuku();
+    }//GEN-LAST:event_mniBukuActionPerformed
+
+    private void seeDataTransaksi() {
+        JDialogTransaksi dlgTransaksi = new JDialogTransaksi(this, true, conn);
+        dlgTransaksi.setVisible(true);
+    }
+
+    private void seeDataPenyewa() {
+        JDialogPenyewa dlgPenyewa = new JDialogPenyewa(this, true, conn);
+        dlgPenyewa.setVisible(true);
+    }
+
+    private void seeDataBuku() {
+        JDialogBuku dlgBuku = new JDialogBuku(this, true, conn);
+        dlgBuku.setVisible(true);
+    }
+
     private void executeDataBuku() {
         FrmDataBuku buku = new FrmDataBuku(conn);
         buku.setVisible(true);
@@ -665,20 +733,21 @@ public class FrmMain extends javax.swing.JFrame {
     }
 
     private void executeLogout() {
-        this.setVisible(false);
-        JDialogLogin.instance.setVisible(true);
-    }
-
-    private void executeExit() {
-        if (Sutil.msq(this, "Exit ? ") == 0) {
-            System.exit(0);
+        if (util.Sutil.msq(this, "Are you sure to log out ? ") == 0) {
+            this.setVisible(false);
+            JDialogLogin.instance.setVisible(true);
         } else {
 
         }
     }
 
+    @Override
+    public void dispose() {
+        executeLogout();
+    }
+
     private void executeAbout() {
-        Sutil.msg(this, "Book Forest Library"
+        util.Sutil.msg(this, "Book Forest Library"
                 + "\n Version : 1.0"
                 + "\n Author  : Lavinia"
                 + "\n               Pierry Rajadi"
@@ -707,7 +776,8 @@ public class FrmMain extends javax.swing.JFrame {
     }
 
     private void executeDelete() {
-//        deleteDatabase(username, WIDTH, WIDTH, WIDTH, tanggalpinjam, tanggalpengembalian);
+        deleteDatabase(Integer.parseInt(txtIdTransaksi.getText()));
+        loadAllDatabase();
     }
 
     private void executeSave() {
@@ -722,14 +792,14 @@ public class FrmMain extends javax.swing.JFrame {
             createDatabase(txtUsernameMain.getText(), Integer.parseInt(txtIdPenyewa.getText()),
                     Integer.parseInt(txtIdBuku.getText()),
                     tanggalpinjam1, tanggalpengembalian1);
-            
+
             loadAllDatabase();
 
         } catch (ParseException ex) {
             Logger.getLogger(FrmMain.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     private void removeTableData() {
         DefaultTableModel tableModel = (DefaultTableModel) tblTransaksi.getModel();
         tableModel.setRowCount(0);
@@ -738,12 +808,13 @@ public class FrmMain extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem MenuAbout;
     private javax.swing.JMenu MenuData;
-    private javax.swing.JMenuItem MenuDataBuku;
-    private javax.swing.JMenuItem MenuDataPenyewa;
-    private javax.swing.JMenuItem MenuExit;
     private javax.swing.JMenu MenuFile;
     private javax.swing.JMenu MenuHelp;
-    private javax.swing.JMenuItem MenuLogout;
+    private javax.swing.JMenu MenuRegister;
+    private javax.swing.JMenuItem MniAdmin;
+    private javax.swing.JMenuItem MniDataBuku;
+    private javax.swing.JMenuItem MniDataPenyewa;
+    private javax.swing.JMenuItem MniLogout;
     private javax.swing.JButton btnCariDataBuku;
     private javax.swing.JButton btnCariDataPenyewa;
     private javax.swing.JButton btnDelete;
@@ -762,11 +833,15 @@ public class FrmMain extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JLabel lblAlamat;
     private javax.swing.JLabel lblBack;
     private javax.swing.JLabel lblDenda;
     private javax.swing.JLabel lblLibrary;
     private javax.swing.JLabel lblLogo;
+    private javax.swing.JMenuItem mniBuku;
+    private javax.swing.JMenuItem mniPenyewa;
+    private javax.swing.JMenuItem mniTransaksi;
     private javax.swing.JTable tblTransaksi;
     public static javax.swing.JTextField txtIdBuku;
     public static javax.swing.JTextField txtIdPenyewa;

@@ -62,7 +62,7 @@ public class FrmDataBuku extends javax.swing.JFrame {
         removeTableData();
         try {
 
-            String sql = "SELECT * FROM databuku";
+            String sql = "SELECT * FROM databuku;";
             PreparedStatement pstatement = conn.prepareStatement(sql);
 
             ResultSet rs = pstatement.executeQuery();
@@ -78,7 +78,6 @@ public class FrmDataBuku extends javax.swing.JFrame {
                         rs.getInt("tahunterbit"),
                         rs.getString("kategori"),
                         rs.getLong("isbn")
-//                        rs.getInt("stok")
                     };
                     tableModel.addRow(data);
                 }
@@ -107,7 +106,7 @@ public class FrmDataBuku extends javax.swing.JFrame {
         }
     }
 
-    private void createDatabase(int idbuku, String judulbuku, String pengarang, String penerbit, String tahunterbit, String kategori, String isbn) {
+    private void createDatabase(String judulbuku, String pengarang, String penerbit, String tahunterbit, String kategori, String isbn) {
         try {
             Class.forName(DbConn.JDBC_CLASS);
             Connection conn = DriverManager.getConnection(DbConn.JDBC_URL,
@@ -118,19 +117,17 @@ public class FrmDataBuku extends javax.swing.JFrame {
                 System.out.println("Connected to DB!\n");
 
                 String sql = "INSERT INTO `databuku` "
-                        + "(idbuku, judulbuku, pengarang, penerbit, tahunterbit, kategori, isbn)"
-                        + "VALUES (?,?,?,?,?,?,?);";
+                        + "(judulbuku, pengarang, penerbit, tahunterbit, kategori, isbn)"
+                        + "VALUES (?,?,?,?,?,?);";
 
                 PreparedStatement pstatement = conn.prepareStatement(sql);
-                pstatement.setInt(1, idbuku);
-                pstatement.setString(2, judulbuku);
-                pstatement.setString(3, pengarang);
-                pstatement.setString(4, penerbit);
-                pstatement.setString(5, tahunterbit);
-                pstatement.setString(6, kategori);
-                pstatement.setString(7, isbn);
-
-//                pstatement.setString(8, txtStok.getText());
+                pstatement.setString(1, judulbuku);
+                pstatement.setString(2, pengarang);
+                pstatement.setString(3, penerbit);
+                pstatement.setString(4, tahunterbit);
+                pstatement.setString(5, kategori);
+                pstatement.setString(6, isbn);
+                
                 pstatement.executeUpdate();
                 System.out.println("Record insert.");
 
@@ -529,8 +526,34 @@ public class FrmDataBuku extends javax.swing.JFrame {
         txtStok.setText("");
     }
 
+    public void createIdBuku() {
+        try {
+            String sql = "SELECT max(idbuku) FROM databuku;";
+            Integer lastDataValue = 0;
+            PreparedStatement pstatement = conn.prepareStatement(sql);
+
+            ResultSet rs = pstatement.executeQuery();
+            if (rs.isBeforeFirst()) { // check is resultset not empty
+
+                while (rs.next()) {
+                    lastDataValue = rs.getInt("max(idbuku)");
+                };
+                // tableModel.addRow(data);
+            } else {
+                util.Sutil.msg(this, "Record Empty");
+            }
+            ++lastDataValue;
+            txtIDBuku.setText(lastDataValue.toString());
+            
+            rs.close();
+            pstatement.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(FrmDataPenyewa.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     private void executeCreate() {
-        createDatabase(Integer.parseInt(txtIDBuku.getText()), txtJudulBuku.getText(), txtPengarang.getText(),
+        createDatabase(txtJudulBuku.getText(), txtPengarang.getText(),
                 txtPenerbit.getText(), String.valueOf(yrcTahunTerbit.getYear()),
                 (String) (cboKategoriBuku.getSelectedItem()), txtISBN.getText());
 
