@@ -276,14 +276,14 @@ public class FrmDataBuku extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID Buku", "Judul Buku", "Pengarang", "Penerbit", "Tahun Terbit", "Kategori Buku", "ISBN", "Stok", "Keterangan"
+                "ID Buku", "Judul Buku", "Pengarang", "Penerbit", "Tahun Terbit", "Kategori Buku", "ISBN"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -367,7 +367,6 @@ public class FrmDataBuku extends javax.swing.JFrame {
         pnlDataBuku.setLayout(pnlDataBukuLayout);
         pnlDataBukuLayout.setHorizontalGroup(
             pnlDataBukuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(pnlDataBukuLayout.createSequentialGroup()
                 .addGap(41, 41, 41)
                 .addGroup(pnlDataBukuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -405,7 +404,8 @@ public class FrmDataBuku extends javax.swing.JFrame {
                             .addComponent(btnNew, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(42, 42, 42)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(236, Short.MAX_VALUE))
+                .addContainerGap(16, Short.MAX_VALUE))
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING)
         );
         pnlDataBukuLayout.setVerticalGroup(
             pnlDataBukuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -457,12 +457,12 @@ public class FrmDataBuku extends javax.swing.JFrame {
                     .addGroup(pnlDataBukuLayout.createSequentialGroup()
                         .addGap(50, 50, 50)
                         .addComponent(jLabel3)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 81, Short.MAX_VALUE)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(33, 33, 33)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        getContentPane().add(pnlDataBuku, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 123, 1110, 540));
+        getContentPane().add(pnlDataBuku, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 123, 890, 470));
 
         lblLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/logo1.png"))); // NOI18N
         getContentPane().add(lblLogo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 90, 90));

@@ -10,6 +10,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
@@ -22,7 +23,7 @@ import util.DbConn;
 public class JDialogBuku extends javax.swing.JDialog {
 
     private Connection conn;
-    
+
     /**
      * Creates new form JDialogBuku
      */
@@ -34,10 +35,23 @@ public class JDialogBuku extends javax.swing.JDialog {
         loadAllDatabase();
         setLocationRelativeTo(null);
     }
-    
-    private void loadAllDatabase() {
-        try {
 
+//    private void getData() {
+//        String Name = "";
+//        String sqlPenyewaLookup = "Select * from databuku where " + cbxSearch.getSelectedIndex() + " = ? ;";
+//
+//        PreparedStatement pstPenyewaLookup = conn.prepareStatement(sqlPenyewaLookup);
+//        pstPenyewaLookup.setInt(1, data);
+//
+//        ResultSet rsPenyewaLookup = pstPenyewaLookup.executeQuery();
+//        while (rsPenyewaLookup.next()) {
+//            Name = rsPenyewaLookup.getString("nama");
+//        }
+//        return Name;
+//    }
+    private void loadAllDatabase() {
+        removeTableData();
+        try {
             String sql = "SELECT * FROM databuku;";
             PreparedStatement pstatement = conn.prepareStatement(sql);
 
@@ -94,6 +108,11 @@ public class JDialogBuku extends javax.swing.JDialog {
 
         jScrollPane2 = new javax.swing.JScrollPane();
         tblDataBuku = new javax.swing.JTable();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        cbxSearch = new javax.swing.JComboBox<>();
+        txtSearch = new javax.swing.JTextField();
+        btnSearch = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -103,14 +122,14 @@ public class JDialogBuku extends javax.swing.JDialog {
 
             },
             new String [] {
-                "ID Buku", "Judul Buku", "Pengarang", "Penerbit", "Tahun Terbit", "Kategori Buku", "ISBN", "Stok", "Keterangan"
+                "ID Buku", "Judul Buku", "Pengarang", "Penerbit", "Tahun Terbit", "ISBN", "Kategori Buku"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -123,27 +142,360 @@ public class JDialogBuku extends javax.swing.JDialog {
         });
         tblDataBuku.setColumnSelectionAllowed(true);
         jScrollPane2.setViewportView(tblDataBuku);
+        tblDataBuku.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+
+        jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        jLabel1.setText("Search by : ");
+
+        cbxSearch.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ID Buku", "Judul Buku", "Pengarang", "Penerbit", "Tahun Terbit", "ISBN", "Kategori" }));
+
+        btnSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/google_custom_search.png"))); // NOI18N
+        btnSearch.setText("Search");
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(cbxSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnSearch)
+                .addContainerGap(26, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbxSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSearch))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 719, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 719, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 365, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 345, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 365, Short.MAX_VALUE))
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addGap(0, 55, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 341, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+        // TODO add your handling code here:
+        searchDataBuku();
+    }//GEN-LAST:event_btnSearchActionPerformed
+
+    private void searchDataBuku() {
+        if (cbxSearch.getSelectedItem().equals("ID Buku")) {
+            if (!txtSearch.getText().trim().equals("")) {
+                searchByIdBuku();
+            } else if (txtSearch.getText().trim().equals("")) {
+                loadAllDatabase();
+            }
+        } else if (cbxSearch.getSelectedItem().equals("Judul Buku")) {
+            if (!txtSearch.getText().trim().equals("")) {
+                searchByJudulBuku();
+            } else if (txtSearch.getText().trim().equals("")) {
+                loadAllDatabase();
+            }
+        } else if (cbxSearch.getSelectedItem().equals("Pengarang")) {
+            if (!txtSearch.getText().trim().equals("")) {
+                searchByPengarangBuku();
+            } else if (txtSearch.getText().trim().equals("")) {
+                loadAllDatabase();
+            }
+        } else if (cbxSearch.getSelectedItem().equals("Penerbit")) {
+            if (!txtSearch.getText().trim().equals("")) {
+                searchByPenerbitBuku();
+            } else if (txtSearch.getText().trim().equals("")) {
+                loadAllDatabase();
+            }
+        } else if (cbxSearch.getSelectedItem().equals("Tahun Terbit")) {
+            if (!txtSearch.getText().trim().equals("")) {
+                searchByTahunTerbitBuku();
+            } else if (txtSearch.getText().trim().equals("")) {
+                loadAllDatabase();
+            }
+        } else if (cbxSearch.getSelectedItem().equals("ISBN")) {
+            if (!txtSearch.getText().trim().equals("")) {
+                searchByISBNBuku();
+            } else if (txtSearch.getText().trim().equals("")) {
+                loadAllDatabase();
+            }
+        } else if (cbxSearch.getSelectedItem().equals("Kategori")) {
+            if (!txtSearch.getText().trim().equals("")) {
+                searchByKategoriBuku();
+            } else if (txtSearch.getText().trim().equals("")) {
+                loadAllDatabase();
+            }
+        } else {
+            util.Sutil.mse(this, "Not found !");
+        }
+    }
+
+    private void searchByIdBuku() {
+        try {
+            removeTableData();
+            String sql = "SELECT * FROM databuku WHERE idbuku LIKE ?";
+
+            PreparedStatement pstatement = conn.prepareStatement(sql);
+            pstatement.setInt(1, Integer.parseInt(txtSearch.getText().trim()));
+
+            ResultSet rs = pstatement.executeQuery();
+            if (rs.isBeforeFirst()) { // check is resultset not empty
+                DefaultTableModel tableModel = (DefaultTableModel) tblDataBuku.getModel();
+                while (rs.next()) {
+                    Object data[] = {
+                        rs.getInt("idbuku"),
+                        rs.getString("judulbuku"),
+                        rs.getString("pengarang"),
+                        rs.getString("penerbit"),
+                        rs.getString("tahunterbit"),
+                        rs.getString("isbn"),
+                        rs.getString("kategori")
+                    };
+                    tableModel.addRow(data);
+                }
+            }
+
+            rs.close();
+            pstatement.close();
+        } catch (SQLException ex) {
+            System.out.println("Error:\n" + ex.getLocalizedMessage());
+        }
+    }
+
+    private void searchByJudulBuku() {
+        try {
+            removeTableData();
+            String sql = "SELECT * FROM databuku WHERE judulbuku LIKE ?";
+
+            PreparedStatement pstatement = conn.prepareStatement(sql);
+            pstatement.setString(1, "%" + txtSearch.getText().trim() + "%");
+
+            ResultSet rs = pstatement.executeQuery();
+            if (rs.isBeforeFirst()) { // check is resultset not empty
+                DefaultTableModel tableModel = (DefaultTableModel) tblDataBuku.getModel();
+                while (rs.next()) {
+                    Object data[] = {
+                        rs.getInt("idbuku"),
+                        rs.getString("judulbuku"),
+                        rs.getString("pengarang"),
+                        rs.getString("penerbit"),
+                        rs.getString("tahunterbit"),
+                        rs.getString("isbn"),
+                        rs.getString("kategori")
+                    };
+                    tableModel.addRow(data);
+                }
+            }
+
+            rs.close();
+            pstatement.close();
+        } catch (SQLException ex) {
+            System.out.println("Error:\n" + ex.getLocalizedMessage());
+        }
+    }
+
+    private void searchByPengarangBuku() {
+        try {
+            removeTableData();
+            String sql = "SELECT * FROM databuku WHERE pengarang LIKE ?";
+
+            PreparedStatement pstatement = conn.prepareStatement(sql);
+            pstatement.setString(1, "%" + txtSearch.getText().trim() + "%");
+
+            ResultSet rs = pstatement.executeQuery();
+            if (rs.isBeforeFirst()) { // check is resultset not empty
+                DefaultTableModel tableModel = (DefaultTableModel) tblDataBuku.getModel();
+                while (rs.next()) {
+                    Object data[] = {
+                        rs.getInt("idbuku"),
+                        rs.getString("judulbuku"),
+                        rs.getString("pengarang"),
+                        rs.getString("penerbit"),
+                        rs.getString("tahunterbit"),
+                        rs.getString("isbn"),
+                        rs.getString("kategori")
+                    };
+                    tableModel.addRow(data);
+                }
+            }
+
+            rs.close();
+            pstatement.close();
+        } catch (SQLException ex) {
+            System.out.println("Error:\n" + ex.getLocalizedMessage());
+        }
+    }
+
+    private void searchByPenerbitBuku() {
+        try {
+            removeTableData();
+            String sql = "SELECT * FROM databuku WHERE penerbit LIKE ?";
+
+            PreparedStatement pstatement = conn.prepareStatement(sql);
+            pstatement.setString(1, "%" + txtSearch.getText().trim() + "%");
+
+            ResultSet rs = pstatement.executeQuery();
+            if (rs.isBeforeFirst()) { // check is resultset not empty
+                DefaultTableModel tableModel = (DefaultTableModel) tblDataBuku.getModel();
+                while (rs.next()) {
+                    Object data[] = {
+                        rs.getInt("idbuku"),
+                        rs.getString("judulbuku"),
+                        rs.getString("pengarang"),
+                        rs.getString("penerbit"),
+                        rs.getString("tahunterbit"),
+                        rs.getString("isbn"),
+                        rs.getString("kategori")
+                    };
+                    tableModel.addRow(data);
+                }
+            }
+
+            rs.close();
+            pstatement.close();
+        } catch (SQLException ex) {
+            System.out.println("Error:\n" + ex.getLocalizedMessage());
+        }
+    }
+
+    private void searchByTahunTerbitBuku() {
+        try {
+            removeTableData();
+            String sql = "SELECT * FROM databuku WHERE tahunterbit LIKE ?";
+
+            PreparedStatement pstatement = conn.prepareStatement(sql);
+            pstatement.setString(1, "%" + txtSearch.getText().trim() + "%");
+
+            ResultSet rs = pstatement.executeQuery();
+            if (rs.isBeforeFirst()) { // check is resultset not empty
+                DefaultTableModel tableModel = (DefaultTableModel) tblDataBuku.getModel();
+                while (rs.next()) {
+                    Object data[] = {
+                        rs.getInt("idbuku"),
+                        rs.getString("judulbuku"),
+                        rs.getString("pengarang"),
+                        rs.getString("penerbit"),
+                        rs.getString("tahunterbit"),
+                        rs.getString("isbn"),
+                        rs.getString("kategori")
+                    };
+                    tableModel.addRow(data);
+                }
+            }
+
+            rs.close();
+            pstatement.close();
+        } catch (SQLException ex) {
+            System.out.println("Error:\n" + ex.getLocalizedMessage());
+        }
+    }
+
+    private void searchByISBNBuku() {
+        try {
+            removeTableData();
+            String sql = "SELECT * FROM databuku WHERE isbn LIKE ?";
+
+            PreparedStatement pstatement = conn.prepareStatement(sql);
+            pstatement.setString(1, "%" + txtSearch.getText().trim() + "%");
+
+            ResultSet rs = pstatement.executeQuery();
+            if (rs.isBeforeFirst()) { // check is resultset not empty
+                DefaultTableModel tableModel = (DefaultTableModel) tblDataBuku.getModel();
+                while (rs.next()) {
+                    Object data[] = {
+                        rs.getInt("idbuku"),
+                        rs.getString("judulbuku"),
+                        rs.getString("pengarang"),
+                        rs.getString("penerbit"),
+                        rs.getString("tahunterbit"),
+                        rs.getString("isbn"),
+                        rs.getString("kategori")
+                    };
+                    tableModel.addRow(data);
+                }
+            }
+
+            rs.close();
+            pstatement.close();
+        } catch (SQLException ex) {
+            System.out.println("Error:\n" + ex.getLocalizedMessage());
+        }
+    }
+
+    private void searchByKategoriBuku() {
+        try {
+            removeTableData();
+            String sql = "SELECT * FROM databuku WHERE kategori LIKE ?";
+
+            PreparedStatement pstatement = conn.prepareStatement(sql);
+            pstatement.setString(1, "%" + txtSearch.getText().trim() + "%");
+
+            ResultSet rs = pstatement.executeQuery();
+            if (rs.isBeforeFirst()) { // check is resultset not empty
+                DefaultTableModel tableModel = (DefaultTableModel) tblDataBuku.getModel();
+                while (rs.next()) {
+                    Object data[] = {
+                        rs.getInt("idbuku"),
+                        rs.getString("judulbuku"),
+                        rs.getString("pengarang"),
+                        rs.getString("penerbit"),
+                        rs.getString("tahunterbit"),
+                        rs.getString("isbn"),
+                        rs.getString("kategori")
+                    };
+                    tableModel.addRow(data);
+                }
+            }
+
+            rs.close();
+            pstatement.close();
+        } catch (SQLException ex) {
+            System.out.println("Error:\n" + ex.getLocalizedMessage());
+        }
+    }
+
+    private void removeTableData() {
+        DefaultTableModel tableModel = (DefaultTableModel) tblDataBuku.getModel();
+        tableModel.setRowCount(0);
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnSearch;
+    private javax.swing.JComboBox<String> cbxSearch;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable tblDataBuku;
+    private javax.swing.JTextField txtSearch;
     // End of variables declaration//GEN-END:variables
 }
