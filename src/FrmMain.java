@@ -17,6 +17,7 @@ import util.DbConn;
 import Data.JDialogTransaksi;
 import Data.JDialogPenyewa;
 import Data.JDialogBuku;
+import javax.swing.JFrame;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -50,6 +51,7 @@ public class FrmMain extends javax.swing.JFrame {
 
         idTransaksi();
 
+//        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLocationRelativeTo(null);
     }
 

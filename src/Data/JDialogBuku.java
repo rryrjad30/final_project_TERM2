@@ -66,9 +66,8 @@ public class JDialogBuku extends javax.swing.JDialog {
                         rs.getString("pengarang"),
                         rs.getString("penerbit"),
                         rs.getInt("tahunterbit"),
-                        rs.getString("kategori"),
-                        rs.getLong("isbn")
-//                        rs.getInt("stok")
+                        rs.getLong("isbn"),
+                        rs.getString("kategori")
                     };
                     tableModel.addRow(data);
                 }
