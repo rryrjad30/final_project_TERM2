@@ -43,9 +43,9 @@ public class JDialogTabelPenyewa extends javax.swing.JDialog {
             public void valueChanged(ListSelectionEvent e) {
                 int row = tblPenyewa.getSelectedRow();
                 if (row >= 0) {
-                    String idPenyewa = tblPenyewa.getValueAt(row, 0).toString();
+                    String idNama = tblPenyewa.getValueAt(row, 0).toString();
                     String nama = tblPenyewa.getValueAt(row, 1).toString();
-                    FrmMain.pilihDataPenyewa(idPenyewa, nama);
+                    FrmMain.pilihDataPenyewa(idNama, nama);
                 }
                 dispose();
             }
@@ -65,7 +65,7 @@ public class JDialogTabelPenyewa extends javax.swing.JDialog {
                     DefaultTableModel tableModel = (DefaultTableModel) tblPenyewa.getModel();
 
                     Object data[] = {
-                        rs.getString("idpenyewa"),
+                        rs.getString("idnama"),
                         rs.getString("nama"),
                         rs.getString("jeniskelamin"),
                         rs.getString("tempatlahir"),

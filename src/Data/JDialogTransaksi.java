@@ -35,12 +35,12 @@ public class JDialogTransaksi extends javax.swing.JDialog {
         setLocationRelativeTo(null);
     }
 
-    private String getNamebyIdPenyewa(int idpenyewa) throws SQLException {
+    private String getNamebyIdNama(int idnama) throws SQLException {
         String Name = "";
-        String sqlPenyewaLookup = "Select nama from datapenyewa where idpenyewa = ? ;";
+        String sqlPenyewaLookup = "Select nama from datapenyewa where idnama = ? ;";
 
         PreparedStatement pstPenyewaLookup = conn.prepareStatement(sqlPenyewaLookup);
-        pstPenyewaLookup.setInt(1, idpenyewa);
+        pstPenyewaLookup.setInt(1, idnama);
 
         ResultSet rsPenyewaLookup = pstPenyewaLookup.executeQuery();
         while (rsPenyewaLookup.next()) {
@@ -65,7 +65,7 @@ public class JDialogTransaksi extends javax.swing.JDialog {
 
     private void loadAllDatabase() {
         try {
-            String sql = "SELECT username, idtransaksi, idpenyewa, idbuku"
+            String sql = "SELECT username, idtransaksi, idnama, idbuku"
                     + ", date_format(tanggalpinjam, '%d-%m-%Y') as tanggalpinjam"
                     + ", date_format(tanggalpengembalian, '%d-%m-%Y') as tanggalpengembalian FROM transaksi;";
             PreparedStatement pstatement = conn.prepareStatement(sql);
@@ -79,8 +79,8 @@ public class JDialogTransaksi extends javax.swing.JDialog {
 //                    if (row >= 0) {
                         Object data[] = {
                             rs.getInt("idtransaksi"),
-                            rs.getInt("idpenyewa"),
-//                            getNamebyIdPenyewa((int)(tblTransaksi.getValueAt(row, 1))),
+                            rs.getInt("idnama"),
+//                            getNamebyIdnama((int)(tblTransaksi.getValueAt(row, 1))),
                             rs.getInt("idbuku"),
 //                            getBookbyIdBuku((int) tblTransaksi.getValueAt(row, 3)),
                             rs.getString("tanggalpinjam"),

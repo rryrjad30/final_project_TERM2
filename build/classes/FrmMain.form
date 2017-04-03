@@ -291,7 +291,7 @@
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Group type="102" attributes="0">
                                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                              <Component id="txtIdPenyewa" pref="50" max="32767" attributes="0"/>
+                                              <Component id="txtIdNama" pref="50" max="32767" attributes="0"/>
                                               <Component id="txtIdTransaksi" max="32767" attributes="0"/>
                                           </Group>
                                           <EmptySpace type="separate" max="-2" attributes="0"/>
@@ -336,7 +336,7 @@
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="txtIdPenyewa" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                      <Component id="txtIdNama" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
                       <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="btnCariDataPenyewa" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
                       <Component id="txtNama" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
@@ -408,12 +408,12 @@
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
           </AuxValues>
         </Component>
-        <Component class="javax.swing.JTextField" name="txtIdPenyewa">
+        <Component class="javax.swing.JTextField" name="txtIdNama">
           <Properties>
             <Property name="editable" type="boolean" value="false"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtIdPenyewaActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtIdNamaActionPerformed"/>
           </Events>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="9"/>

@@ -60,8 +60,8 @@ public class FrmMain extends javax.swing.JFrame {
                 if (row >= 0) {
                     try {
                         txtIdTransaksi.setText(tblTransaksi.getValueAt(row, 0).toString());
-                        txtIdPenyewa.setText(tblTransaksi.getValueAt(row, 1).toString());
-                        txtNama.setText(getNamebyIdPenyewa(Integer.valueOf(txtIdPenyewa.getText())));
+                        txtIdNama.setText(tblTransaksi.getValueAt(row, 1).toString());
+                        txtNama.setText(getNamebyIdNama(Integer.valueOf(txtIdNama.getText())));
                         txtIdBuku.setText(tblTransaksi.getValueAt(row, 2).toString());
                         txtJudulBuku.setText(getBookbyIdBuku(Integer.valueOf(txtIdBuku.getText())));
 
@@ -82,12 +82,12 @@ public class FrmMain extends javax.swing.JFrame {
         tblTransaksi.getSelectionModel().addListSelectionListener(listener);
     }
 
-    private String getNamebyIdPenyewa(int idpenyewa) throws SQLException {
+    private String getNamebyIdNama(int idnama) throws SQLException {
         String Name = "";
-        String sqlPenyewaLookup = "Select nama from datapenyewa where idpenyewa = ? ;";
+        String sqlPenyewaLookup = "Select nama from datapenyewa where idnama = ? ;";
 
         PreparedStatement pstPenyewaLookup = conn.prepareStatement(sqlPenyewaLookup);
-        pstPenyewaLookup.setInt(1, idpenyewa);
+        pstPenyewaLookup.setInt(1, idnama);
 
         ResultSet rsPenyewaLookup = pstPenyewaLookup.executeQuery();
         while (rsPenyewaLookup.next()) {
@@ -162,7 +162,7 @@ public class FrmMain extends javax.swing.JFrame {
         }
     }
 
-    private void createDatabase(String username, int idpenyewa, int idbuku,
+    private void createDatabase(String username, int idnama, int idbuku,
             Date tanggalpinjam, Date tanggalpengembalian) throws ParseException {
         try {
 //            Class.forName(DbConn.JDBC_CLASS);
@@ -174,12 +174,12 @@ public class FrmMain extends javax.swing.JFrame {
                 System.out.println("Connected to DB!\n");
 
                 String sql = "INSERT INTO transaksi "
-                        + "(username, idpenyewa, idbuku, tanggalpinjam, tanggalpengembalian)"
+                        + "(username, idnama, idbuku, tanggalpinjam, tanggalpengembalian)"
                         + "VALUES (?,?,?,?,? + interval 3 day);";
 
                 PreparedStatement pstatement = conn.prepareStatement(sql);
                 pstatement.setString(1, username);
-                pstatement.setInt(2, idpenyewa);
+                pstatement.setInt(2, idnama);
                 pstatement.setInt(3, idbuku);
 
                 SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
@@ -209,7 +209,7 @@ public class FrmMain extends javax.swing.JFrame {
     private void loadAllDatabase() {
         removeTableData();
         try {
-            String sql = "SELECT username, idtransaksi, idpenyewa, idbuku"
+            String sql = "SELECT username, idtransaksi, idnama, idbuku"
                     + ", date_format(tanggalpinjam, '%d-%m-%Y') as tanggalpinjam"
                     + ", date_format(tanggalpengembalian, '%d-%m-%Y') as tanggalpengembalian FROM transaksi;";
             PreparedStatement pstatement = conn.prepareStatement(sql);
@@ -221,7 +221,7 @@ public class FrmMain extends javax.swing.JFrame {
 
                     Object data[] = {
                         rs.getInt("idtransaksi"),
-                        rs.getInt("idpenyewa"),
+                        rs.getInt("idnama"),
                         rs.getInt("idbuku"),
                         rs.getString("tanggalpinjam"),
                         rs.getString("tanggalpengembalian")
@@ -274,7 +274,7 @@ public class FrmMain extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         txtIdTransaksi = new javax.swing.JTextField();
-        txtIdPenyewa = new javax.swing.JTextField();
+        txtIdNama = new javax.swing.JTextField();
         txtIdBuku = new javax.swing.JTextField();
         txtNama = new javax.swing.JTextField();
         btnCariDataPenyewa = new javax.swing.JButton();
@@ -340,10 +340,10 @@ public class FrmMain extends javax.swing.JFrame {
 
         txtIdTransaksi.setEditable(false);
 
-        txtIdPenyewa.setEditable(false);
-        txtIdPenyewa.addActionListener(new java.awt.event.ActionListener() {
+        txtIdNama.setEditable(false);
+        txtIdNama.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtIdPenyewaActionPerformed(evt);
+                txtIdNamaActionPerformed(evt);
             }
         });
 
@@ -437,7 +437,7 @@ public class FrmMain extends javax.swing.JFrame {
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(txtIdPenyewa, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
+                                            .addComponent(txtIdNama, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
                                             .addComponent(txtIdTransaksi))
                                         .addGap(18, 18, 18)
                                         .addComponent(txtNama, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -469,7 +469,7 @@ public class FrmMain extends javax.swing.JFrame {
                     .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtIdPenyewa, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtIdNama, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
                     .addComponent(btnCariDataPenyewa, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtNama, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -655,9 +655,9 @@ public class FrmMain extends javax.swing.JFrame {
         executeDataBuku();
     }//GEN-LAST:event_MniDataBukuActionPerformed
 
-    private void txtIdPenyewaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdPenyewaActionPerformed
+    private void txtIdNamaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdNamaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtIdPenyewaActionPerformed
+    }//GEN-LAST:event_txtIdNamaActionPerformed
 
     private void btnCariDataPenyewaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariDataPenyewaActionPerformed
         // TODO add your handling code here:
@@ -755,8 +755,8 @@ public class FrmMain extends javax.swing.JFrame {
                 + "\n               William");
     }
 
-    public static void pilihDataPenyewa(String idpenyewa, String nama) {
-        txtIdPenyewa.setText(idpenyewa);
+    public static void pilihDataPenyewa(String idnama, String nama) {
+        txtIdNama.setText(idnama);
         txtNama.setText(nama);
     }
 
@@ -767,7 +767,7 @@ public class FrmMain extends javax.swing.JFrame {
 
     private void executeNew() {
         txtIdTransaksi.setText("");
-        txtIdPenyewa.setText("");
+        txtIdNama.setText("");
         txtNama.setText("");
         txtIdBuku.setText("");
         txtJudulBuku.setText("");
@@ -789,7 +789,7 @@ public class FrmMain extends javax.swing.JFrame {
             Date tanggalpinjam1 = sdf.parse(tanggalpinjam);
             Date tanggalpengembalian1 = sdf.parse(tanggalpengembalian);
 
-            createDatabase(txtUsernameMain.getText(), Integer.parseInt(txtIdPenyewa.getText()),
+            createDatabase(txtUsernameMain.getText(), Integer.parseInt(txtIdNama.getText()),
                     Integer.parseInt(txtIdBuku.getText()),
                     tanggalpinjam1, tanggalpengembalian1);
 
@@ -844,7 +844,7 @@ public class FrmMain extends javax.swing.JFrame {
     private javax.swing.JMenuItem mniTransaksi;
     private javax.swing.JTable tblTransaksi;
     public static javax.swing.JTextField txtIdBuku;
-    public static javax.swing.JTextField txtIdPenyewa;
+    public static javax.swing.JTextField txtIdNama;
     public javax.swing.JTextField txtIdTransaksi;
     public static javax.swing.JTextField txtJudulBuku;
     public static javax.swing.JTextField txtNama;

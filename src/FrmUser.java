@@ -100,7 +100,7 @@ public class FrmUser extends javax.swing.JFrame {
                         rs.getString("username"),
                         rs.getString("password"),
                         rs.getString("confirmpassword"),
-//                        rs.getBoolean("active")
+                        rs.getBoolean("active")
                     };
                     tableModel.addRow(data);
                 }
