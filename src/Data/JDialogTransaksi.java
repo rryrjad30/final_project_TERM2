@@ -35,13 +35,14 @@ public class JDialogTransaksi extends javax.swing.JDialog {
         setLocationRelativeTo(null);
     }
 
-    private String getNamebyIdNama() throws SQLException {
+    private String getNamebyIdNama(Integer i) throws SQLException {
         String nama = "";
-        String sqlPenyewaLookup = "Select nama from datapenyewa where idnama = ? ;";
+        String sqlPenyewaLookup = "Select nama from datapenyewa p inner join transaksi t where p.idnama = ? and t.idnama = ? order by t.idtransaksi;";
 
         PreparedStatement pstPenyewaLookup = conn.prepareStatement(sqlPenyewaLookup);
-//        pstPenyewaLookup.setInt(1, idnama);
-        
+        pstPenyewaLookup.setInt(1, i);
+        pstPenyewaLookup.setInt(2, i);
+
         ResultSet rsPenyewaLookup = pstPenyewaLookup.executeQuery();
         while (rsPenyewaLookup.next()) {
             nama = rsPenyewaLookup.getString("nama");
@@ -49,12 +50,13 @@ public class JDialogTransaksi extends javax.swing.JDialog {
         return nama;
     }
 
-
-    private String getJudulBukuByIdBuku() throws SQLException {
+    private String getJudulBukuByIdBuku(Integer i) throws SQLException {
         String judulbuku = "";
-        String sqlBukuLookup = "Select judulbuku from databuku b inner join transaksi t where b.idbuku = t.idbuku order by t.idtransaksi;";
+        String sqlBukuLookup = "Select judulbuku from databuku b inner join transaksi t where b.idbuku = ? and t.idbuku = ? order by t.idtransaksi;";
 
         PreparedStatement pstBukuLookup = conn.prepareStatement(sqlBukuLookup);
+        pstBukuLookup.setInt(1, i);
+        pstBukuLookup.setInt(2, i);
 
         ResultSet rsBukuLookup = pstBukuLookup.executeQuery();
         while (rsBukuLookup.next()) {
@@ -64,6 +66,7 @@ public class JDialogTransaksi extends javax.swing.JDialog {
     }
 
     private void loadAllDatabase() {
+        removeTableData();
         try {
             String sql = "SELECT username, idtransaksi, idnama, idbuku"
                     + ", date_format(tanggalpinjam, '%d-%m-%Y') as tanggalpinjam"
@@ -76,18 +79,18 @@ public class JDialogTransaksi extends javax.swing.JDialog {
                 while (rs.next()) {
                     DefaultTableModel tableModel = (DefaultTableModel) tblTransaksi.getModel();
 //                    int row = tblTransaksi.getSelectedRow();
-                        Object data[] = {
-                            rs.getInt("idtransaksi"),
-                            rs.getInt("idnama"),
-//                            getNamebyIdnama((int)(tblTransaksi.getValueAt(row, 1))),
-                            rs.getInt("idpenyewa"),
-                            getNamebyIdNama(),
-                            rs.getInt("idbuku"),
-                            getJudulBukuByIdBuku(),
-                            rs.getString("tanggalpinjam"),
-                            rs.getString("tanggalpengembalian")
-                        };
-                        tableModel.addRow(data);
+                    Integer idnama = rs.getInt("idnama");
+                    Integer idbuku = rs.getInt("idbuku");
+                    Object data[] = {
+                        rs.getInt("idtransaksi"),
+                        rs.getInt("idnama"),
+                        getNamebyIdNama(idnama),
+                        rs.getInt("idbuku"),
+                        getJudulBukuByIdBuku(idbuku),
+                        rs.getString("tanggalpinjam"),
+                        rs.getString("tanggalpengembalian")
+                    };
+                    tableModel.addRow(data);
                 }
             } else {
                 util.Sutil.msg(this, "Record Empty");
@@ -165,7 +168,7 @@ public class JDialogTransaksi extends javax.swing.JDialog {
 
         jLabel1.setText("Search by : ");
 
-        cbxSearch.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ID Transaksi", "ID Penyewa", "Nama", "ID Buku", "Judul Buku" }));
+        cbxSearch.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "All", "ID Transaksi", "ID Nama", "Nama", "ID Buku", "Judul Buku" }));
 
         btnSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/google_custom_search.png"))); // NOI18N
         btnSearch.setText("Search");
@@ -229,35 +232,37 @@ public class JDialogTransaksi extends javax.swing.JDialog {
     }//GEN-LAST:event_btnSearchActionPerformed
 
     private void searchDataTransaksi() {
-        if (cbxSearch.getSelectedItem().equals("ID Transaksi")) {
+        if (cbxSearch.getSelectedItem().equals("All")) {
+            loadAllDatabase();
+        } else if (cbxSearch.getSelectedItem().equals("ID Transaksi")) {
             if (!txtSearch.getText().trim().equals("")) {
                 searchByIdTransaksi();
             } else if (txtSearch.getText().trim().equals("")) {
-                loadAllDatabase();
+                util.Sutil.mse(this, "Field must not empty !");
             }
         } else if (cbxSearch.getSelectedItem().equals("ID Nama")) {
             if (!txtSearch.getText().trim().equals("")) {
-                searchByIdPenyewa();
+                searchByIdNama();
             } else if (txtSearch.getText().trim().equals("")) {
-                loadAllDatabase();
+                util.Sutil.mse(this, "Field must not empty !");
             }
         } else if (cbxSearch.getSelectedItem().equals("Nama")) {
             if (!txtSearch.getText().trim().equals("")) {
-//                searchByNama();
+                searchByNama();
             } else if (txtSearch.getText().trim().equals("")) {
-                loadAllDatabase();
+                util.Sutil.mse(this, "Field must not empty !");
             }
         } else if (cbxSearch.getSelectedItem().equals("ID Buku")) {
             if (!txtSearch.getText().trim().equals("")) {
                 searchByIdBuku();
             } else if (txtSearch.getText().trim().equals("")) {
-                loadAllDatabase();
+                util.Sutil.mse(this, "Field must not empty !");
             }
         } else if (cbxSearch.getSelectedItem().equals("Judul Buku")) {
             if (!txtSearch.getText().trim().equals("")) {
-//                searchByJudulBuku();
+                searchByJudulBuku();
             } else if (txtSearch.getText().trim().equals("")) {
-                loadAllDatabase();
+                util.Sutil.mse(this, "Field must not empty !");
             }
         } else {
             util.Sutil.mse(this, "Not found !");
@@ -276,13 +281,16 @@ public class JDialogTransaksi extends javax.swing.JDialog {
             if (rs.isBeforeFirst()) { // check is resultset not empty
                 DefaultTableModel tableModel = (DefaultTableModel) tblTransaksi.getModel();
                 while (rs.next()) {
+                    Integer idnama = rs.getInt("idnama");
+                    Integer idbuku = rs.getInt("idbuku");
                     Object data[] = {
                         rs.getInt("idtransaksi"),
-                        rs.getInt("idpenyewa"),
-                        getNamebyIdNama(),
+                        rs.getInt("idnama"),
+                        getNamebyIdNama(idnama),
                         rs.getInt("idbuku"),
-                        getJudulBukuByIdBuku(),
-                        rs.getString("judulbuku")
+                        getJudulBukuByIdBuku(idbuku),
+                        rs.getString("tanggalpinjam"),
+                        rs.getString("tanggalpengembalian")
                     };
                     tableModel.addRow(data);
                 }
@@ -294,26 +302,67 @@ public class JDialogTransaksi extends javax.swing.JDialog {
             System.out.println("Error:\n" + ex.getLocalizedMessage());
         }
     }
-    
-    private void searchByIdPenyewa() {
+
+    private void searchByIdTransaksi(Integer[] a) {
+        PreparedStatement pstatement = null;
+        ResultSet rs = null;
         try {
             removeTableData();
-            String sql = "SELECT * FROM transaksi WHERE idpenyewa LIKE ?";
+            String sql = "SELECT * FROM transaksi WHERE idtransaksi LIKE ?";
+            for (Integer integer : a) {
+                System.out.println(integer);
+                pstatement = conn.prepareStatement(sql);
+                pstatement.setInt(1, integer);
+                rs = pstatement.executeQuery();
+                if (rs.isBeforeFirst()) { // check is resultset not empty
+                    DefaultTableModel tableModel = (DefaultTableModel) tblTransaksi.getModel();
+                    while (rs.next()) {
+                        Integer idnama = rs.getInt("idnama");
+                        Integer idbuku = rs.getInt("idbuku");
+                        Object data[] = {
+                            rs.getInt("idtransaksi"),
+                            rs.getInt("idnama"),
+                            getNamebyIdNama(idnama),
+                            rs.getInt("idbuku"),
+                            getJudulBukuByIdBuku(idbuku),
+                            rs.getString("tanggalpinjam"),
+                            rs.getString("tanggalpengembalian")
+                        };
+                        tableModel.addRow(data);
+                    }
+                }
+            }
 
+            rs.close();
+            pstatement.close();
+        } catch (SQLException ex) {
+            System.out.println("Error:\n" + ex.getLocalizedMessage());
+        } catch (NullPointerException e) {
+
+        }
+    }
+
+    private void searchByIdNama() {
+        try {
+            removeTableData();
+
+            String sql = "SELECT * FROM transaksi WHERE idnama LIKE ?";
             PreparedStatement pstatement = conn.prepareStatement(sql);
             pstatement.setInt(1, Integer.parseInt(txtSearch.getText().trim()));
-
             ResultSet rs = pstatement.executeQuery();
             if (rs.isBeforeFirst()) { // check is resultset not empty
                 DefaultTableModel tableModel = (DefaultTableModel) tblTransaksi.getModel();
                 while (rs.next()) {
+                    Integer idnama = rs.getInt("idnama");
+                    Integer idbuku = rs.getInt("idbuku");
                     Object data[] = {
                         rs.getInt("idtransaksi"),
-                        rs.getInt("idpenyewa"),
-                        getNamebyIdNama(),
+                        rs.getInt("idnama"),
+                        getNamebyIdNama(idnama),
                         rs.getInt("idbuku"),
-                        getJudulBukuByIdBuku(),
-                        rs.getString("judulbuku")
+                        getJudulBukuByIdBuku(idbuku),
+                        rs.getString("tanggalpinjam"),
+                        rs.getString("tanggalpengembalian")
                     };
                     tableModel.addRow(data);
                 }
@@ -328,32 +377,33 @@ public class JDialogTransaksi extends javax.swing.JDialog {
 
     private void searchByNama() {
         try {
-            removeTableData();
-            String sql = "SELECT * FROM transaksi WHERE nama LIKE ?";
-
-            PreparedStatement pstatement = conn.prepareStatement(sql);
-            pstatement.setString(1, "%" + txtSearch.getText().trim() + "%");
-
-            ResultSet rs = pstatement.executeQuery();
-            if (rs.isBeforeFirst()) { // check is resultset not empty
-                DefaultTableModel tableModel = (DefaultTableModel) tblTransaksi.getModel();
-                while (rs.next()) {
-                    Object data[] = {
-                        rs.getInt("idtransaksi"),
-                        rs.getInt("idpenyewa"),
-                        getNamebyIdNama(),
-                        rs.getInt("idbuku"),
-                        getJudulBukuByIdBuku(),
-                        rs.getString("judulbuku")
-                    };
-                    tableModel.addRow(data);
-                }
+            Integer results;
+            String sql = "select count(*) from transaksi,datapenyewa where datapenyewa.nama like ? and transaksi.idnama = datapenyewa.idnama;";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, txtSearch.getText().trim());
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                results = rs.getInt("count(*)");
+            } else {
+                results = 0;
+            }
+            Integer[] penampung = new Integer[results];
+            String sqlPenyewaLookup = "select idtransaksi from transaksi,datapenyewa where datapenyewa.nama like ? and transaksi.idnama = datapenyewa.idnama;";
+            PreparedStatement pstPenyewaLookup = conn.prepareStatement(sqlPenyewaLookup);
+            pstPenyewaLookup.setString(1, txtSearch.getText().trim());
+            Integer a = 0;
+            ResultSet rsPenyewaLookup = pstPenyewaLookup.executeQuery();
+            while (rsPenyewaLookup.next()) {
+                penampung[a] = rsPenyewaLookup.getInt("idtransaksi");
+                a++;
             }
 
-            rs.close();
-            pstatement.close();
+            pstPenyewaLookup.close();
+            pstmt.close();
+            rsPenyewaLookup.close();
+            searchByIdTransaksi(penampung);
         } catch (SQLException ex) {
-            System.out.println("Error:\n" + ex.getLocalizedMessage());
+            System.out.println(ex.getLocalizedMessage());
         }
     }
 
@@ -369,13 +419,16 @@ public class JDialogTransaksi extends javax.swing.JDialog {
             if (rs.isBeforeFirst()) { // check is resultset not empty
                 DefaultTableModel tableModel = (DefaultTableModel) tblTransaksi.getModel();
                 while (rs.next()) {
+                    Integer idnama = rs.getInt("idnama");
+                    Integer idbuku = rs.getInt("idbuku");
                     Object data[] = {
                         rs.getInt("idtransaksi"),
-                        rs.getInt("idpenyewa"),
-                        getNamebyIdNama(),
+                        rs.getInt("idnama"),
+                        getNamebyIdNama(idnama),
                         rs.getInt("idbuku"),
-                        getJudulBukuByIdBuku(),
-                        rs.getString("judulbuku")
+                        getJudulBukuByIdBuku(idbuku),
+                        rs.getString("tanggalpinjam"),
+                        rs.getString("tanggalpengembalian")
                     };
                     tableModel.addRow(data);
                 }
@@ -390,32 +443,34 @@ public class JDialogTransaksi extends javax.swing.JDialog {
 
     private void searchByJudulBuku() {
         try {
-            removeTableData();
-            String sql = "SELECT * FROM transaksi WHERE judulbuku LIKE ?";
-
-            PreparedStatement pstatement = conn.prepareStatement(sql);
-            pstatement.setString(1, "%" + txtSearch.getText().trim() + "%");
-
-            ResultSet rs = pstatement.executeQuery();
-            if (rs.isBeforeFirst()) { // check is resultset not empty
-                DefaultTableModel tableModel = (DefaultTableModel) tblTransaksi.getModel();
-                while (rs.next()) {
-                    Object data[] = {
-                        rs.getInt("idtransaksi"),
-                        rs.getInt("idpenyewa"),
-                        getNamebyIdNama(),
-                        rs.getInt("idbuku"),
-                        getJudulBukuByIdBuku(),
-                        rs.getString("judulbuku")
-                    };
-                    tableModel.addRow(data);
-                }
+            Integer results;
+            String sql = "select count(*) from transaksi,databuku where databuku.judulbuku like ? and transaksi.idbuku = databuku.idbuku;";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, "%" + txtSearch.getText().trim() + "%");
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                results = rs.getInt("count(*)");
+            } else {
+                results = 0;
+            }
+            System.out.println(results);
+            Integer[] penampung = new Integer[results];
+            String sqlBukuLookup = "select idtransaksi from transaksi,databuku where databuku.judulbuku like ? and transaksi.idbuku = databuku.idbuku;";
+            PreparedStatement pstBukuLookup = conn.prepareStatement(sqlBukuLookup);
+            pstBukuLookup.setString(1, "%" + txtSearch.getText().trim() + "%");
+            Integer a = 0;
+            ResultSet rsBukuLookup = pstBukuLookup.executeQuery();
+            while (rsBukuLookup.next()) {
+                penampung[a] = rsBukuLookup.getInt("idtransaksi");
+                a++;
             }
 
-            rs.close();
-            pstatement.close();
+            pstBukuLookup.close();
+            pstmt.close();
+            rsBukuLookup.close();
+            searchByIdTransaksi(penampung);
         } catch (SQLException ex) {
-            System.out.println("Error:\n" + ex.getLocalizedMessage());
+            System.out.println(ex.getLocalizedMessage());
         }
     }
 
@@ -423,7 +478,7 @@ public class JDialogTransaksi extends javax.swing.JDialog {
         DefaultTableModel tableModel = (DefaultTableModel) tblTransaksi.getModel();
         tableModel.setRowCount(0);
     }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSearch;
     private javax.swing.JComboBox<String> cbxSearch;

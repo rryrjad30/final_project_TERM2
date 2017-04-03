@@ -209,9 +209,9 @@ public class FrmMain extends javax.swing.JFrame {
     private void loadAllDatabase() {
         removeTableData();
         try {
-            String sql = "SELECT username, idtransaksi, idnama, idbuku"
-                    + ", date_format(tanggalpinjam, '%d-%m-%Y') as tanggalpinjam"
-                    + ", date_format(tanggalpengembalian, '%d-%m-%Y') as tanggalpengembalian FROM transaksi;";
+            String sql = "SELECT idtransaksi, idnama, idbuku,"
+                    + "date_format(tanggalpinjam, '%d-%m-%Y') as tanggalpinjam,"
+                    + "date_format(tanggalpengembalian, '%d-%m-%Y') as tanggalpengembalian FROM transaksi;";
             PreparedStatement pstatement = conn.prepareStatement(sql);
 
             ResultSet rs = pstatement.executeQuery();

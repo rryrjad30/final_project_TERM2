@@ -98,6 +98,7 @@ public class JDialogLogin extends javax.swing.JDialog {
         databaseConnection();
         String username = txtUsername.getText().trim();
         String password = txtPassword.getText().trim();
+        
 
         if (username.equals("") && password.equals("")) {
             util.Sutil.mse(this, "Username and Password can't be empty !");
@@ -133,12 +134,13 @@ public class JDialogLogin extends javax.swing.JDialog {
 
     private void executeLogIn() {
         try {
-
-            String sql = "SELECT * FROM registerdata WHERE username = ? and password = ?";
+            
+            String sql = "SELECT * FROM registerdata WHERE username = ' ? ' and password = ' ? ' and active = ?";
             PreparedStatement pstatement = conn.prepareStatement(sql);
             pstatement.setString(1, txtUsername.getText());
             pstatement.setString(2, txtPassword.getText());
-
+//            pstatement.setBoolean(3, active);
+            
             ResultSet rs = pstatement.executeQuery();
             if (rs.next()) {
                 

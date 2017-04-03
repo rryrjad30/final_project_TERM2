@@ -148,7 +148,7 @@ public class JDialogBuku extends javax.swing.JDialog {
 
         jLabel1.setText("Search by : ");
 
-        cbxSearch.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ID Buku", "Judul Buku", "Pengarang", "Penerbit", "Tahun Terbit", "ISBN", "Kategori" }));
+        cbxSearch.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "All", "ID Buku", "Judul Buku", "Pengarang", "Penerbit", "Tahun Terbit", "ISBN", "Kategori" }));
 
         btnSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/google_custom_search.png"))); // NOI18N
         btnSearch.setText("Search");
@@ -213,7 +213,9 @@ public class JDialogBuku extends javax.swing.JDialog {
     }//GEN-LAST:event_btnSearchActionPerformed
 
     private void searchDataBuku() {
-        if (cbxSearch.getSelectedItem().equals("ID Buku")) {
+        if (cbxSearch.getSelectedItem().equals("All")) {
+            loadAllDatabase();
+        } else if (cbxSearch.getSelectedItem().equals("ID Buku")) {
             if (!txtSearch.getText().trim().equals("")) {
                 searchByIdBuku();
             } else if (txtSearch.getText().trim().equals("")) {

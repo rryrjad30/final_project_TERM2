@@ -162,12 +162,13 @@
         <Component class="javax.swing.JComboBox" name="cbxSearch">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="5">
-                <StringItem index="0" value="ID Transaksi"/>
-                <StringItem index="1" value="ID Penyewa"/>
-                <StringItem index="2" value="Nama"/>
-                <StringItem index="3" value="ID Buku"/>
-                <StringItem index="4" value="Judul Buku"/>
+              <StringArray count="6">
+                <StringItem index="0" value="All"/>
+                <StringItem index="1" value="ID Transaksi"/>
+                <StringItem index="2" value="ID Nama"/>
+                <StringItem index="3" value="Nama"/>
+                <StringItem index="4" value="ID Buku"/>
+                <StringItem index="5" value="Judul Buku"/>
               </StringArray>
             </Property>
           </Properties>

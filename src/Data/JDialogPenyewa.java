@@ -134,7 +134,7 @@ public class JDialogPenyewa extends javax.swing.JDialog {
 
         jLabel1.setText("Search by : ");
 
-        cbxSearch.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ID Penyewa", "Nama", "Jenis Kelamin", "Tempat Lahir", "Tanggal Lahir", "No Hp", "Alamat", "Jenis Penyewa" }));
+        cbxSearch.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "All", "ID Nama", "Nama", "Jenis Kelamin", "Tempat Lahir", "Tanggal Lahir", "No Hp", "Alamat", "Jenis Penyewa" }));
 
         btnSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/google_custom_search.png"))); // NOI18N
         btnSearch.setText("Search");
@@ -199,53 +199,55 @@ public class JDialogPenyewa extends javax.swing.JDialog {
     }//GEN-LAST:event_btnSearchActionPerformed
 
     private void searchDataPenyewa() {
-        if (cbxSearch.getSelectedItem().equals("ID Penyewa")) {
+         if (cbxSearch.getSelectedItem().equals("All")) {
+            loadAllDatabase();
+        } else if (cbxSearch.getSelectedItem().equals("ID Nama")) {
             if (!txtSearch.getText().trim().equals("")) {
                 searchByIdPenyewa();
             } else if (txtSearch.getText().trim().equals("")) {
-                loadAllDatabase();
+                util.Sutil.mse(this, "Field must not empty !");
             }
         } else if (cbxSearch.getSelectedItem().equals("Nama")) {
             if (!txtSearch.getText().trim().equals("")) {
                 searchByNama();
             } else if (txtSearch.getText().trim().equals("")) {
-                loadAllDatabase();
+                util.Sutil.mse(this, "Field must not empty !");
             }
         } else if (cbxSearch.getSelectedItem().equals("Jenis Kelamin")) {
             if (!txtSearch.getText().trim().equals("")) {
                 searchByJenisKelamin();
             } else if (txtSearch.getText().trim().equals("")) {
-                loadAllDatabase();
+                util.Sutil.mse(this, "Field must not empty !");
             }
         } else if (cbxSearch.getSelectedItem().equals("Tempat Lahir")) {
             if (!txtSearch.getText().trim().equals("")) {
                 searchByTempatLahir();
             } else if (txtSearch.getText().trim().equals("")) {
-                loadAllDatabase();
+                util.Sutil.mse(this, "Field must not empty !");
             }
         } else if (cbxSearch.getSelectedItem().equals("Tanggal Lahir")) {
             if (!txtSearch.getText().trim().equals("")) {
                 searchByTanggalLahir();
             } else if (txtSearch.getText().trim().equals("")) {
-                loadAllDatabase();
+                util.Sutil.mse(this, "Field must not empty !");
             }
         } else if (cbxSearch.getSelectedItem().equals("No Hp")) {
             if (!txtSearch.getText().trim().equals("")) {
                 searchByNoHp();
             } else if (txtSearch.getText().trim().equals("")) {
-                loadAllDatabase();
+                util.Sutil.mse(this, "Field must not empty !");
             }
         } else if (cbxSearch.getSelectedItem().equals("Alamat")) {
             if (!txtSearch.getText().trim().equals("")) {
                 searchByAlamat();
             } else if (txtSearch.getText().trim().equals("")) {
-                loadAllDatabase();
+                util.Sutil.mse(this, "Field must not empty !");
             }
         }  else if (cbxSearch.getSelectedItem().equals("Jenis Penyewa")) {
             if (!txtSearch.getText().trim().equals("")) {
                 searchByJenisPenyewa();
             } else if (txtSearch.getText().trim().equals("")) {
-                loadAllDatabase();
+                util.Sutil.mse(this, "Field must not empty !");
             }
         } else {
             util.Sutil.mse(this, "Not found !");
