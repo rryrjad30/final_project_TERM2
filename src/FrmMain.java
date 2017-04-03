@@ -40,7 +40,7 @@ public class FrmMain extends javax.swing.JFrame {
 
         String username = JDialogLogin.txtUsername.getText();
         txtUsernameMain.setText(username);
-        
+
         tableSelectionListener();
 
         lblDenda.setText("<html>* Normal : Rp 10.000/hari<br>* Special : Rp 7.000/hari</html>");
@@ -733,9 +733,13 @@ public class FrmMain extends javax.swing.JFrame {
     }
 
     private void executeLogout() {
-        if (util.Sutil.msq(this, "Are you sure to log out ? ") == 0) {
-            this.setVisible(false);
-            JDialogLogin.instance.setVisible(true);
+        this.setVisible(false);
+        JDialogLogin.instance.setVisible(true);
+    }
+
+    private void executeExit() {
+        if (util.Sutil.msq(this, "Are you sure to exit ? ") == 0) {
+            System.exit(0);
         } else {
 
         }
@@ -743,7 +747,7 @@ public class FrmMain extends javax.swing.JFrame {
 
     @Override
     public void dispose() {
-        executeLogout();
+        executeExit();
     }
 
     private void executeAbout() {

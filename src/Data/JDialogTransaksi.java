@@ -35,32 +35,31 @@ public class JDialogTransaksi extends javax.swing.JDialog {
         setLocationRelativeTo(null);
     }
 
-    private Void getNameByIdPenyewa() throws SQLException {
-        String Name = "";
-        String sqlPenyewaLookup = "Select nama from datapenyewa p inner join transaksi t where p.idpenyewa = t.idpenyewa order by t.idtransaksi;";
+    private String getNameByIdPenyewa() throws SQLException {
+        String nama = "";
+        String sqlPenyewaLookup = "Select nama from datapenyewa p inner join transaksi t "
+                + "where p.idpenyewa = t.idpenyewa order by t.idtransaksi; ";
 
         PreparedStatement pstPenyewaLookup = conn.prepareStatement(sqlPenyewaLookup);
-//        pstPenyewaLookup.setInt(1, idpenyewa);
 
         ResultSet rsPenyewaLookup = pstPenyewaLookup.executeQuery();
         while (rsPenyewaLookup.next()) {
-            Name = rsPenyewaLookup.getString("nama");
+            nama = rsPenyewaLookup.getString("nama");
         }
-        return null;
+        return nama;
     }
 
-    private Void getJudulBukuByIdBuku() throws SQLException {
+    private String getJudulBukuByIdBuku() throws SQLException {
         String judulbuku = "";
         String sqlBukuLookup = "Select judulbuku from databuku b inner join transaksi t where b.idbuku = t.idbuku order by t.idtransaksi;";
 
         PreparedStatement pstBukuLookup = conn.prepareStatement(sqlBukuLookup);
-//        pstBukuLookup.setInt(1, idbuku);
 
         ResultSet rsBukuLookup = pstBukuLookup.executeQuery();
         while (rsBukuLookup.next()) {
             judulbuku = rsBukuLookup.getString("judulbuku");
         }
-        return null;
+        return judulbuku;
     }
 
     private void loadAllDatabase() {
