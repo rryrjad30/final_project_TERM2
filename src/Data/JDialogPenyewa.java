@@ -108,11 +108,11 @@ public class JDialogPenyewa extends javax.swing.JDialog {
 
             },
             new String [] {
-                "ID Penyewa", "Nama", "Jenis Kelamin", "Tempat Lahir", "Tanggal Lahir", "No. Hp", "Alamat", "Jenis Penyewa"
+                "ID Nama", "Nama", "Jenis Kelamin", "Tempat Lahir", "Tanggal Lahir", "No. Hp", "Alamat", "Jenis Penyewa"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
                 false, false, false, false, false, false, false, false
@@ -128,6 +128,7 @@ public class JDialogPenyewa extends javax.swing.JDialog {
         });
         tblPenyewa.setColumnSelectionAllowed(true);
         jScrollPane1.setViewportView(tblPenyewa);
+        tblPenyewa.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 

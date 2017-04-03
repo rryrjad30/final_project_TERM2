@@ -35,37 +35,20 @@ public class JDialogTransaksi extends javax.swing.JDialog {
         setLocationRelativeTo(null);
     }
 
-<<<<<<< HEAD
-    private String getNameByIdPenyewa() throws SQLException {
+    private String getNamebyIdNama() throws SQLException {
         String nama = "";
-        String sqlPenyewaLookup = "Select nama from datapenyewa p inner join transaksi t "
-                + "where p.idpenyewa = t.idpenyewa order by t.idtransaksi; ";
-
-        PreparedStatement pstPenyewaLookup = conn.prepareStatement(sqlPenyewaLookup);
-=======
-<<<<<<< HEAD
-    private String getNamebyIdNama(int idnama) throws SQLException {
-        String Name = "";
         String sqlPenyewaLookup = "Select nama from datapenyewa where idnama = ? ;";
 
         PreparedStatement pstPenyewaLookup = conn.prepareStatement(sqlPenyewaLookup);
-        pstPenyewaLookup.setInt(1, idnama);
-=======
-    private Void getNameByIdPenyewa() throws SQLException {
-        String Name = "";
-        String sqlPenyewaLookup = "Select nama from datapenyewa p inner join transaksi t where p.idpenyewa = t.idpenyewa order by t.idtransaksi;";
-
-        PreparedStatement pstPenyewaLookup = conn.prepareStatement(sqlPenyewaLookup);
-//        pstPenyewaLookup.setInt(1, idpenyewa);
->>>>>>> origin/master
->>>>>>> origin/master
-
+//        pstPenyewaLookup.setInt(1, idnama);
+        
         ResultSet rsPenyewaLookup = pstPenyewaLookup.executeQuery();
         while (rsPenyewaLookup.next()) {
             nama = rsPenyewaLookup.getString("nama");
         }
         return nama;
     }
+
 
     private String getJudulBukuByIdBuku() throws SQLException {
         String judulbuku = "";
@@ -95,13 +78,10 @@ public class JDialogTransaksi extends javax.swing.JDialog {
 //                    int row = tblTransaksi.getSelectedRow();
                         Object data[] = {
                             rs.getInt("idtransaksi"),
-<<<<<<< HEAD
                             rs.getInt("idnama"),
 //                            getNamebyIdnama((int)(tblTransaksi.getValueAt(row, 1))),
-=======
                             rs.getInt("idpenyewa"),
-                            getNameByIdPenyewa(),
->>>>>>> origin/master
+                            getNamebyIdNama(),
                             rs.getInt("idbuku"),
                             getJudulBukuByIdBuku(),
                             rs.getString("tanggalpinjam"),
@@ -159,7 +139,7 @@ public class JDialogTransaksi extends javax.swing.JDialog {
 
             },
             new String [] {
-                "ID Transaksi", "ID Penyewa", "Nama", "ID Buku", "Judul Buku", "Tanggal Pinjam", "Tanggal Pengembalian"
+                "ID Transaksi", "ID Nama", "Nama", "ID Buku", "Judul Buku", "Tanggal Pinjam", "Tanggal Pengembalian"
             }
         ) {
             Class[] types = new Class [] {
@@ -255,7 +235,7 @@ public class JDialogTransaksi extends javax.swing.JDialog {
             } else if (txtSearch.getText().trim().equals("")) {
                 loadAllDatabase();
             }
-        } else if (cbxSearch.getSelectedItem().equals("ID Penyewa")) {
+        } else if (cbxSearch.getSelectedItem().equals("ID Nama")) {
             if (!txtSearch.getText().trim().equals("")) {
                 searchByIdPenyewa();
             } else if (txtSearch.getText().trim().equals("")) {
@@ -299,7 +279,7 @@ public class JDialogTransaksi extends javax.swing.JDialog {
                     Object data[] = {
                         rs.getInt("idtransaksi"),
                         rs.getInt("idpenyewa"),
-                        getNameByIdPenyewa(),
+                        getNamebyIdNama(),
                         rs.getInt("idbuku"),
                         getJudulBukuByIdBuku(),
                         rs.getString("judulbuku")
@@ -330,7 +310,7 @@ public class JDialogTransaksi extends javax.swing.JDialog {
                     Object data[] = {
                         rs.getInt("idtransaksi"),
                         rs.getInt("idpenyewa"),
-                        getNameByIdPenyewa(),
+                        getNamebyIdNama(),
                         rs.getInt("idbuku"),
                         getJudulBukuByIdBuku(),
                         rs.getString("judulbuku")
@@ -361,7 +341,7 @@ public class JDialogTransaksi extends javax.swing.JDialog {
                     Object data[] = {
                         rs.getInt("idtransaksi"),
                         rs.getInt("idpenyewa"),
-                        getNameByIdPenyewa(),
+                        getNamebyIdNama(),
                         rs.getInt("idbuku"),
                         getJudulBukuByIdBuku(),
                         rs.getString("judulbuku")
@@ -392,7 +372,7 @@ public class JDialogTransaksi extends javax.swing.JDialog {
                     Object data[] = {
                         rs.getInt("idtransaksi"),
                         rs.getInt("idpenyewa"),
-                        getNameByIdPenyewa(),
+                        getNamebyIdNama(),
                         rs.getInt("idbuku"),
                         getJudulBukuByIdBuku(),
                         rs.getString("judulbuku")
@@ -423,7 +403,7 @@ public class JDialogTransaksi extends javax.swing.JDialog {
                     Object data[] = {
                         rs.getInt("idtransaksi"),
                         rs.getInt("idpenyewa"),
-                        getNameByIdPenyewa(),
+                        getNamebyIdNama(),
                         rs.getInt("idbuku"),
                         getJudulBukuByIdBuku(),
                         rs.getString("judulbuku")
