@@ -56,7 +56,9 @@ public class JDialogTabelPenyewa extends javax.swing.JDialog {
 
     private void loadAllDatabase() {
         try {
-            String sql = "SELECT * FROM datapenyewa;";
+            String sql = "SELECT idnama,nama, jeniskelamin,tempatlahir,"
+                    + "date_format(tanggallahir, '%d-%m-%Y') as tanggallahir,"
+                    + "nohp, alamat, jenispenyewa FROM datapenyewa;";
             PreparedStatement pstatement = conn.prepareStatement(sql);
 
             ResultSet rs = pstatement.executeQuery();

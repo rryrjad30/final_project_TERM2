@@ -170,6 +170,12 @@ public class JDialogTransaksi extends javax.swing.JDialog {
 
         cbxSearch.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "All", "ID Transaksi", "ID Nama", "Nama", "ID Buku", "Judul Buku" }));
 
+        txtSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtSearchActionPerformed(evt);
+            }
+        });
+
         btnSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/google_custom_search.png"))); // NOI18N
         btnSearch.setText("Search");
         btnSearch.addActionListener(new java.awt.event.ActionListener() {
@@ -230,6 +236,10 @@ public class JDialogTransaksi extends javax.swing.JDialog {
         // TODO add your handling code here:
         searchDataTransaksi();
     }//GEN-LAST:event_btnSearchActionPerformed
+
+    private void txtSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSearchActionPerformed
 
     private void searchDataTransaksi() {
         if (cbxSearch.getSelectedItem().equals("All")) {

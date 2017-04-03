@@ -135,7 +135,7 @@ public class JDialogLogin extends javax.swing.JDialog {
     private void executeLogIn() {
         try {
             
-            String sql = "SELECT * FROM registerdata WHERE username = ' ? ' and password = ' ? ' and active = ?";
+            String sql = "SELECT * FROM registerdata WHERE username = ? and password = ?";
             PreparedStatement pstatement = conn.prepareStatement(sql);
             pstatement.setString(1, txtUsername.getText());
             pstatement.setString(2, txtPassword.getText());
