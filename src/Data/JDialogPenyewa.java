@@ -36,6 +36,7 @@ public class JDialogPenyewa extends javax.swing.JDialog {
     }
 
     private void loadAllDatabase() {
+        removeTableData();
         try {
             String sql = "SELECT * FROM datapenyewa;";
             PreparedStatement pstatement = conn.prepareStatement(sql);
@@ -93,6 +94,11 @@ public class JDialogPenyewa extends javax.swing.JDialog {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         tblPenyewa = new javax.swing.JTable();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        cbxSearch = new javax.swing.JComboBox<>();
+        txtSearch = new javax.swing.JTextField();
+        btnSearch = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -123,30 +129,404 @@ public class JDialogPenyewa extends javax.swing.JDialog {
         tblPenyewa.setColumnSelectionAllowed(true);
         jScrollPane1.setViewportView(tblPenyewa);
 
+        jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        jLabel1.setText("Search by : ");
+
+        cbxSearch.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ID Penyewa", "Nama", "Jenis Kelamin", "Tempat Lahir", "Tanggal Lahir", "No Hp", "Alamat", "Jenis Penyewa" }));
+
+        btnSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/google_custom_search.png"))); // NOI18N
+        btnSearch.setText("Search");
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(cbxSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnSearch)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbxSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSearch))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 664, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 664, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 703, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 389, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 349, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 389, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addGap(0, 56, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 344, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+        // TODO add your handling code here:
+        searchDataPenyewa();
+    }//GEN-LAST:event_btnSearchActionPerformed
+
+    private void searchDataPenyewa() {
+        if (cbxSearch.getSelectedItem().equals("ID Penyewa")) {
+            if (!txtSearch.getText().trim().equals("")) {
+                searchByIdPenyewa();
+            } else if (txtSearch.getText().trim().equals("")) {
+                loadAllDatabase();
+            }
+        } else if (cbxSearch.getSelectedItem().equals("Nama")) {
+            if (!txtSearch.getText().trim().equals("")) {
+                searchByNama();
+            } else if (txtSearch.getText().trim().equals("")) {
+                loadAllDatabase();
+            }
+        } else if (cbxSearch.getSelectedItem().equals("Jenis Kelamin")) {
+            if (!txtSearch.getText().trim().equals("")) {
+                searchByJenisKelamin();
+            } else if (txtSearch.getText().trim().equals("")) {
+                loadAllDatabase();
+            }
+        } else if (cbxSearch.getSelectedItem().equals("Tempat Lahir")) {
+            if (!txtSearch.getText().trim().equals("")) {
+                searchByTempatLahir();
+            } else if (txtSearch.getText().trim().equals("")) {
+                loadAllDatabase();
+            }
+        } else if (cbxSearch.getSelectedItem().equals("Tanggal Lahir")) {
+            if (!txtSearch.getText().trim().equals("")) {
+                searchByTanggalLahir();
+            } else if (txtSearch.getText().trim().equals("")) {
+                loadAllDatabase();
+            }
+        } else if (cbxSearch.getSelectedItem().equals("No Hp")) {
+            if (!txtSearch.getText().trim().equals("")) {
+                searchByNoHp();
+            } else if (txtSearch.getText().trim().equals("")) {
+                loadAllDatabase();
+            }
+        } else if (cbxSearch.getSelectedItem().equals("Alamat")) {
+            if (!txtSearch.getText().trim().equals("")) {
+                searchByAlamat();
+            } else if (txtSearch.getText().trim().equals("")) {
+                loadAllDatabase();
+            }
+        }  else if (cbxSearch.getSelectedItem().equals("Jenis Penyewa")) {
+            if (!txtSearch.getText().trim().equals("")) {
+                searchByJenisPenyewa();
+            } else if (txtSearch.getText().trim().equals("")) {
+                loadAllDatabase();
+            }
+        } else {
+            util.Sutil.mse(this, "Not found !");
+        }
+    }
+
+    private void searchByIdPenyewa() {
+        try {
+            removeTableData();
+            String sql = "SELECT * FROM datapenyewa WHERE idpenyewa LIKE ?";
+
+            PreparedStatement pstatement = conn.prepareStatement(sql);
+            pstatement.setInt(1, Integer.parseInt(txtSearch.getText().trim()));
+
+            ResultSet rs = pstatement.executeQuery();
+            if (rs.isBeforeFirst()) { // check is resultset not empty
+                DefaultTableModel tableModel = (DefaultTableModel) tblPenyewa.getModel();
+                while (rs.next()) {
+                    Object data[] = {
+                        rs.getInt("idpenyewa"),
+                        rs.getString("nama"),
+                        rs.getString("jeniskelamin"),
+                        rs.getString("tempatlahir"),
+                        rs.getString("tanggallahir"),
+                        rs.getString("nohp"),
+                        rs.getString("alamat"),
+                        rs.getString("jenispenyewa")
+                    };
+                    tableModel.addRow(data);
+                }
+            }
+
+            rs.close();
+            pstatement.close();
+        } catch (SQLException ex) {
+            System.out.println("Error:\n" + ex.getLocalizedMessage());
+        }
+    }
+
+    private void searchByNama() {
+        try {
+            removeTableData();
+            String sql = "SELECT * FROM datapenyewa WHERE nama LIKE ?";
+
+            PreparedStatement pstatement = conn.prepareStatement(sql);
+            pstatement.setString(1, "%" + txtSearch.getText().trim() + "%");
+
+            ResultSet rs = pstatement.executeQuery();
+            if (rs.isBeforeFirst()) { // check is resultset not empty
+                DefaultTableModel tableModel = (DefaultTableModel) tblPenyewa.getModel();
+                while (rs.next()) {
+                    Object data[] = {
+                        rs.getInt("idpenyewa"),
+                        rs.getString("nama"),
+                        rs.getString("jeniskelamin"),
+                        rs.getString("tempatlahir"),
+                        rs.getString("tanggallahir"),
+                        rs.getString("nohp"),
+                        rs.getString("alamat"),
+                        rs.getString("jenispenyewa")
+                    };
+                    tableModel.addRow(data);
+                }
+            }
+
+            rs.close();
+            pstatement.close();
+        } catch (SQLException ex) {
+            System.out.println("Error:\n" + ex.getLocalizedMessage());
+        }
+    }
+
+    private void searchByJenisKelamin() {
+        try {
+            removeTableData();
+            String sql = "SELECT * FROM datapenyewa WHERE jeniskelamin LIKE ?";
+
+            PreparedStatement pstatement = conn.prepareStatement(sql);
+            pstatement.setString(1, "%" + txtSearch.getText().trim() + "%");
+
+            ResultSet rs = pstatement.executeQuery();
+            if (rs.isBeforeFirst()) { // check is resultset not empty
+                DefaultTableModel tableModel = (DefaultTableModel) tblPenyewa.getModel();
+                while (rs.next()) {
+                    Object data[] = {
+                        rs.getInt("idpenyewa"),
+                        rs.getString("nama"),
+                        rs.getString("jeniskelamin"),
+                        rs.getString("tempatlahir"),
+                        rs.getString("tanggallahir"),
+                        rs.getString("nohp"),
+                        rs.getString("alamat"),
+                        rs.getString("jenispenyewa")
+                    };
+                    tableModel.addRow(data);
+                }
+            }
+
+            rs.close();
+            pstatement.close();
+        } catch (SQLException ex) {
+            System.out.println("Error:\n" + ex.getLocalizedMessage());
+        }
+    }
+
+    private void searchByTempatLahir() {
+        try {
+            removeTableData();
+            String sql = "SELECT * FROM datapenyewa WHERE tempatlahir LIKE ?";
+
+            PreparedStatement pstatement = conn.prepareStatement(sql);
+            pstatement.setString(1, "%" + txtSearch.getText().trim() + "%");
+
+            ResultSet rs = pstatement.executeQuery();
+            if (rs.isBeforeFirst()) { // check is resultset not empty
+                DefaultTableModel tableModel = (DefaultTableModel) tblPenyewa.getModel();
+                while (rs.next()) {
+                    Object data[] = {
+                        rs.getInt("idpenyewa"),
+                        rs.getString("nama"),
+                        rs.getString("jeniskelamin"),
+                        rs.getString("tempatlahir"),
+                        rs.getString("tanggallahir"),
+                        rs.getString("nohp"),
+                        rs.getString("alamat"),
+                        rs.getString("jenispenyewa")
+                    };
+                    tableModel.addRow(data);
+                }
+            }
+
+            rs.close();
+            pstatement.close();
+        } catch (SQLException ex) {
+            System.out.println("Error:\n" + ex.getLocalizedMessage());
+        }
+    }
+
+    private void searchByTanggalLahir() {
+        try {
+            removeTableData();
+            String sql = "SELECT * FROM datapenyewa WHERE tanggallahir LIKE ?";
+
+            PreparedStatement pstatement = conn.prepareStatement(sql);
+            pstatement.setString(1, "%" + txtSearch.getText().trim() + "%");
+
+            ResultSet rs = pstatement.executeQuery();
+            if (rs.isBeforeFirst()) { // check is resultset not empty
+                DefaultTableModel tableModel = (DefaultTableModel) tblPenyewa.getModel();
+                while (rs.next()) {
+                    Object data[] = {
+                        rs.getInt("idpenyewa"),
+                        rs.getString("nama"),
+                        rs.getString("jeniskelamin"),
+                        rs.getString("tempatlahir"),
+                        rs.getString("tanggallahir"),
+                        rs.getString("nohp"),
+                        rs.getString("alamat"),
+                        rs.getString("jenispenyewa")
+                    };
+                    tableModel.addRow(data);
+                }
+            }
+
+            rs.close();
+            pstatement.close();
+        } catch (SQLException ex) {
+            System.out.println("Error:\n" + ex.getLocalizedMessage());
+        }
+    }
+
+    private void searchByNoHp() {
+        try {
+            removeTableData();
+            String sql = "SELECT * FROM datapenyewa WHERE nohp LIKE ?";
+
+            PreparedStatement pstatement = conn.prepareStatement(sql);
+            pstatement.setString(1, "%" + txtSearch.getText().trim() + "%");
+
+            ResultSet rs = pstatement.executeQuery();
+            if (rs.isBeforeFirst()) { // check is resultset not empty
+                DefaultTableModel tableModel = (DefaultTableModel) tblPenyewa.getModel();
+                while (rs.next()) {
+                    Object data[] = {
+                        rs.getInt("idpenyewa"),
+                        rs.getString("nama"),
+                        rs.getString("jeniskelamin"),
+                        rs.getString("tempatlahir"),
+                        rs.getString("tanggallahir"),
+                        rs.getString("nohp"),
+                        rs.getString("alamat"),
+                        rs.getString("jenispenyewa")
+                    };
+                    tableModel.addRow(data);
+                }
+            }
+
+            rs.close();
+            pstatement.close();
+        } catch (SQLException ex) {
+            System.out.println("Error:\n" + ex.getLocalizedMessage());
+        }
+    }
+
+    private void searchByAlamat() {
+        try {
+            removeTableData();
+            String sql = "SELECT * FROM datapenyewa WHERE alamat LIKE ?";
+
+            PreparedStatement pstatement = conn.prepareStatement(sql);
+            pstatement.setString(1, "%" + txtSearch.getText().trim() + "%");
+
+            ResultSet rs = pstatement.executeQuery();
+            if (rs.isBeforeFirst()) { // check is resultset not empty
+                DefaultTableModel tableModel = (DefaultTableModel) tblPenyewa.getModel();
+                while (rs.next()) {
+                    Object data[] = {
+                        rs.getInt("idpenyewa"),
+                        rs.getString("nama"),
+                        rs.getString("jeniskelamin"),
+                        rs.getString("tempatlahir"),
+                        rs.getString("tanggallahir"),
+                        rs.getString("nohp"),
+                        rs.getString("alamat"),
+                        rs.getString("jenispenyewa")
+                    };
+                    tableModel.addRow(data);
+                }
+            }
+
+            rs.close();
+            pstatement.close();
+        } catch (SQLException ex) {
+            System.out.println("Error:\n" + ex.getLocalizedMessage());
+        }
+    }
+    
+    private void searchByJenisPenyewa() {
+        try {
+            removeTableData();
+            String sql = "SELECT * FROM datapenyewa WHERE jenispenyewa LIKE ?";
+
+            PreparedStatement pstatement = conn.prepareStatement(sql);
+            pstatement.setString(1, "%" + txtSearch.getText().trim() + "%");
+
+            ResultSet rs = pstatement.executeQuery();
+            if (rs.isBeforeFirst()) { // check is resultset not empty
+                DefaultTableModel tableModel = (DefaultTableModel) tblPenyewa.getModel();
+                while (rs.next()) {
+                    Object data[] = {
+                        rs.getInt("idpenyewa"),
+                        rs.getString("nama"),
+                        rs.getString("jeniskelamin"),
+                        rs.getString("tempatlahir"),
+                        rs.getString("tanggallahir"),
+                        rs.getString("nohp"),
+                        rs.getString("alamat"),
+                        rs.getString("jenispenyewa")
+                    };
+                    tableModel.addRow(data);
+                }
+            }
+
+            rs.close();
+            pstatement.close();
+        } catch (SQLException ex) {
+            System.out.println("Error:\n" + ex.getLocalizedMessage());
+        }
+    }
+
+    private void removeTableData() {
+        DefaultTableModel tableModel = (DefaultTableModel) tblPenyewa.getModel();
+        tableModel.setRowCount(0);
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnSearch;
+    private javax.swing.JComboBox<String> cbxSearch;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblPenyewa;
+    private javax.swing.JTextField txtSearch;
     // End of variables declaration//GEN-END:variables
 }
