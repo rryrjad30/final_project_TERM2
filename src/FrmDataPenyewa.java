@@ -32,7 +32,7 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
     public FrmDataPenyewa(Connection conn) {
         this.conn = conn;
         initComponents();
-        createIdPenyewa();
+        createIdNama();
         databaseConnection();
         loadAllDatabase();
         setLocationRelativeTo(null);
@@ -40,7 +40,7 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
 
     private void loadAllDatabase() {
         removeTableData();
-        createIdPenyewa();
+        createIdNama();
         try {
             String sql = "SELECT * FROM datapenyewa;";
             PreparedStatement pstatement = conn.prepareStatement(sql);
@@ -51,7 +51,7 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
                     DefaultTableModel tableModel = (DefaultTableModel) tblPenyewa.getModel();
 
                     Object data[] = {
-                        rs.getString("idpenyewa"),
+                        rs.getString("idnama"),
                         rs.getString("nama"),
                         rs.getString("jeniskelamin"),
                         rs.getString("tempatlahir"),
@@ -128,7 +128,7 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
         }
     }
     
-    private void updateDatabase(int idpenyewa, String nama, String gender, String tempatlahir,
+    private void updateDatabase(int idnama, String nama, String gender, String tempatlahir,
             Date tanggallahir, String nohp, String alamat, String jenispenyewa) {
         try {
             Class.forName(DbConn.JDBC_CLASS);
@@ -147,7 +147,7 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
                         + "nohp = '" + nohp + "' , "
                         + "alamat = '" + alamat + "' "
                         + "jenispenyewa = '" + jenispenyewa + "' "
-                        + "where idpenyewa = '" + idpenyewa + "';";
+                        + "where idnama = '" + idnama + "';";
 
                 PreparedStatement pstatement = conn.prepareStatement(sql);
 
@@ -163,7 +163,7 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
         }
     }
 
-    private void deleteDatabase(int idpenyewa) {
+    private void deleteDatabase(int idnama) {
         try {
             Class.forName(DbConn.JDBC_CLASS);
             Connection conn = DriverManager.getConnection(DbConn.JDBC_URL,
@@ -173,7 +173,7 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
             if (conn != null) {
                 System.out.println("Connected to DB!\n");
 
-                String sql = "DELETE FROM `datapenyewa` where idpenyewa = '"+ idpenyewa + "';";
+                String sql = "DELETE FROM `datapenyewa` where idnama = '"+ idnama + "';";
 
                 PreparedStatement pstatement = conn.prepareStatement(sql);
 
@@ -215,7 +215,7 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
         lblUserPict = new javax.swing.JLabel();
         lblAlamatPenyewa = new javax.swing.JLabel();
         txtAlamatPenyewa = new javax.swing.JTextField();
-        txtIDPenyewa = new javax.swing.JTextField();
+        txtIdNama = new javax.swing.JTextField();
         lblNoHp = new javax.swing.JLabel();
         txtNoHP = new javax.swing.JTextField();
         lblJenis = new javax.swing.JLabel();
@@ -328,11 +328,11 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
             }
         });
 
-        txtIDPenyewa.setEditable(false);
-        txtIDPenyewa.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        txtIDPenyewa.addActionListener(new java.awt.event.ActionListener() {
+        txtIdNama.setEditable(false);
+        txtIdNama.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        txtIdNama.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtIDPenyewaActionPerformed(evt);
+                txtIdNamaActionPerformed(evt);
             }
         });
 
@@ -385,20 +385,19 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
                     .addGroup(pnlDataPenyewaLayout.createSequentialGroup()
                         .addComponent(lblNama1)
                         .addGap(19, 19, 19)
-                        .addComponent(txtIDPenyewa, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtIdNama, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(txtNama, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlDataPenyewaLayout.createSequentialGroup()
-                                    .addComponent(lblAlamatPenyewa)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(txtAlamatPenyewa, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlDataPenyewaLayout.createSequentialGroup()
-                                    .addComponent(lblNoHp)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(txtNoHP, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlDataPenyewaLayout.createSequentialGroup()
+                                .addComponent(lblAlamatPenyewa)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtAlamatPenyewa, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlDataPenyewaLayout.createSequentialGroup()
+                                .addComponent(lblNoHp)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtNoHP, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(pnlDataPenyewaLayout.createSequentialGroup()
                                 .addGap(8, 8, 8)
                                 .addGroup(pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -452,7 +451,7 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
                     .addComponent(lblUserPict, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(pnlDataPenyewaLayout.createSequentialGroup()
                         .addGroup(pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtIDPenyewa, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtIdNama, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblNama1)
                             .addComponent(txtNama, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -512,9 +511,9 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_btnBackActionPerformed
 
-    private void txtIDPenyewaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIDPenyewaActionPerformed
+    private void txtIdNamaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdNamaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtIDPenyewaActionPerformed
+    }//GEN-LAST:event_txtIdNamaActionPerformed
 
     private void txtAlamatPenyewaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtAlamatPenyewaActionPerformed
         // TODO add your handling code here:
@@ -546,7 +545,7 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
 
     private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
         // TODO add your handling code here:
-        createIdPenyewa();
+        createIdNama();
         txtNama.setText("");
         rdoLaki.setSelected(false);
         rdoPerempuan.setSelected(false);
@@ -558,9 +557,9 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
         rdoSpesial.setSelected(false);
     }//GEN-LAST:event_btnNewActionPerformed
 
-    public void createIdPenyewa() {
+    public void createIdNama() {
         try {
-            String sql = "SELECT max(idpenyewa) FROM datapenyewa;";
+            String sql = "SELECT max(idnama) FROM datapenyewa;";
             Integer lastDataValue = 0;
             PreparedStatement pstatement = conn.prepareStatement(sql);
 
@@ -568,14 +567,14 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
             if (rs.isBeforeFirst()) { // check is resultset not empty
 
                 while (rs.next()) {
-                    lastDataValue = rs.getInt("max(idpenyewa)");
+                    lastDataValue = rs.getInt("max(idnama)");
                 };
                 // tableModel.addRow(data);
             } else {
                 util.Sutil.msg(this, "Record Empty");
             }
             ++lastDataValue;
-            txtIDPenyewa.setText(lastDataValue.toString());
+            txtIdNama.setText(lastDataValue.toString());
             
             rs.close();
             pstatement.close();
@@ -650,14 +649,14 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
 
             Date tanggallahir1 = sdf.parse(tanggallahir);
             
-        updateDatabase(Integer.parseInt(txtIDPenyewa.getText()), txtNama.getText(), gender, txtTempatLahir.getText()
+        updateDatabase(Integer.parseInt(txtIdNama.getText()), txtNama.getText(), gender, txtTempatLahir.getText()
                 , tanggallahir1, txtNoHP.getText(), txtAlamatPenyewa.getText(), normalspecial);
         
         loadAllDatabase();
     }
 
     public void toDeleteData() {
-        deleteDatabase(Integer.parseInt(txtIDPenyewa.getText()));
+        deleteDatabase(Integer.parseInt(txtIdNama.getText()));
         loadAllDatabase();
     }
 
@@ -695,7 +694,7 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
     private javax.swing.JRadioButton rdoSpesial;
     private javax.swing.JTable tblPenyewa;
     private javax.swing.JTextField txtAlamatPenyewa;
-    private javax.swing.JTextField txtIDPenyewa;
+    private javax.swing.JTextField txtIdNama;
     private javax.swing.JTextField txtNama;
     private javax.swing.JTextField txtNoHP;
     private javax.swing.JTextField txtTempatLahir;

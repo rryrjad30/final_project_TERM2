@@ -47,7 +47,7 @@ public class JDialogPenyewa extends javax.swing.JDialog {
                     DefaultTableModel tableModel = (DefaultTableModel) tblPenyewa.getModel();
 
                     Object data[] = {
-                        rs.getString("idpenyewa"),
+                        rs.getString("idnama"),
                         rs.getString("nama"),
                         rs.getString("jeniskelamin"),
                         rs.getString("tempatlahir"),

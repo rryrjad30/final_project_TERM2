@@ -35,12 +35,30 @@ public class JDialogTransaksi extends javax.swing.JDialog {
         setLocationRelativeTo(null);
     }
 
+<<<<<<< HEAD
     private String getNameByIdPenyewa() throws SQLException {
         String nama = "";
         String sqlPenyewaLookup = "Select nama from datapenyewa p inner join transaksi t "
                 + "where p.idpenyewa = t.idpenyewa order by t.idtransaksi; ";
 
         PreparedStatement pstPenyewaLookup = conn.prepareStatement(sqlPenyewaLookup);
+=======
+<<<<<<< HEAD
+    private String getNamebyIdNama(int idnama) throws SQLException {
+        String Name = "";
+        String sqlPenyewaLookup = "Select nama from datapenyewa where idnama = ? ;";
+
+        PreparedStatement pstPenyewaLookup = conn.prepareStatement(sqlPenyewaLookup);
+        pstPenyewaLookup.setInt(1, idnama);
+=======
+    private Void getNameByIdPenyewa() throws SQLException {
+        String Name = "";
+        String sqlPenyewaLookup = "Select nama from datapenyewa p inner join transaksi t where p.idpenyewa = t.idpenyewa order by t.idtransaksi;";
+
+        PreparedStatement pstPenyewaLookup = conn.prepareStatement(sqlPenyewaLookup);
+//        pstPenyewaLookup.setInt(1, idpenyewa);
+>>>>>>> origin/master
+>>>>>>> origin/master
 
         ResultSet rsPenyewaLookup = pstPenyewaLookup.executeQuery();
         while (rsPenyewaLookup.next()) {
@@ -64,7 +82,7 @@ public class JDialogTransaksi extends javax.swing.JDialog {
 
     private void loadAllDatabase() {
         try {
-            String sql = "SELECT username, idtransaksi, idpenyewa, idbuku"
+            String sql = "SELECT username, idtransaksi, idnama, idbuku"
                     + ", date_format(tanggalpinjam, '%d-%m-%Y') as tanggalpinjam"
                     + ", date_format(tanggalpengembalian, '%d-%m-%Y') as tanggalpengembalian FROM transaksi;";
             PreparedStatement pstatement = conn.prepareStatement(sql);
@@ -77,8 +95,13 @@ public class JDialogTransaksi extends javax.swing.JDialog {
 //                    int row = tblTransaksi.getSelectedRow();
                         Object data[] = {
                             rs.getInt("idtransaksi"),
+<<<<<<< HEAD
+                            rs.getInt("idnama"),
+//                            getNamebyIdnama((int)(tblTransaksi.getValueAt(row, 1))),
+=======
                             rs.getInt("idpenyewa"),
                             getNameByIdPenyewa(),
+>>>>>>> origin/master
                             rs.getInt("idbuku"),
                             getJudulBukuByIdBuku(),
                             rs.getString("tanggalpinjam"),
