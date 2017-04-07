@@ -10,6 +10,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import util.DbConn;
 
@@ -32,10 +35,47 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
     public FrmDataPenyewa(Connection conn) {
         this.conn = conn;
         initComponents();
+        tableSelectionListener();
         createIdNama();
         databaseConnection();
         loadAllDatabase();
         setLocationRelativeTo(null);
+    }
+
+    public void tableSelectionListener() {
+        ListSelectionListener listener = new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent e) {
+                int row = tblPenyewa.getSelectedRow();
+                if (row >= 0) {
+                    try {
+                        txtIdNama.setText(tblPenyewa.getValueAt(row, 0).toString());
+                        txtNama.setText(tblPenyewa.getValueAt(row, 1).toString());
+                        if (tblPenyewa.getValueAt(row, 2).toString().equals("Laki - laki")) {
+                            rdoLaki.setSelected(true);
+                        } else if (tblPenyewa.getValueAt(row, 2).toString().equals("Perempuan")) {
+                            rdoPerempuan.setSelected(true);
+                        }
+                        txtTempatLahir.setText(tblPenyewa.getValueAt(row, 3).toString());
+                        
+                        Date tgllahir = new SimpleDateFormat("dd-MM-yyyy").parse((String) tblPenyewa.getValueAt(row, 4));
+                        dtcTanggalLahir.setDate(tgllahir);
+                        
+                        txtNoHP.setText(tblPenyewa.getValueAt(row, 5).toString());
+                        txtAlamatPenyewa.setText(tblPenyewa.getValueAt(row, 6).toString());
+                        
+                        if (tblPenyewa.getValueAt(row, 7).toString().equals("Normal")) {
+                            rdoNormal.setSelected(true);
+                        } else if (tblPenyewa.getValueAt(row, 7).toString().equals("Special")) {
+                            rdoSpesial.setSelected(true);
+                        }
+                    } catch (ParseException ex) {
+                        Logger.getLogger(FrmDataPenyewa.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        };
+        tblPenyewa.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        tblPenyewa.getSelectionModel().addListSelectionListener(listener);
     }
 
     private void loadAllDatabase() {
@@ -106,14 +146,14 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
                 PreparedStatement pstatement = conn.prepareStatement(sql);
                 pstatement.setString(1, nama);
                 pstatement.setString(2, gender);
-                
+
                 SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
                 String tanggallahir1 = sdf.format(tanggallahir);
 
                 Date tanggallahir2 = sdf.parse(tanggallahir1);
                 java.sql.Date sqlDate = new java.sql.Date(tanggallahir2.getTime());
                 pstatement.setDate(3, sqlDate);
-                
+
                 pstatement.setString(4, tempatlahir);
                 pstatement.setString(5, nohp);
                 pstatement.setString(6, alamat);
@@ -129,7 +169,7 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
             System.out.println("Error:\n" + ex.getLocalizedMessage());
         }
     }
-    
+
     private void updateDatabase(int idnama, String nama, String gender, String tempatlahir,
             Date tanggallahir, String nohp, String alamat, String jenispenyewa) {
         try {
@@ -175,7 +215,7 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
             if (conn != null) {
                 System.out.println("Connected to DB!\n");
 
-                String sql = "DELETE FROM `datapenyewa` where idnama = '"+ idnama + "';";
+                String sql = "DELETE FROM `datapenyewa` where idnama = '" + idnama + "';";
 
                 PreparedStatement pstatement = conn.prepareStatement(sql);
 
@@ -553,7 +593,7 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
         } catch (ParseException ex) {
             Logger.getLogger(FrmDataPenyewa.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
@@ -575,7 +615,7 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
         loadAllDatabase();
     }//GEN-LAST:event_btbRefreshActionPerformed
 
-    private void executeNew(){
+    private void executeNew() {
         createIdNama();
         txtNama.setText("");
         rdoLaki.setSelected(false);
@@ -587,7 +627,7 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
         rdoNormal.setSelected(false);
         rdoSpesial.setSelected(false);
     }
-    
+
     private void createIdNama() {
         try {
             String sql = "SELECT max(idnama) FROM datapenyewa;";
@@ -606,7 +646,7 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
             }
             ++lastDataValue;
             txtIdNama.setText(lastDataValue.toString());
-            
+
             rs.close();
             pstatement.close();
         } catch (SQLException ex) {
@@ -637,7 +677,7 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
                 normalspecial = "";
             }
             //--
-            
+
             SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
             String tanggalpinjam = sdf.format(dtcTanggalLahir.getDate());
 
@@ -655,34 +695,34 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
 
     public void toUpdateData() throws ParseException {
         //untuk gender (jenis kelamin)
-            String gender = "";
-            if (rdoLaki.isSelected()) {
-                gender = rdoLaki.getText();
-            } else if (rdoPerempuan.isSelected()) {
-                gender = rdoPerempuan.getText();
-            } else {
-                gender = "";
-            }
-            //--
+        String gender = "";
+        if (rdoLaki.isSelected()) {
+            gender = rdoLaki.getText();
+        } else if (rdoPerempuan.isSelected()) {
+            gender = rdoPerempuan.getText();
+        } else {
+            gender = "";
+        }
+        //--
 
-            //untuk normal atau special
-            String normalspecial = "";
-            if (rdoNormal.isSelected()) {
-                normalspecial = rdoNormal.getText();
-            } else if (rdoSpesial.isSelected()) {
-                normalspecial = rdoSpesial.getText();
-            } else {
-                normalspecial = "";
-            }
-            //--
-            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-            String tanggallahir = sdf.format(dtcTanggalLahir.getDate());
+        //untuk normal atau special
+        String normalspecial = "";
+        if (rdoNormal.isSelected()) {
+            normalspecial = rdoNormal.getText();
+        } else if (rdoSpesial.isSelected()) {
+            normalspecial = rdoSpesial.getText();
+        } else {
+            normalspecial = "";
+        }
+        //--
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        String tanggallahir = sdf.format(dtcTanggalLahir.getDate());
 
-            Date tanggallahir1 = sdf.parse(tanggallahir);
-            
-        updateDatabase(Integer.parseInt(txtIdNama.getText()), txtNama.getText(), gender, txtTempatLahir.getText()
-                , tanggallahir1, txtNoHP.getText(), txtAlamatPenyewa.getText(), normalspecial);
-        
+        Date tanggallahir1 = sdf.parse(tanggallahir);
+
+        updateDatabase(Integer.parseInt(txtIdNama.getText()), txtNama.getText(), gender, txtTempatLahir.getText(),
+                tanggallahir1, txtNoHP.getText(), txtAlamatPenyewa.getText(), normalspecial);
+
         loadAllDatabase();
     }
 
