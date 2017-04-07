@@ -567,6 +567,15 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
 
     private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
         // TODO add your handling code here:
+        executeNew();
+    }//GEN-LAST:event_btnNewActionPerformed
+
+    private void btbRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btbRefreshActionPerformed
+        // TODO add your handling code here:
+        loadAllDatabase();
+    }//GEN-LAST:event_btbRefreshActionPerformed
+
+    private void executeNew(){
         createIdNama();
         txtNama.setText("");
         rdoLaki.setSelected(false);
@@ -577,14 +586,9 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
         txtNoHP.setText("");
         rdoNormal.setSelected(false);
         rdoSpesial.setSelected(false);
-    }//GEN-LAST:event_btnNewActionPerformed
-
-    private void btbRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btbRefreshActionPerformed
-        // TODO add your handling code here:
-        loadAllDatabase();
-    }//GEN-LAST:event_btbRefreshActionPerformed
-
-    public void createIdNama() {
+    }
+    
+    private void createIdNama() {
         try {
             String sql = "SELECT max(idnama) FROM datapenyewa;";
             Integer lastDataValue = 0;

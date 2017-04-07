@@ -17,7 +17,6 @@ import util.DbConn;
 import Data.JDialogTransaksi;
 import Data.JDialogPenyewa;
 import Data.JDialogBuku;
-import javax.swing.JFrame;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -872,6 +871,6 @@ public class FrmMain extends javax.swing.JFrame {
     public javax.swing.JTextField txtIdTransaksi;
     public static javax.swing.JTextField txtJudulBuku;
     public static javax.swing.JTextField txtNama;
-    private javax.swing.JTextField txtUsernameMain;
+    public javax.swing.JTextField txtUsernameMain;
     // End of variables declaration//GEN-END:variables
 }

@@ -17,7 +17,6 @@ import util.DbConn;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author COMPUTER
@@ -37,7 +36,7 @@ public class FrmUser extends javax.swing.JFrame {
         tableSelectionListener();
         setLocationRelativeTo(null);
     }
-    
+
     public void tableSelectionListener() {
         ListSelectionListener listener = new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent e) {
@@ -53,8 +52,8 @@ public class FrmUser extends javax.swing.JFrame {
         tblUser.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         tblUser.getSelectionModel().addListSelectionListener(listener);
     }
-    
-    private void saveToDatabase(String username, String password, String confirmpassword, int active){
+
+    private void saveToDatabase(String username, String password, String confirmpassword, int active) {
         try {
             Class.forName(DbConn.JDBC_CLASS);
             Connection conn = DriverManager.getConnection(DbConn.JDBC_URL,
@@ -84,7 +83,7 @@ public class FrmUser extends javax.swing.JFrame {
             System.out.println(ex);
         }
     }
-    
+
     private void loadAllDatabase() {
         removeTableData();
         try {
@@ -264,41 +263,42 @@ public class FrmUser extends javax.swing.JFrame {
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         // TODO add your handling code here:
-        int active;
-        if(cboActive.isSelected()){
-            active = 1;
-        } else {
-            active  = 0;
-        }
+        String loginUser = JDialogLogin.txtUsername.getText();
         
-        if(util.Sutil.msq(this, "Save change ? ") == 1){
-            executeSave();
-            util.Sutil.msg(this, "Saved !");
-        }  
-//         else if(JDialogLogin.txtUsername.equals(txtUser.getText())){
-//            if(!cboActive.isSelected()){
-//                util.Sutil.mse(this, "");
-//            }
+//        if (!txtUser.getText().equals(loginUser)) {
+            if (util.Sutil.msq(this, "Save change ? ") == 1) {
+                executeSave();
+                util.Sutil.msg(this, "Saved !");
+            }
+//        if (txtUser.getText().equals(loginUser)) {
+//           if(!cboActive.isSelected()){
+//               util.Sutil.mse(this, "This user is using");
+//           }
+//           
 //        }
-        
+
     }//GEN-LAST:event_btnSaveActionPerformed
 
-    private void executeSave(){
+    private void executeSave() {
         int active;
-        if(cboActive.isSelected()){
+        if (cboActive.isSelected()) {
             active = 1;
         } else {
-            active  = 0;
+            active = 0;
         }
         saveToDatabase(txtUser.getText(), txtPassword.getText(), txtConfirmPassword.getText(), active);
         loadAllDatabase();
     }
-    
+
+    private static void checkActive() {
+
+    }
+
     private void removeTableData() {
         DefaultTableModel tableModel = (DefaultTableModel) tblUser.getModel();
         tableModel.setRowCount(0);
     }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSave;
     private javax.swing.JCheckBox cboActive;
