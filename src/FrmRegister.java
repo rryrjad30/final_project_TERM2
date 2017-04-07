@@ -30,16 +30,17 @@ public class FrmRegister extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }
 
-    private void insertToDatabase(String username, String passwords, String confirmpassword) {
+    private void insertToDatabase(String username, String password, String confirmpassword, String active) {
         try {
 
             String sql = "INSERT INTO `registerdata` "
-                    + "(username, passwords, confirmpassword)"
-                    + "VALUES (?,?,?);";
+                    + "(username, password, confirmpassword, active)"
+                    + "VALUES (?,?,?,?);";
             PreparedStatement pstatement = conn.prepareStatement(sql);
             pstatement.setString(1, username);
-            pstatement.setString(2, passwords);
+            pstatement.setString(2, password);
             pstatement.setString(3, confirmpassword);
+            pstatement.setString(4, active);
 
             pstatement.executeUpdate();
             System.out.println("Record insert.");
@@ -84,6 +85,8 @@ public class FrmRegister extends javax.swing.JFrame {
         txtPassword = new javax.swing.JTextField();
         txtConfirmPassword = new javax.swing.JTextField();
         btnRegister = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
+        chkActive = new javax.swing.JCheckBox();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -122,6 +125,13 @@ public class FrmRegister extends javax.swing.JFrame {
             }
         });
 
+        jLabel5.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(102, 255, 255));
+        jLabel5.setText("Active");
+
+        chkActive.setText("Active");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -131,18 +141,16 @@ public class FrmRegister extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(49, 49, 49)
-                                .addComponent(jLabel2))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(52, 52, 52)
-                                .addComponent(jLabel3))
-                            .addComponent(jLabel4))
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtConfirmPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(txtConfirmPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(chkActive)))
                     .addComponent(btnRegister, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(19, 19, 19))
         );
@@ -150,20 +158,22 @@ public class FrmRegister extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(54, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtConfirmPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addGap(14, 14, 14)
-                        .addComponent(jLabel3)
-                        .addGap(14, 14, 14)
-                        .addComponent(jLabel4)))
-                .addGap(37, 37, 37)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtConfirmPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(chkActive))
+                .addGap(4, 4, 4)
                 .addComponent(btnRegister, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -183,26 +193,38 @@ public class FrmRegister extends javax.swing.JFrame {
     private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed
         // TODO add your handling code here:
         String username = txtUsername.getText().trim();
-        String passwords = txtPassword.getText().trim();
+        String password = txtPassword.getText().trim();
         String confirmpassword = txtConfirmPassword.getText();
+        String active = "";
+        if (chkActive.isSelected()) {
+                active = chkActive.getText();
+            } else if (!chkActive.isSelected()) {
+                active = chkActive.getText();
+            } else {
+                active = "";
+            }
 
-        if (username.equals("") || passwords.equals("") || confirmpassword.equals("")) {
-            util.Sutil.mse(this, "Can not empty !");
-        } else if (!passwords.equals(confirmpassword)) {
-            util.Sutil.mse(this, "Password and Confirm Password must sama !");
-        } else if(!username.equals("") && !passwords.equals("") && !confirmpassword.equals("") && passwords.equals(confirmpassword)){
-            insertToDatabase(username, passwords, confirmpassword);
-            util.Sutil.msg(this, "Registered !");
+
+        if (username.equals("") || password.equals("") || confirmpassword.equals("") || active.equals("")) {
+            util.Sutil.mse(this, "Can not be empty !");
+        } else if (!password.equals(confirmpassword)) {
+            util.Sutil.mse(this, "Password and Confirm Password must be the same !");
+        } else if(!username.equals("") && !password.equals("") && !confirmpassword.equals("")
+                && password.equals(confirmpassword) && !active.equals("")){
+            insertToDatabase(username, password, confirmpassword, active);
+            util.Sutil.msg(this, "Succesfully registered !");
             dispose();
         }
     }//GEN-LAST:event_btnRegisterActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnRegister;
+    private javax.swing.JCheckBox chkActive;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JTextField txtConfirmPassword;
     private javax.swing.JTextField txtPassword;

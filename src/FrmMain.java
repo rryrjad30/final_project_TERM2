@@ -529,7 +529,7 @@ public class FrmMain extends javax.swing.JFrame {
         });
         tblTransaksi.setColumnSelectionAllowed(true);
         jScrollPane1.setViewportView(tblTransaksi);
-        tblTransaksi.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        tblTransaksi.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
         getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 500, 720, 158));
 
@@ -588,7 +588,7 @@ public class FrmMain extends javax.swing.JFrame {
 
         mniBuku.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_B, java.awt.event.InputEvent.CTRL_MASK));
         mniBuku.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/Buku Icon.png"))); // NOI18N
-        mniBuku.setText("Book");
+        mniBuku.setText("Buku");
         mniBuku.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mniBukuActionPerformed(evt);
@@ -773,12 +773,13 @@ public class FrmMain extends javax.swing.JFrame {
 
     private void executeNew() {
         txtIdTransaksi.setText("");
+        idTransaksi();
         txtIdNama.setText("");
         txtNama.setText("");
         txtIdBuku.setText("");
         txtJudulBuku.setText("");
-        dtcTanggalPinjam.cleanup();
-        dtcTanggalPengembalian.cleanup();
+        dtcTanggalPinjam.setCalendar(null);
+        dtcTanggalPengembalian.setCalendar(null);
     }
 
     private void executeDelete() {

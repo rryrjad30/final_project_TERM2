@@ -36,6 +36,7 @@ public class FrmDataBuku extends javax.swing.JFrame {
         tableSelectionListener();
         databaseConnection();
         loadAllDatabase();
+        idBuku();
         setLocationRelativeTo(null);
     }
 
@@ -56,6 +57,32 @@ public class FrmDataBuku extends javax.swing.JFrame {
         };
         tblDataBuku.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         tblDataBuku.getSelectionModel().addListSelectionListener(listener);
+    }
+    
+     private void idBuku() {
+        try {
+            String sql = "SELECT max(idbuku) FROM databuku;";
+            Integer lastDataValue = 0;
+            PreparedStatement pstatement = conn.prepareStatement(sql);
+
+            ResultSet rs = pstatement.executeQuery();
+            if (rs.isBeforeFirst()) { // check is resultset not empty
+
+                while (rs.next()) {
+                    lastDataValue = rs.getInt("max(idbuku)");
+                };
+                // tableModel.addRow(data);
+            } else {
+                util.Sutil.msg(this, "Record Empty");
+            }
+            ++lastDataValue;
+            txtIDBuku.setText(lastDataValue.toString());
+
+            rs.close();
+            pstatement.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(FrmDataBuku.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private void loadAllDatabase() {
@@ -222,8 +249,6 @@ public class FrmDataBuku extends javax.swing.JFrame {
         lblKategoriBuku = new javax.swing.JLabel();
         lblISBN = new javax.swing.JLabel();
         txtISBN = new javax.swing.JTextField();
-        lblStok = new javax.swing.JLabel();
-        txtStok = new javax.swing.JTextField();
         btnCreate = new javax.swing.JButton();
         btnUpdate = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
@@ -308,16 +333,6 @@ public class FrmDataBuku extends javax.swing.JFrame {
 
         txtISBN.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
 
-        lblStok.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lblStok.setText("Stok");
-
-        txtStok.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        txtStok.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtStokActionPerformed(evt);
-            }
-        });
-
         btnCreate.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnCreate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/add.png"))); // NOI18N
         btnCreate.setText("Create");
@@ -374,14 +389,12 @@ public class FrmDataBuku extends javax.swing.JFrame {
                     .addComponent(lblPenerbit)
                     .addComponent(lblPengarang)
                     .addComponent(lblIDBuku)
-                    .addComponent(lblStok)
                     .addComponent(lblISBN)
                     .addComponent(lblTahunTerbit))
                 .addGap(18, 18, 18)
                 .addGroup(pnlDataBukuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlDataBukuLayout.createSequentialGroup()
-                        .addComponent(txtStok, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addGap(343, 343, 343)
                         .addComponent(btnBack1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(pnlDataBukuLayout.createSequentialGroup()
                         .addGroup(pnlDataBukuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -437,11 +450,7 @@ public class FrmDataBuku extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(pnlDataBukuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(txtISBN, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(lblISBN))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(pnlDataBukuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(txtStok, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(lblStok)))
+                                    .addComponent(lblISBN)))
                             .addGroup(pnlDataBukuLayout.createSequentialGroup()
                                 .addGroup(pnlDataBukuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(btnNew, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -507,51 +516,21 @@ public class FrmDataBuku extends javax.swing.JFrame {
         executeCreate();
     }//GEN-LAST:event_btnCreateActionPerformed
 
-    private void txtStokActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtStokActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtStokActionPerformed
-
     private void cboKategoriBukuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboKategoriBukuActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cboKategoriBukuActionPerformed
 
     private void executeNew() {
         txtIDBuku.setText("");
+        idBuku();
         txtJudulBuku.setText("");
         txtPengarang.setText("");
         txtPenerbit.setText("");
         yrcTahunTerbit.setYear(0);
         cboKategoriBuku.setSelectedIndex(0);
         txtISBN.setText("");
-        txtStok.setText("");
     }
 
-    public void createIdBuku() {
-        try {
-            String sql = "SELECT max(idbuku) FROM databuku;";
-            Integer lastDataValue = 0;
-            PreparedStatement pstatement = conn.prepareStatement(sql);
-
-            ResultSet rs = pstatement.executeQuery();
-            if (rs.isBeforeFirst()) { // check is resultset not empty
-
-                while (rs.next()) {
-                    lastDataValue = rs.getInt("max(idbuku)");
-                };
-                // tableModel.addRow(data);
-            } else {
-                util.Sutil.msg(this, "Record Empty");
-            }
-            ++lastDataValue;
-            txtIDBuku.setText(lastDataValue.toString());
-            
-            rs.close();
-            pstatement.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(FrmDataPenyewa.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
     private void executeCreate() {
         createDatabase(txtJudulBuku.getText(), txtPengarang.getText(),
                 txtPenerbit.getText(), String.valueOf(yrcTahunTerbit.getYear()),
@@ -598,7 +577,6 @@ public class FrmDataBuku extends javax.swing.JFrame {
     private javax.swing.JLabel lblLogo;
     private javax.swing.JLabel lblPenerbit;
     private javax.swing.JLabel lblPengarang;
-    private javax.swing.JLabel lblStok;
     private javax.swing.JLabel lblTahunTerbit;
     private javax.swing.JPanel pnlDataBuku;
     private javax.swing.JTable tblDataBuku;
@@ -607,7 +585,6 @@ public class FrmDataBuku extends javax.swing.JFrame {
     private javax.swing.JTextField txtJudulBuku;
     private javax.swing.JTextField txtPenerbit;
     private javax.swing.JTextField txtPengarang;
-    private javax.swing.JTextField txtStok;
     private com.toedter.calendar.JYearChooser yrcTahunTerbit;
     // End of variables declaration//GEN-END:variables
 }
