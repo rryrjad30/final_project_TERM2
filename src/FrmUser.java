@@ -43,7 +43,7 @@ public class FrmUser extends javax.swing.JFrame {
             public void valueChanged(ListSelectionEvent e) {
                 int row = tblUser.getSelectedRow();
                 if (row >= 0) {
-                    txtUsername.setText(tblUser.getValueAt(row, 0).toString());
+                    txtUser.setText(tblUser.getValueAt(row, 0).toString());
                     txtPassword.setText(tblUser.getValueAt(row, 1).toString());
                     txtConfirmPassword.setText(tblUser.getValueAt(row, 2).toString());
                     cboActive.setSelected(Boolean.valueOf(tblUser.getValueAt(row, 3).toString()));
@@ -54,7 +54,7 @@ public class FrmUser extends javax.swing.JFrame {
         tblUser.getSelectionModel().addListSelectionListener(listener);
     }
     
-    private void saveToDatabase(String username, String password, String confirmpassword, Boolean active){
+    private void saveToDatabase(String username, String password, String confirmpassword, int active){
         try {
             Class.forName(DbConn.JDBC_CLASS);
             Connection conn = DriverManager.getConnection(DbConn.JDBC_URL,
@@ -72,7 +72,7 @@ public class FrmUser extends javax.swing.JFrame {
                         + "where username = '" + username + "';";
 
                 PreparedStatement pstatement = conn.prepareStatement(sql);
-
+                System.out.println(pstatement);
                 pstatement.executeUpdate();
                 System.out.println("Updated.");
 
@@ -145,7 +145,7 @@ public class FrmUser extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        txtUsername = new javax.swing.JTextField();
+        txtUser = new javax.swing.JTextField();
         txtPassword = new javax.swing.JTextField();
         txtConfirmPassword = new javax.swing.JTextField();
         cboActive = new javax.swing.JCheckBox();
@@ -190,7 +190,7 @@ public class FrmUser extends javax.swing.JFrame {
 
         jLabel4.setText("Active");
 
-        btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/update.png"))); // NOI18N
+        btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/file_save_as.png"))); // NOI18N
         btnSave.setText("Save");
         btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -214,7 +214,7 @@ public class FrmUser extends javax.swing.JFrame {
                             .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtUser, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtConfirmPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(cboActive))))
@@ -226,7 +226,7 @@ public class FrmUser extends javax.swing.JFrame {
                 .addGap(16, 16, 16)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtUser, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
@@ -264,11 +264,33 @@ public class FrmUser extends javax.swing.JFrame {
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         // TODO add your handling code here:
-        executeSave();
+        int active;
+        if(cboActive.isSelected()){
+            active = 1;
+        } else {
+            active  = 0;
+        }
+        
+        if(util.Sutil.msq(this, "Save change ? ") == 1){
+            executeSave();
+            util.Sutil.msg(this, "Saved !");
+        }  
+//         else if(JDialogLogin.txtUsername.equals(txtUser.getText())){
+//            if(!cboActive.isSelected()){
+//                util.Sutil.mse(this, "");
+//            }
+//        }
+        
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void executeSave(){
-        saveToDatabase(txtUsername.getText(), txtPassword.getText(), txtConfirmPassword.getText(), cboActive.isSelected());
+        int active;
+        if(cboActive.isSelected()){
+            active = 1;
+        } else {
+            active  = 0;
+        }
+        saveToDatabase(txtUser.getText(), txtPassword.getText(), txtConfirmPassword.getText(), active);
         loadAllDatabase();
     }
     
@@ -289,6 +311,6 @@ public class FrmUser extends javax.swing.JFrame {
     private javax.swing.JTable tblUser;
     private javax.swing.JTextField txtConfirmPassword;
     private javax.swing.JTextField txtPassword;
-    private javax.swing.JTextField txtUsername;
+    private javax.swing.JTextField txtUser;
     // End of variables declaration//GEN-END:variables
 }

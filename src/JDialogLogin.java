@@ -98,7 +98,6 @@ public class JDialogLogin extends javax.swing.JDialog {
         databaseConnection();
         String username = txtUsername.getText().trim();
         String password = txtPassword.getText().trim();
-        
 
         if (username.equals("") && password.equals("")) {
             util.Sutil.mse(this, "Username and Password can't be empty !");
@@ -106,7 +105,7 @@ public class JDialogLogin extends javax.swing.JDialog {
             util.Sutil.mse(this, "Username can't be empty !");
         } else if (password.equals("")) {
             util.Sutil.mse(this, "Password can't be empty !");
-        } else if(!username.equals("") && !password.equals("")){
+        } else if (!username.equals("") && !password.equals("")) {
             executeLogIn();
         }
     }//GEN-LAST:event_btnLogInActionPerformed
@@ -134,21 +133,25 @@ public class JDialogLogin extends javax.swing.JDialog {
 
     private void executeLogIn() {
         try {
-            
+
             String sql = "SELECT * FROM registerdata WHERE username = ? and password = ?";
             PreparedStatement pstatement = conn.prepareStatement(sql);
             pstatement.setString(1, txtUsername.getText());
             pstatement.setString(2, txtPassword.getText());
 //            pstatement.setBoolean(3, active);
-            
+
             ResultSet rs = pstatement.executeQuery();
             if (rs.next()) {
-                
-                FrmMain main = new FrmMain(conn);
-                main.setVisible(true);
-                txtUsername.setText("");
-                txtPassword.setText("");
-                dispose();
+                if (rs.getInt("active") == 1) {
+                    FrmMain main = new FrmMain(conn);
+                    main.setVisible(true);
+                    txtUsername.setText("");
+                    txtPassword.setText("");
+                    dispose();
+                } else {
+                    util.Sutil.mse(this, "Account not active anymore!");
+                }
+
             } else {
                 util.Sutil.mse(this, "Username or password invalid !");
             }
@@ -160,7 +163,7 @@ public class JDialogLogin extends javax.swing.JDialog {
             Logger.getLogger(JDialogLogin.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     /**
      * @param args the command line arguments
      */

@@ -30,7 +30,7 @@ public class FrmRegister extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }
 
-    private void insertToDatabase(String username, String password, String confirmpassword, String active) {
+    private void insertToDatabase(String username, String password, String confirmpassword, int active) {
         try {
 
             String sql = "INSERT INTO `registerdata` "
@@ -40,7 +40,7 @@ public class FrmRegister extends javax.swing.JFrame {
             pstatement.setString(1, username);
             pstatement.setString(2, password);
             pstatement.setString(3, confirmpassword);
-            pstatement.setString(4, active);
+            pstatement.setInt(4, active);
 
             pstatement.executeUpdate();
             System.out.println("Record insert.");
@@ -195,22 +195,20 @@ public class FrmRegister extends javax.swing.JFrame {
         String username = txtUsername.getText().trim();
         String password = txtPassword.getText().trim();
         String confirmpassword = txtConfirmPassword.getText();
-        String active = "";
+        int active;
         if (chkActive.isSelected()) {
-                active = chkActive.getText();
-            } else if (!chkActive.isSelected()) {
-                active = chkActive.getText();
+                active = 1;
             } else {
-                active = "";
+                active = 0;
             }
 
 
-        if (username.equals("") || password.equals("") || confirmpassword.equals("") || active.equals("")) {
-            util.Sutil.mse(this, "Can not be empty !");
+        if (username.equals("") || password.equals("") || confirmpassword.equals("")) {
+            util.Sutil.mse(this, "Field must not be empty !");
         } else if (!password.equals(confirmpassword)) {
             util.Sutil.mse(this, "Password and Confirm Password must be the same !");
         } else if(!username.equals("") && !password.equals("") && !confirmpassword.equals("")
-                && password.equals(confirmpassword) && !active.equals("")){
+                && password.equals(confirmpassword)){
             insertToDatabase(username, password, confirmpassword, active);
             util.Sutil.msg(this, "Succesfully registered !");
             dispose();

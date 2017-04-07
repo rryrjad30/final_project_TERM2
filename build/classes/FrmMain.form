@@ -45,7 +45,7 @@
         </Menu>
         <Menu class="javax.swing.JMenu" name="MenuData">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Data"/>
+            <Property name="text" type="java.lang.String" value="Lihat Data"/>
           </Properties>
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="mniTransaksi">
@@ -100,7 +100,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="MniDataPenyewa">
               <Properties>
                 <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
-                  <KeyStroke key="Shift+Ctrl+P"/>
+                  <KeyStroke key="Ctrl+F1"/>
                 </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/icon/User Icon.png"/>
@@ -114,7 +114,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="MniDataBuku">
               <Properties>
                 <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
-                  <KeyStroke key="Shift+Ctrl+B"/>
+                  <KeyStroke key="Ctrl+F2"/>
                 </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/icon/Buku Icon.png"/>
@@ -305,6 +305,8 @@
                                           <Component id="btnTransaction" min="-2" pref="100" max="-2" attributes="0"/>
                                           <EmptySpace type="separate" max="-2" attributes="0"/>
                                           <Component id="btnDelete" min="-2" pref="100" max="-2" attributes="0"/>
+                                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                                          <Component id="btnRefresh" min="-2" pref="100" max="-2" attributes="0"/>
                                       </Group>
                                       <Group type="102" alignment="0" attributes="0">
                                           <Component id="txtIdBuku" min="-2" pref="50" max="-2" attributes="0"/>
@@ -368,6 +370,7 @@
                       <Component id="btnNew" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
                       <Component id="btnDelete" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
                       <Component id="btnTransaction" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                      <Component id="btnRefresh" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -495,7 +498,7 @@
         <Component class="javax.swing.JButton" name="btnTransaction">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/icon/update.png"/>
+              <Image iconType="3" name="/icon/file_save_as.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Save"/>
           </Properties>
@@ -528,6 +531,17 @@
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="10"/>
           </AuxValues>
+        </Component>
+        <Component class="javax.swing.JButton" name="btnRefresh">
+          <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/icon/arrow_refresh.png"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Refresh"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnRefreshActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

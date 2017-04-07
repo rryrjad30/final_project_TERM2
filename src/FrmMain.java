@@ -115,21 +115,20 @@ public class FrmMain extends javax.swing.JFrame {
     private void idTransaksi() {
         try {
             String sql = "SELECT max(idtransaksi) FROM transaksi;";
-            Integer lastDataValue = 0;
+            int id = 0;
+            
             PreparedStatement pstatement = conn.prepareStatement(sql);
 
             ResultSet rs = pstatement.executeQuery();
             if (rs.isBeforeFirst()) { // check is resultset not empty
 
                 while (rs.next()) {
-                    lastDataValue = rs.getInt("max(idtransaksi)");
+                    id = rs.getInt("max(idtransaksi)");
+                    txtIdTransaksi.setText(String.valueOf(++id));
                 };
-                // tableModel.addRow(data);
             } else {
                 util.Sutil.msg(this, "Record Empty");
             }
-            ++lastDataValue;
-            txtIdTransaksi.setText(lastDataValue.toString());
 
             rs.close();
             pstatement.close();
@@ -289,6 +288,7 @@ public class FrmMain extends javax.swing.JFrame {
         txtJudulBuku = new javax.swing.JTextField();
         dtcTanggalPinjam = new com.toedter.calendar.JDateChooser();
         dtcTanggalPengembalian = new com.toedter.calendar.JDateChooser();
+        btnRefresh = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblTransaksi = new javax.swing.JTable();
         jLabel7 = new javax.swing.JLabel();
@@ -389,7 +389,7 @@ public class FrmMain extends javax.swing.JFrame {
             }
         });
 
-        btnTransaction.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/update.png"))); // NOI18N
+        btnTransaction.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/file_save_as.png"))); // NOI18N
         btnTransaction.setText("Save");
         btnTransaction.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -404,6 +404,14 @@ public class FrmMain extends javax.swing.JFrame {
 
         dtcTanggalPengembalian.setDateFormatString("dd-MM-yyyy");
         dtcTanggalPengembalian.setDoubleBuffered(false);
+
+        btnRefresh.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/arrow_refresh.png"))); // NOI18N
+        btnRefresh.setText("Refresh");
+        btnRefresh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRefreshActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -450,7 +458,9 @@ public class FrmMain extends javax.swing.JFrame {
                                         .addGap(18, 18, 18)
                                         .addComponent(btnTransaction, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(18, 18, 18)
-                                        .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(btnRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addComponent(txtIdBuku, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(18, 18, 18)
@@ -497,7 +507,8 @@ public class FrmMain extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnNew, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnTransaction, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnTransaction, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -564,7 +575,7 @@ public class FrmMain extends javax.swing.JFrame {
 
         jMenuBar1.add(MenuFile);
 
-        MenuData.setText("Data");
+        MenuData.setText("Lihat Data");
 
         mniTransaksi.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.CTRL_MASK));
         mniTransaksi.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/textfile.png"))); // NOI18N
@@ -600,7 +611,7 @@ public class FrmMain extends javax.swing.JFrame {
 
         MenuRegister.setText("Register");
 
-        MniDataPenyewa.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        MniDataPenyewa.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, java.awt.event.InputEvent.CTRL_MASK));
         MniDataPenyewa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/User Icon.png"))); // NOI18N
         MniDataPenyewa.setText("Penyewa");
         MniDataPenyewa.addActionListener(new java.awt.event.ActionListener() {
@@ -610,7 +621,7 @@ public class FrmMain extends javax.swing.JFrame {
         });
         MenuRegister.add(MniDataPenyewa);
 
-        MniDataBuku.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_B, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        MniDataBuku.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F2, java.awt.event.InputEvent.CTRL_MASK));
         MniDataBuku.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/Buku Icon.png"))); // NOI18N
         MniDataBuku.setText("Buku");
         MniDataBuku.addActionListener(new java.awt.event.ActionListener() {
@@ -708,6 +719,11 @@ public class FrmMain extends javax.swing.JFrame {
         // TODO add your handling code here:
         seeDataBuku();
     }//GEN-LAST:event_mniBukuActionPerformed
+
+    private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
+        // TODO add your handling code here:
+        loadAllDatabase();
+    }//GEN-LAST:event_btnRefreshActionPerformed
 
     private void seeDataTransaksi() {
         JDialogTransaksi dlgTransaksi = new JDialogTransaksi(this, true, conn);
@@ -826,6 +842,7 @@ public class FrmMain extends javax.swing.JFrame {
     private javax.swing.JButton btnCariDataPenyewa;
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnNew;
+    private javax.swing.JButton btnRefresh;
     private javax.swing.JButton btnTransaction;
     private javax.swing.ButtonGroup buttonGroup1;
     private static com.toedter.calendar.JDateChooser dtcTanggalPengembalian;
