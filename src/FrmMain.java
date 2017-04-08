@@ -42,7 +42,7 @@ public class FrmMain extends javax.swing.JFrame {
         txtUsernameMain.setText(username);
 
         tableSelectionListener();
-
+        idTransaksi();
         lblDenda.setText("<html>* Normal : Rp 10.000/hari<br>* Special : Rp 7.000/hari</html>");
 
         databaseConnection();
@@ -207,7 +207,9 @@ public class FrmMain extends javax.swing.JFrame {
     }
 
     private void loadAllDatabase() {
+        
         removeTableData();
+        
         try {
             String sql = "SELECT idtransaksi, idnama, idbuku,"
                     + "date_format(tanggalpinjam, '%d-%m-%Y') as tanggalpinjam,"
@@ -237,6 +239,7 @@ public class FrmMain extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(FrmDataPenyewa.class.getName()).log(Level.SEVERE, null, ex);
         }
+        idTransaksi();
     }
 
     private void databaseConnection() {
@@ -787,8 +790,7 @@ public class FrmMain extends javax.swing.JFrame {
     }
 
     private void executeNew() {
-        txtIdTransaksi.setText("");
-        idTransaksi();
+//        idTransaksi();
         txtIdNama.setText("");
         txtNama.setText("");
         txtIdBuku.setText("");

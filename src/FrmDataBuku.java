@@ -379,6 +379,9 @@ public class FrmDataBuku extends javax.swing.JFrame {
             }
         });
 
+        yrcTahunTerbit.setEndYear(2017);
+        yrcTahunTerbit.setStartYear(1985);
+
         btnRefresh.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnRefresh.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/arrow_refresh.png"))); // NOI18N
         btnRefresh.setText("Refresh");

@@ -1,5 +1,7 @@
 
-import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.GridLayout;
+import java.awt.Image;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -7,6 +9,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
+import javax.swing.JPanel;
 import util.DbConn;
 
 /*
@@ -27,11 +31,13 @@ public class JDialogLogin extends javax.swing.JDialog {
         instance = this;
         initComponents();
         databaseConnection();
-        setLocationRelativeTo(null);
 
+        
+
+        setLocationRelativeTo(null);
 //        btnLogIn.setBackground(Color.YELLOW);
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -44,6 +50,7 @@ public class JDialogLogin extends javax.swing.JDialog {
         txtPassword = new javax.swing.JPasswordField();
         btnRegister = new javax.swing.JButton();
         btnLogIn = new javax.swing.JButton();
+        tst = new javax.swing.JLabel();
         txtUsername = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
@@ -71,6 +78,12 @@ public class JDialogLogin extends javax.swing.JDialog {
             }
         });
         getContentPane().add(btnLogIn, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 220, 100, 30));
+
+        tst.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/bullet_user.png"))); // NOI18N
+        getContentPane().add(tst, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 160, 40, 20));
+
+        txtUsername.setToolTipText("");
+        txtUsername.setName("Username"); // NOI18N
         getContentPane().add(txtUsername, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 160, 270, -1));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -221,6 +234,7 @@ public class JDialogLogin extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel lblPict;
     private javax.swing.JLabel lblWelcome;
+    private javax.swing.JLabel tst;
     private javax.swing.JPasswordField txtPassword;
     public static javax.swing.JTextField txtUsername;
     // End of variables declaration//GEN-END:variables

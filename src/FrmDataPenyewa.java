@@ -50,19 +50,19 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
                     try {
                         txtIdNama.setText(tblPenyewa.getValueAt(row, 0).toString());
                         txtNama.setText(tblPenyewa.getValueAt(row, 1).toString());
-                        if (tblPenyewa.getValueAt(row, 2).toString().equals("Laki - laki")) {
+                        if (tblPenyewa.getValueAt(row, 2).toString().equals("Laki- Laki")) {
                             rdoLaki.setSelected(true);
                         } else if (tblPenyewa.getValueAt(row, 2).toString().equals("Perempuan")) {
                             rdoPerempuan.setSelected(true);
                         }
                         txtTempatLahir.setText(tblPenyewa.getValueAt(row, 3).toString());
-                        
+
                         Date tgllahir = new SimpleDateFormat("dd-MM-yyyy").parse((String) tblPenyewa.getValueAt(row, 4));
                         dtcTanggalLahir.setDate(tgllahir);
-                        
+
                         txtNoHP.setText(tblPenyewa.getValueAt(row, 5).toString());
                         txtAlamatPenyewa.setText(tblPenyewa.getValueAt(row, 6).toString());
-                        
+
                         if (tblPenyewa.getValueAt(row, 7).toString().equals("Normal")) {
                             rdoNormal.setSelected(true);
                         } else if (tblPenyewa.getValueAt(row, 7).toString().equals("Special")) {
@@ -146,15 +146,15 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
                 PreparedStatement pstatement = conn.prepareStatement(sql);
                 pstatement.setString(1, nama);
                 pstatement.setString(2, gender);
+                pstatement.setString(3, tempatlahir);
 
                 SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
                 String tanggallahir1 = sdf.format(tanggallahir);
 
                 Date tanggallahir2 = sdf.parse(tanggallahir1);
                 java.sql.Date sqlDate = new java.sql.Date(tanggallahir2.getTime());
-                pstatement.setDate(3, sqlDate);
+                pstatement.setDate(4, sqlDate);
 
-                pstatement.setString(4, tempatlahir);
                 pstatement.setString(5, nohp);
                 pstatement.setString(6, alamat);
                 pstatement.setString(7, jenispenyewa);
@@ -173,7 +173,7 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
     private void updateDatabase(int idnama, String nama, String gender, String tempatlahir,
             Date tanggallahir, String nohp, String alamat, String jenispenyewa) {
         try {
-            Class.forName(DbConn.JDBC_CLASS);
+//            Class.forName(DbConn.JDBC_CLASS);
             Connection conn = DriverManager.getConnection(DbConn.JDBC_URL,
                     DbConn.JDBC_USERNAME,
                     DbConn.JDBC_PASSWORD);
@@ -181,15 +181,21 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
             if (conn != null) {
                 System.out.println("Connected to DB!\n");
 
-                String sql = "UPDATE `databuku` set "
+                SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+                String tanggallahir1 = sdf.format(tanggallahir);
+
+                Date tanggallahir2 = sdf.parse(tanggallahir1);
+                java.sql.Date sqlDate = new java.sql.Date(tanggallahir2.getTime());
+
+                String sql = "UPDATE `datapenyewa` set "
                         + "nama = '" + nama + "' , "
-                        + "gender = '" + gender + "' , "
+                        + "jeniskelamin = '" + gender + "' , "
                         + "tempatlahir = '" + tempatlahir + "' , "
-                        + "tanggallahir = '" + tanggallahir + "' , "
+                        + "tanggallahir = '" + sqlDate + "' , "
                         + "nohp = '" + nohp + "' , "
-                        + "alamat = '" + alamat + "' "
+                        + "alamat = '" + alamat + "' ,"
                         + "jenispenyewa = '" + jenispenyewa + "' "
-                        + "where idnama = '" + idnama + "';";
+                        + "where idnama = '" + idnama + "' ;";
 
                 PreparedStatement pstatement = conn.prepareStatement(sql);
 
@@ -200,14 +206,16 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
 
                 conn.close();
             }
-        } catch (SQLException | ClassNotFoundException ex) {
+        } catch (SQLException ex) {
             System.out.println(ex);
+        } catch (ParseException ex) {
+            Logger.getLogger(FrmDataPenyewa.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     private void deleteDatabase(int idnama) {
         try {
-            Class.forName(DbConn.JDBC_CLASS);
+//            Class.forName(DbConn.JDBC_CLASS);
             Connection conn = DriverManager.getConnection(DbConn.JDBC_URL,
                     DbConn.JDBC_USERNAME,
                     DbConn.JDBC_PASSWORD);
@@ -215,7 +223,7 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
             if (conn != null) {
                 System.out.println("Connected to DB!\n");
 
-                String sql = "DELETE FROM `datapenyewa` where idnama = '" + idnama + "';";
+                String sql = "DELETE FROM datapenyewa where idnama = '" + idnama + "';";
 
                 PreparedStatement pstatement = conn.prepareStatement(sql);
 
@@ -225,7 +233,7 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
                 pstatement.close();
                 conn.close();
             }
-        } catch (SQLException | ClassNotFoundException ex) {
+        } catch (SQLException ex) {
             System.out.println(ex);
         }
     }
@@ -393,7 +401,7 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
 
         buttonGroup2.add(rdoSpesial);
         rdoSpesial.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        rdoSpesial.setText("Spesial");
+        rdoSpesial.setText("Special");
 
         btnBack.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnBack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/undo.png"))); // NOI18N

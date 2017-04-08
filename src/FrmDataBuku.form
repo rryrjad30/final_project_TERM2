@@ -419,6 +419,10 @@
           </Events>
         </Component>
         <Component class="com.toedter.calendar.JYearChooser" name="yrcTahunTerbit">
+          <Properties>
+            <Property name="endYear" type="int" value="2017"/>
+            <Property name="startYear" type="int" value="1985"/>
+          </Properties>
         </Component>
         <Component class="javax.swing.JButton" name="btnRefresh">
           <Properties>

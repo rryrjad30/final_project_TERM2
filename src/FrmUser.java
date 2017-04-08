@@ -189,6 +189,8 @@ public class FrmUser extends javax.swing.JFrame {
 
         jLabel4.setText("Active");
 
+        txtUser.setEnabled(false);
+
         btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/file_save_as.png"))); // NOI18N
         btnSave.setText("Save");
         btnSave.addActionListener(new java.awt.event.ActionListener() {
@@ -263,35 +265,26 @@ public class FrmUser extends javax.swing.JFrame {
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         // TODO add your handling code here:
-        String loginUser = JDialogLogin.txtUsername.getText();
-        
-//        if (!txtUser.getText().equals(loginUser)) {
-            if (util.Sutil.msq(this, "Save change ? ") == 1) {
+        if (txtPassword.getText().equals(txtConfirmPassword.getText())) {
+            if (util.Sutil.msq(this, "Save change ? ") == 0) {
                 executeSave();
                 util.Sutil.msg(this, "Saved !");
             }
-//        if (txtUser.getText().equals(loginUser)) {
-//           if(!cboActive.isSelected()){
-//               util.Sutil.mse(this, "This user is using");
-//           }
-//           
-//        }
+        } else if (!txtPassword.getText().equals(txtConfirmPassword.getText())) {
+            util.Sutil.mse(this, "Password and confirmpassword must be same");
+        }
 
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void executeSave() {
-        int active;
+        int active = 0;
         if (cboActive.isSelected()) {
             active = 1;
-        } else {
+        } else if (!cboActive.isSelected()) {
             active = 0;
         }
         saveToDatabase(txtUser.getText(), txtPassword.getText(), txtConfirmPassword.getText(), active);
         loadAllDatabase();
-    }
-
-    private static void checkActive() {
-
     }
 
     private void removeTableData() {
