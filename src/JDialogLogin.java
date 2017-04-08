@@ -28,16 +28,18 @@ public class JDialogLogin extends javax.swing.JDialog {
     private Connection conn;
 
     public JDialogLogin() {
-        instance = this;
-        initComponents();
-        databaseConnection();
-
-        
-
-        setLocationRelativeTo(null);
+        try {
+            instance = this;
+            initComponents();
+            databaseConnection();
+            
+            setLocationRelativeTo(null);
 //        btnLogIn.setBackground(Color.YELLOW);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(JDialogLogin.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -108,7 +110,7 @@ public class JDialogLogin extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLogInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogInActionPerformed
-        databaseConnection();
+        
         String username = txtUsername.getText().trim();
         String password = txtPassword.getText().trim();
 
@@ -129,9 +131,10 @@ public class JDialogLogin extends javax.swing.JDialog {
         register.setVisible(true);
     }//GEN-LAST:event_btnRegisterActionPerformed
 
-    private void databaseConnection() {
+    private void databaseConnection() throws ClassNotFoundException {
+        
         try {
-
+            Class.forName(DbConn.JDBC_CLASS);
             conn = DriverManager.getConnection(DbConn.JDBC_URL,
                     DbConn.JDBC_USERNAME,
                     DbConn.JDBC_PASSWORD);
@@ -140,8 +143,9 @@ public class JDialogLogin extends javax.swing.JDialog {
                 System.out.println("Connected to DB!\n");
             }
         } catch (SQLException ex) {
-            System.out.println("Error:\n" + ex.getLocalizedMessage());
+            Logger.getLogger(JDialogLogin.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
     }
 
     private void executeLogIn() {
@@ -171,7 +175,6 @@ public class JDialogLogin extends javax.swing.JDialog {
 
             rs.close();
             pstatement.close();
-            conn.close();
         } catch (SQLException ex) {
             Logger.getLogger(JDialogLogin.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -183,7 +186,7 @@ public class JDialogLogin extends javax.swing.JDialog {
     public static void main(String args[]) {
 
         try {
-            Class.forName(DbConn.JDBC_CLASS);
+
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Metal".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());

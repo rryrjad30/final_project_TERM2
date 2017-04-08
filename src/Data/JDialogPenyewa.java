@@ -6,14 +6,12 @@
 package Data;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
-import util.DbConn;
 
 /**
  *
@@ -244,7 +242,7 @@ public class JDialogPenyewa extends javax.swing.JDialog {
     private void searchByIdPenyewa() {
         try {
             removeTableData();
-            String sql = "SELECT * FROM datapenyewa WHERE idpenyewa LIKE ?";
+            String sql = "SELECT * FROM datapenyewa WHERE idnama LIKE ?";
 
             PreparedStatement pstatement = conn.prepareStatement(sql);
             pstatement.setInt(1, Integer.parseInt(txtSearch.getText().trim()));
@@ -254,7 +252,7 @@ public class JDialogPenyewa extends javax.swing.JDialog {
                 DefaultTableModel tableModel = (DefaultTableModel) tblPenyewa.getModel();
                 while (rs.next()) {
                     Object data[] = {
-                        rs.getInt("idpenyewa"),
+                        rs.getInt("idnama"),
                         rs.getString("nama"),
                         rs.getString("jeniskelamin"),
                         rs.getString("tempatlahir"),
@@ -287,7 +285,7 @@ public class JDialogPenyewa extends javax.swing.JDialog {
                 DefaultTableModel tableModel = (DefaultTableModel) tblPenyewa.getModel();
                 while (rs.next()) {
                     Object data[] = {
-                        rs.getInt("idpenyewa"),
+                        rs.getInt("idnama"),
                         rs.getString("nama"),
                         rs.getString("jeniskelamin"),
                         rs.getString("tempatlahir"),
@@ -320,7 +318,7 @@ public class JDialogPenyewa extends javax.swing.JDialog {
                 DefaultTableModel tableModel = (DefaultTableModel) tblPenyewa.getModel();
                 while (rs.next()) {
                     Object data[] = {
-                        rs.getInt("idpenyewa"),
+                        rs.getInt("idnama"),
                         rs.getString("nama"),
                         rs.getString("jeniskelamin"),
                         rs.getString("tempatlahir"),
@@ -353,7 +351,7 @@ public class JDialogPenyewa extends javax.swing.JDialog {
                 DefaultTableModel tableModel = (DefaultTableModel) tblPenyewa.getModel();
                 while (rs.next()) {
                     Object data[] = {
-                        rs.getInt("idpenyewa"),
+                        rs.getInt("idnama"),
                         rs.getString("nama"),
                         rs.getString("jeniskelamin"),
                         rs.getString("tempatlahir"),
@@ -386,7 +384,7 @@ public class JDialogPenyewa extends javax.swing.JDialog {
                 DefaultTableModel tableModel = (DefaultTableModel) tblPenyewa.getModel();
                 while (rs.next()) {
                     Object data[] = {
-                        rs.getInt("idpenyewa"),
+                        rs.getInt("idnama"),
                         rs.getString("nama"),
                         rs.getString("jeniskelamin"),
                         rs.getString("tempatlahir"),
@@ -419,7 +417,7 @@ public class JDialogPenyewa extends javax.swing.JDialog {
                 DefaultTableModel tableModel = (DefaultTableModel) tblPenyewa.getModel();
                 while (rs.next()) {
                     Object data[] = {
-                        rs.getInt("idpenyewa"),
+                        rs.getInt("idnama"),
                         rs.getString("nama"),
                         rs.getString("jeniskelamin"),
                         rs.getString("tempatlahir"),
@@ -452,7 +450,7 @@ public class JDialogPenyewa extends javax.swing.JDialog {
                 DefaultTableModel tableModel = (DefaultTableModel) tblPenyewa.getModel();
                 while (rs.next()) {
                     Object data[] = {
-                        rs.getInt("idpenyewa"),
+                        rs.getInt("idnama"),
                         rs.getString("nama"),
                         rs.getString("jeniskelamin"),
                         rs.getString("tempatlahir"),
@@ -485,7 +483,7 @@ public class JDialogPenyewa extends javax.swing.JDialog {
                 DefaultTableModel tableModel = (DefaultTableModel) tblPenyewa.getModel();
                 while (rs.next()) {
                     Object data[] = {
-                        rs.getInt("idpenyewa"),
+                        rs.getInt("idnama"),
                         rs.getString("nama"),
                         rs.getString("jeniskelamin"),
                         rs.getString("tempatlahir"),
