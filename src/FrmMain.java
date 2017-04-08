@@ -1,6 +1,5 @@
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,7 +12,6 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
-import util.DbConn;
 import Data.JDialogTransaksi;
 import Data.JDialogPenyewa;
 import Data.JDialogBuku;
@@ -43,7 +41,7 @@ public class FrmMain extends javax.swing.JFrame {
 
         tableSelectionListener();
         lblDenda.setText("<html>* Normal : Rp 10.000/hari<br>* Special : Rp 7.000/hari</html>");
-
+        lastIdTransaksi();
         loadAllDatabase();
 
 //        setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -107,59 +105,8 @@ public class FrmMain extends javax.swing.JFrame {
         return judulbuku;
     }
 
-    private void lastIdTransaksi(){
-        try {
-            String sql = "SELECT max(id_transaksi) FROM lastvalueid where id = 1;";
-            int id = 0;
-            
-            PreparedStatement pstatement = conn.prepareStatement(sql);
-
-            ResultSet rs = pstatement.executeQuery();
-            if (rs.isBeforeFirst()) { // check is resultset not empty
-
-                while (rs.next()) {
-                    id = rs.getInt("max(id_transaksi)");
-                    txtIdTransaksi.setText(String.valueOf(++id));
-                };
-            } else {
-                util.Sutil.msg(this, "Record Empty");
-            }
-
-            rs.close();
-            pstatement.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(FrmDataPenyewa.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-//    private void idTransaksi() {
-//        try {
-//            String sql = "SELECT max(idtransaksi) FROM transaksi;";
-//            int id = 0;
-//            
-//            PreparedStatement pstatement = conn.prepareStatement(sql);
-//
-//            ResultSet rs = pstatement.executeQuery();
-//            if (rs.isBeforeFirst()) { // check is resultset not empty
-//
-//                while (rs.next()) {
-//                    id = rs.getInt("max(idtransaksi)");
-//                    txtIdTransaksi.setText(String.valueOf(++id));
-//                };
-//            } else {
-//                util.Sutil.msg(this, "Record Empty");
-//            }
-//
-//            rs.close();
-//            pstatement.close();
-//        } catch (SQLException ex) {
-//            Logger.getLogger(FrmDataPenyewa.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//    }
-
     private void deleteDatabase(int idtransaksi) {
         try {
-            
 
             if (conn != null) {
                 System.out.println("Connected to DB!\n");
@@ -179,14 +126,39 @@ public class FrmMain extends javax.swing.JFrame {
         }
     }
 
-    private void getLastValueOfTransaksi(){
+    private void lastIdTransaksi() {
+        try {
+            String sql = "SELECT max(id_transaksi) FROM lastvalueid where id = 1;";
+            int id = 0;
+
+            PreparedStatement pstatement = conn.prepareStatement(sql);
+
+            ResultSet rs = pstatement.executeQuery();
+            if (rs.isBeforeFirst()) { // check is resultset not empty
+
+                while (rs.next()) {
+                    id = rs.getInt("max(id_transaksi)");
+                    txtIdTransaksi.setText(String.valueOf(++id));
+                };
+            } else {
+                util.Sutil.msg(this, "Record Empty");
+            }
+
+            rs.close();
+            pstatement.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(FrmDataPenyewa.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void getLastValueOfTransaksi() {
         try {
 
             if (conn != null) {
                 System.out.println("Connected to DB!\n");
 
-               String sql = "UPDATE lastvalueid set id_transaksi = ?"
-                       + "where id = 1;";
+                String sql = "UPDATE lastvalueid set id_transaksi = ?"
+                        + "where id = 1;";
 
                 PreparedStatement pstatement = conn.prepareStatement(sql);
                 pstatement.setString(1, txtIdTransaksi.getText());
@@ -200,7 +172,7 @@ public class FrmMain extends javax.swing.JFrame {
             System.out.println("Error:\n" + ex.getLocalizedMessage());
         }
     }
-    
+
     private void createDatabase(String username, int idnama, int idbuku,
             Date tanggalpinjam, Date tanggalpengembalian) throws ParseException {
         try {
@@ -241,9 +213,8 @@ public class FrmMain extends javax.swing.JFrame {
     }
 
     private void loadAllDatabase() {
-        
+
         removeTableData();
-        lastIdTransaksi();
         try {
             String sql = "SELECT idtransaksi, idnama, idbuku,"
                     + "date_format(tanggalpinjam, '%d-%m-%Y') as tanggalpinjam,"
@@ -809,7 +780,7 @@ public class FrmMain extends javax.swing.JFrame {
     }
 
     private void executeNew() {
-//        idTransaksi();
+        lastIdTransaksi();
         txtIdNama.setText("");
         txtNama.setText("");
         txtIdBuku.setText("");
