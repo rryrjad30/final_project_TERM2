@@ -42,13 +42,9 @@ public class FrmMain extends javax.swing.JFrame {
         txtUsernameMain.setText(username);
 
         tableSelectionListener();
-        idTransaksi();
         lblDenda.setText("<html>* Normal : Rp 10.000/hari<br>* Special : Rp 7.000/hari</html>");
 
-        databaseConnection();
         loadAllDatabase();
-
-        idTransaksi();
 
 //        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLocationRelativeTo(null);
@@ -111,9 +107,9 @@ public class FrmMain extends javax.swing.JFrame {
         return judulbuku;
     }
 
-    private void idTransaksi() {
+    private void lastIdTransaksi(){
         try {
-            String sql = "SELECT max(idtransaksi) FROM transaksi;";
+            String sql = "SELECT max(id_transaksi) FROM lastvalueid where id = 1;";
             int id = 0;
             
             PreparedStatement pstatement = conn.prepareStatement(sql);
@@ -122,7 +118,7 @@ public class FrmMain extends javax.swing.JFrame {
             if (rs.isBeforeFirst()) { // check is resultset not empty
 
                 while (rs.next()) {
-                    id = rs.getInt("max(idtransaksi)");
+                    id = rs.getInt("max(id_transaksi)");
                     txtIdTransaksi.setText(String.valueOf(++id));
                 };
             } else {
@@ -135,13 +131,35 @@ public class FrmMain extends javax.swing.JFrame {
             Logger.getLogger(FrmDataPenyewa.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+//    private void idTransaksi() {
+//        try {
+//            String sql = "SELECT max(idtransaksi) FROM transaksi;";
+//            int id = 0;
+//            
+//            PreparedStatement pstatement = conn.prepareStatement(sql);
+//
+//            ResultSet rs = pstatement.executeQuery();
+//            if (rs.isBeforeFirst()) { // check is resultset not empty
+//
+//                while (rs.next()) {
+//                    id = rs.getInt("max(idtransaksi)");
+//                    txtIdTransaksi.setText(String.valueOf(++id));
+//                };
+//            } else {
+//                util.Sutil.msg(this, "Record Empty");
+//            }
+//
+//            rs.close();
+//            pstatement.close();
+//        } catch (SQLException ex) {
+//            Logger.getLogger(FrmDataPenyewa.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//    }
 
     private void deleteDatabase(int idtransaksi) {
         try {
-            Class.forName(DbConn.JDBC_CLASS);
-            Connection conn = DriverManager.getConnection(DbConn.JDBC_URL,
-                    DbConn.JDBC_USERNAME,
-                    DbConn.JDBC_PASSWORD);
+            
 
             if (conn != null) {
                 System.out.println("Connected to DB!\n");
@@ -155,20 +173,37 @@ public class FrmMain extends javax.swing.JFrame {
                 System.out.println("Deleted.");
 
                 pstatement.close();
-                conn.close();
             }
-        } catch (SQLException | ClassNotFoundException ex) {
+        } catch (SQLException ex) {
             System.out.println(ex);
         }
     }
 
+    private void getLastValueOfTransaksi(){
+        try {
+
+            if (conn != null) {
+                System.out.println("Connected to DB!\n");
+
+               String sql = "UPDATE lastvalueid set id_transaksi = ?"
+                       + "where id = 1;";
+
+                PreparedStatement pstatement = conn.prepareStatement(sql);
+                pstatement.setString(1, txtIdTransaksi.getText());
+
+                pstatement.executeUpdate();
+                System.out.println("Record insert.");
+
+                pstatement.close();
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error:\n" + ex.getLocalizedMessage());
+        }
+    }
+    
     private void createDatabase(String username, int idnama, int idbuku,
             Date tanggalpinjam, Date tanggalpengembalian) throws ParseException {
         try {
-//            Class.forName(DbConn.JDBC_CLASS);
-            Connection conn = DriverManager.getConnection(DbConn.JDBC_URL,
-                    DbConn.JDBC_USERNAME,
-                    DbConn.JDBC_PASSWORD);
 
             if (conn != null) {
                 System.out.println("Connected to DB!\n");
@@ -199,7 +234,6 @@ public class FrmMain extends javax.swing.JFrame {
                 System.out.println("Record insert.");
 
                 pstatement.close();
-                conn.close();
             }
         } catch (SQLException ex) {
             System.out.println("Error:\n" + ex.getLocalizedMessage());
@@ -209,7 +243,7 @@ public class FrmMain extends javax.swing.JFrame {
     private void loadAllDatabase() {
         
         removeTableData();
-        
+        lastIdTransaksi();
         try {
             String sql = "SELECT idtransaksi, idnama, idbuku,"
                     + "date_format(tanggalpinjam, '%d-%m-%Y') as tanggalpinjam,"
@@ -238,21 +272,6 @@ public class FrmMain extends javax.swing.JFrame {
             pstatement.close();
         } catch (SQLException ex) {
             Logger.getLogger(FrmDataPenyewa.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        idTransaksi();
-    }
-
-    private void databaseConnection() {
-        try {
-            conn = DriverManager.getConnection(DbConn.JDBC_URL,
-                    DbConn.JDBC_USERNAME,
-                    DbConn.JDBC_PASSWORD);
-
-            if (conn != null) {
-                System.out.println("Connected to DB!\n");
-            }
-        } catch (SQLException ex) {
-            System.out.println("Error:\n" + ex.getLocalizedMessage());
         }
     }
 
@@ -817,6 +836,7 @@ public class FrmMain extends javax.swing.JFrame {
                     Integer.parseInt(txtIdBuku.getText()),
                     tanggalpinjam1, tanggalpengembalian1);
 
+            getLastValueOfTransaksi();
             loadAllDatabase();
 
         } catch (ParseException ex) {

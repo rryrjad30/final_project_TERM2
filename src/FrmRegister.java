@@ -26,7 +26,6 @@ public class FrmRegister extends javax.swing.JFrame {
     public FrmRegister(Connection conn) {
         this.conn = conn;
         initComponents();
-        databaseConnection();
         setLocationRelativeTo(null);
     }
 
@@ -52,20 +51,6 @@ public class FrmRegister extends javax.swing.JFrame {
             Logger.getLogger(FrmDataPenyewa.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-    }
-
-    private void databaseConnection() {
-        try {
-            conn = DriverManager.getConnection(DbConn.JDBC_URL,
-                    DbConn.JDBC_USERNAME,
-                    DbConn.JDBC_PASSWORD);
-
-            if (conn != null) {
-                System.out.println("Connected to DB!\n");
-            }
-        } catch (SQLException ex) {
-            System.out.println("Error:\n" + ex.getLocalizedMessage());
-        }
     }
 
     /**

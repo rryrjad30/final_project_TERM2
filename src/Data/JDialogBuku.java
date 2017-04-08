@@ -31,24 +31,10 @@ public class JDialogBuku extends javax.swing.JDialog {
         super(parent, modal);
         this.conn = conn;
         initComponents();
-        databaseConnection();
         loadAllDatabase();
         setLocationRelativeTo(null);
     }
 
-//    private void getData() {
-//        String Name = "";
-//        String sqlPenyewaLookup = "Select * from databuku where " + cbxSearch.getSelectedIndex() + " = ? ;";
-//
-//        PreparedStatement pstPenyewaLookup = conn.prepareStatement(sqlPenyewaLookup);
-//        pstPenyewaLookup.setInt(1, data);
-//
-//        ResultSet rsPenyewaLookup = pstPenyewaLookup.executeQuery();
-//        while (rsPenyewaLookup.next()) {
-//            Name = rsPenyewaLookup.getString("nama");
-//        }
-//        return Name;
-//    }
     private void loadAllDatabase() {
         removeTableData();
         try {
@@ -79,20 +65,6 @@ public class JDialogBuku extends javax.swing.JDialog {
             pstatement.close();
         } catch (SQLException ex) {
             Logger.getLogger(JDialogBuku.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    private void databaseConnection() {
-        try {
-            conn = DriverManager.getConnection(DbConn.JDBC_URL,
-                    DbConn.JDBC_USERNAME,
-                    DbConn.JDBC_PASSWORD);
-
-            if (conn != null) {
-                System.out.println("Connected to DB!\n");
-            }
-        } catch (SQLException ex) {
-            System.out.println("Error:\n" + ex.getLocalizedMessage());
         }
     }
 

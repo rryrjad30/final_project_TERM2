@@ -4,7 +4,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -37,7 +36,6 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
         initComponents();
         tableSelectionListener();
         createIdNama();
-        databaseConnection();
         loadAllDatabase();
         setLocationRelativeTo(null);
     }
@@ -115,27 +113,9 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
         }
     }
 
-    private void databaseConnection() {
-        try {
-            conn = DriverManager.getConnection(DbConn.JDBC_URL,
-                    DbConn.JDBC_USERNAME,
-                    DbConn.JDBC_PASSWORD);
-
-            if (conn != null) {
-                System.out.println("Connected to DB!\n");
-            }
-        } catch (SQLException ex) {
-            System.out.println("Error:\n" + ex.getLocalizedMessage());
-        }
-    }
-
     private void createDatabase(String nama, String gender, String tempatlahir,
             Date tanggallahir, String nohp, String alamat, String jenispenyewa) throws ParseException {
         try {
-//            Class.forName(DbConn.JDBC_CLASS);
-            Connection conn = DriverManager.getConnection(DbConn.JDBC_URL,
-                    DbConn.JDBC_USERNAME,
-                    DbConn.JDBC_PASSWORD);
 
             if (conn != null) {
                 System.out.println("Connected to DB!\n");
@@ -163,7 +143,6 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
                 System.out.println("Record insert.");
 
                 pstatement.close();
-                conn.close();
             }
         } catch (SQLException ex) {
             System.out.println("Error:\n" + ex.getLocalizedMessage());
@@ -173,10 +152,6 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
     private void updateDatabase(int idnama, String nama, String gender, String tempatlahir,
             Date tanggallahir, String nohp, String alamat, String jenispenyewa) {
         try {
-//            Class.forName(DbConn.JDBC_CLASS);
-            Connection conn = DriverManager.getConnection(DbConn.JDBC_URL,
-                    DbConn.JDBC_USERNAME,
-                    DbConn.JDBC_PASSWORD);
 
             if (conn != null) {
                 System.out.println("Connected to DB!\n");
@@ -203,38 +178,11 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
                 System.out.println("Updated.");
 
                 pstatement.close();
-
-                conn.close();
             }
         } catch (SQLException ex) {
             System.out.println(ex);
         } catch (ParseException ex) {
             Logger.getLogger(FrmDataPenyewa.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    private void deleteDatabase(int idnama) {
-        try {
-//            Class.forName(DbConn.JDBC_CLASS);
-            Connection conn = DriverManager.getConnection(DbConn.JDBC_URL,
-                    DbConn.JDBC_USERNAME,
-                    DbConn.JDBC_PASSWORD);
-
-            if (conn != null) {
-                System.out.println("Connected to DB!\n");
-
-                String sql = "DELETE FROM datapenyewa where idnama = '" + idnama + "';";
-
-                PreparedStatement pstatement = conn.prepareStatement(sql);
-
-                pstatement.execute();
-                System.out.println("Deleted.");
-
-                pstatement.close();
-                conn.close();
-            }
-        } catch (SQLException ex) {
-            System.out.println(ex);
         }
     }
 
@@ -261,7 +209,6 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
         rdoPerempuan = new javax.swing.JRadioButton();
         btnCreate = new javax.swing.JButton();
         btnUpdate = new javax.swing.JButton();
-        btnDelete = new javax.swing.JButton();
         lblUserPict = new javax.swing.JLabel();
         lblAlamatPenyewa = new javax.swing.JLabel();
         txtAlamatPenyewa = new javax.swing.JTextField();
@@ -355,15 +302,6 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
         btnUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnUpdateActionPerformed(evt);
-            }
-        });
-
-        btnDelete.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/delete.png"))); // NOI18N
-        btnDelete.setText("Delete");
-        btnDelete.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDeleteActionPerformed(evt);
             }
         });
 
@@ -487,69 +425,64 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
                                     .addComponent(rdoNormal)
                                     .addGap(50, 50, 50)
                                     .addComponent(rdoSpesial))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 54, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
                         .addGroup(pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(btnCreate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btnUpdate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnDelete, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btnBack, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btnNew, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(56, 56, 56)
+                        .addGap(55, 55, 55)
                         .addComponent(lblUserPict, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(50, 50, 50))
         );
         pnlDataPenyewaLayout.setVerticalGroup(
             pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlDataPenyewaLayout.createSequentialGroup()
+                .addGap(33, 33, 33)
                 .addGroup(pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlDataPenyewaLayout.createSequentialGroup()
-                        .addGap(33, 33, 33)
+                        .addGroup(pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtIdNama, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblNama1)
+                            .addComponent(txtNama, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblUserPict, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(pnlDataPenyewaLayout.createSequentialGroup()
                                 .addGroup(pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(txtIdNama, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(lblNama1)
-                                    .addComponent(txtNama, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(pnlDataPenyewaLayout.createSequentialGroup()
-                                        .addGroup(pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                            .addComponent(lblJenisKelamin)
-                                            .addComponent(rdoPerempuan)
-                                            .addComponent(rdoLaki))
-                                        .addGap(2, 2, 2)
-                                        .addGroup(pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                            .addComponent(lblTempatLahir)
-                                            .addComponent(txtTempatLahir, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(dtcTanggalLahir, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(lblHp, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(lblJenisKelamin)
+                                    .addComponent(rdoPerempuan)
+                                    .addComponent(rdoLaki))
+                                .addGap(2, 2, 2)
                                 .addGroup(pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(txtAlamatPenyewa, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(lblAlamatPenyewa))
+                                    .addComponent(lblTempatLahir)
+                                    .addComponent(txtTempatLahir, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(txtNoHP, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(lblNoHp))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(rdoNormal)
-                                    .addComponent(lblJenis)
-                                    .addComponent(rdoSpesial)))))
-                    .addGroup(pnlDataPenyewaLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(btnNew, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnCreate, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnBack, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(27, 27, 27)
+                                .addComponent(dtcTanggalLahir, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(lblHp, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtAlamatPenyewa, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblAlamatPenyewa))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtNoHP, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblNoHp))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(rdoNormal)
+                            .addComponent(lblJenis)
+                            .addComponent(rdoSpesial)))
+                    .addGroup(pnlDataPenyewaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(pnlDataPenyewaLayout.createSequentialGroup()
+                            .addComponent(btnNew, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(18, 18, 18)
+                            .addComponent(btnCreate, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(18, 18, 18)
+                            .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(18, 18, 18)
+                            .addComponent(btnBack, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(lblUserPict, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(28, 28, 28)
                 .addComponent(btbRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -588,11 +521,6 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
     private void txtAlamatPenyewaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtAlamatPenyewaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtAlamatPenyewaActionPerformed
-
-    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        // TODO add your handling code here:
-        toDeleteData();
-    }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
         // TODO add your handling code here:
@@ -734,11 +662,6 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
         loadAllDatabase();
     }
 
-    public void toDeleteData() {
-        deleteDatabase(Integer.parseInt(txtIdNama.getText()));
-        loadAllDatabase();
-    }
-
     private void removeTableData() {
         DefaultTableModel tableModel = (DefaultTableModel) tblPenyewa.getModel();
         tableModel.setRowCount(0);
@@ -748,7 +671,6 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
     private javax.swing.JButton btbRefresh;
     private javax.swing.JButton btnBack;
     private javax.swing.JButton btnCreate;
-    private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnNew;
     private javax.swing.JButton btnUpdate;
     private javax.swing.ButtonGroup buttonGroup1;

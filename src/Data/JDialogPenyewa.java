@@ -30,7 +30,6 @@ public class JDialogPenyewa extends javax.swing.JDialog {
         super(parent, modal);
         this.conn = conn;
         initComponents();
-        databaseConnection();
         loadAllDatabase();
         setLocationRelativeTo(null);
     }
@@ -70,21 +69,7 @@ public class JDialogPenyewa extends javax.swing.JDialog {
             Logger.getLogger(JDialogPenyewa.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
-    private void databaseConnection() {
-        try {
-            conn = DriverManager.getConnection(DbConn.JDBC_URL,
-                    DbConn.JDBC_USERNAME,
-                    DbConn.JDBC_PASSWORD);
-
-            if (conn != null) {
-                System.out.println("Connected to DB!\n");
-            }
-        } catch (SQLException ex) {
-            System.out.println("Error:\n" + ex.getLocalizedMessage());
-        }
-    }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
