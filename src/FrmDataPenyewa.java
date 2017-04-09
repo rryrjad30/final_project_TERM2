@@ -195,6 +195,9 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
         buttonGroup2 = new javax.swing.ButtonGroup();
+        lblLogo = new javax.swing.JLabel();
+        lblLibrary = new javax.swing.JLabel();
+        lblAlamat = new javax.swing.JLabel();
         pnlDataPenyewa = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblPenyewa = new javax.swing.JTable();
@@ -221,10 +224,17 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
         btnNew = new javax.swing.JButton();
         dtcTanggalLahir = new com.toedter.calendar.JDateChooser();
         btbRefresh = new javax.swing.JButton();
-        lblLogo = new javax.swing.JLabel();
-        lblLibrary = new javax.swing.JLabel();
-        lblAlamat = new javax.swing.JLabel();
         lblBack = new javax.swing.JLabel();
+
+        lblLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/logo1.png"))); // NOI18N
+
+        lblLibrary.setFont(new java.awt.Font("Trajan Pro", 1, 40)); // NOI18N
+        lblLibrary.setForeground(new java.awt.Color(255, 255, 255));
+        lblLibrary.setText("Book Forest");
+
+        lblAlamat.setFont(new java.awt.Font("Trajan Pro", 1, 20)); // NOI18N
+        lblAlamat.setForeground(new java.awt.Color(255, 255, 255));
+        lblAlamat.setText("Jalan Kapten Maulana Lubis Aryaduta Hotel lt.1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -489,20 +499,7 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
 
         getContentPane().add(pnlDataPenyewa, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 130, 1050, 550));
 
-        lblLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/logo1.png"))); // NOI18N
-        getContentPane().add(lblLogo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 90, 90));
-
-        lblLibrary.setFont(new java.awt.Font("Trajan Pro", 1, 40)); // NOI18N
-        lblLibrary.setForeground(new java.awt.Color(255, 255, 255));
-        lblLibrary.setText("Book Forest");
-        getContentPane().add(lblLibrary, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 20, 660, 50));
-
-        lblAlamat.setFont(new java.awt.Font("Trajan Pro", 1, 20)); // NOI18N
-        lblAlamat.setForeground(new java.awt.Color(255, 255, 255));
-        lblAlamat.setText("Jalan Kapten Maulana Lubis Aryaduta Hotel lt.1");
-        getContentPane().add(lblAlamat, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 70, -1, -1));
-
-        lblBack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/Library-banner.jpg"))); // NOI18N
+        lblBack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/Tampilan atas.jpg"))); // NOI18N
         getContentPane().add(lblBack, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1050, 110));
 
         pack();
