@@ -247,7 +247,7 @@ public class FrmUser extends javax.swing.JFrame {
                 util.Sutil.msg(this, "Saved !");
             }
         } else if (!txtPassword.getText().equals(txtConfirmPassword.getText())) {
-            util.Sutil.mse(this, "Password and confirmpassword must be same");
+            util.Sutil.mse(this, "Password and confirm password must be same");
         }
 
     }//GEN-LAST:event_btnSaveActionPerformed

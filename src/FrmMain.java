@@ -15,6 +15,7 @@ import javax.swing.table.DefaultTableModel;
 import Data.JDialogTransaksi;
 import Data.JDialogPenyewa;
 import Data.JDialogBuku;
+import javax.swing.JFrame;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -138,7 +139,8 @@ public class FrmMain extends javax.swing.JFrame {
 
                 while (rs.next()) {
                     id = rs.getInt("max(id_transaksi)");
-                    txtIdTransaksi.setText(String.valueOf(++id));
+                    ++id;
+                    txtIdTransaksi.setText(String.valueOf(id));
                 };
             } else {
                 util.Sutil.msg(this, "Record Empty");
@@ -157,11 +159,14 @@ public class FrmMain extends javax.swing.JFrame {
             if (conn != null) {
                 System.out.println("Connected to DB!\n");
 
-                String sql = "UPDATE lastvalueid set id_transaksi = ?"
+                String sql = "UPDATE lastvalueid set id_transaksi = ? "
                         + "where id = 1;";
 
                 PreparedStatement pstatement = conn.prepareStatement(sql);
-                pstatement.setString(1, txtIdTransaksi.getText());
+                int row = tblTransaksi.getRowCount();
+                for (int i = 0; i < row; i++) {
+                    pstatement.setString(1, String.valueOf(tblTransaksi.getModel().getValueAt(i, 0)));
+                }
 
                 pstatement.executeUpdate();
                 System.out.println("Record insert.");
@@ -680,6 +685,7 @@ public class FrmMain extends javax.swing.JFrame {
 
     private void btnTransactionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTransactionActionPerformed
         // TODO add your handling code here:
+
         executeSave();
     }//GEN-LAST:event_btnTransactionActionPerformed
 
@@ -799,9 +805,8 @@ public class FrmMain extends javax.swing.JFrame {
                     Integer.parseInt(txtIdBuku.getText()),
                     tanggalpinjam1, tanggalpengembalian1);
 
-            getLastValueOfTransaksi();
             loadAllDatabase();
-
+            getLastValueOfTransaksi();
         } catch (ParseException ex) {
             Logger.getLogger(FrmMain.class.getName()).log(Level.SEVERE, null, ex);
         }

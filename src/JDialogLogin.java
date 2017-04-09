@@ -76,11 +76,11 @@ public class JDialogLogin extends javax.swing.JDialog {
                 txtPasswordActionPerformed(evt);
             }
         });
-        getContentPane().add(txtPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 270, 440, -1));
+        getContentPane().add(txtPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 280, 270, 25));
 
         txtUsername.setToolTipText("");
         txtUsername.setName("Username"); // NOI18N
-        getContentPane().add(txtUsername, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 210, 440, -1));
+        getContentPane().add(txtUsername, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 220, 270, 25));
 
         btnRegister.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnRegister.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/registerbtnlogin.jpg"))); // NOI18N
@@ -89,7 +89,7 @@ public class JDialogLogin extends javax.swing.JDialog {
                 btnRegisterActionPerformed(evt);
             }
         });
-        getContentPane().add(btnRegister, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 310, 100, 30));
+        getContentPane().add(btnRegister, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 330, 100, 30));
 
         btnLogIn.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnLogIn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/Loginbtn.jpg"))); // NOI18N
@@ -98,7 +98,7 @@ public class JDialogLogin extends javax.swing.JDialog {
                 btnLogInActionPerformed(evt);
             }
         });
-        getContentPane().add(btnLogIn, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 310, 100, 30));
+        getContentPane().add(btnLogIn, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 330, 100, 30));
 
         lblPict.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/login baru.jpg"))); // NOI18N
         getContentPane().add(lblPict, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -3, 880, 470));
@@ -156,7 +156,6 @@ public class JDialogLogin extends javax.swing.JDialog {
             PreparedStatement pstatement = conn.prepareStatement(sql);
             pstatement.setString(1, txtUsername.getText());
             pstatement.setString(2, txtPassword.getText());
-//            pstatement.setBoolean(3, active);
 
             ResultSet rs = pstatement.executeQuery();
             if (rs.next()) {
@@ -167,7 +166,7 @@ public class JDialogLogin extends javax.swing.JDialog {
                     txtPassword.setText("");
                     dispose();
                 } else {
-                    util.Sutil.mse(this, "Account not active anymore!");
+                    util.Sutil.mse(this, "Account not active !");
                 }
 
             } else {
