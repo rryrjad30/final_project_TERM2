@@ -76,7 +76,6 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
 
     private void loadAllDatabase() {
         removeTableData();
-        createIdNama();
         try {
             String sql = "SELECT idnama,nama, jeniskelamin,tempatlahir,"
                     + "date_format(tanggallahir, '%d-%m-%Y') as tanggallahir,"
@@ -126,12 +125,8 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
                 pstatement.setString(2, gender);
                 pstatement.setString(3, tempatlahir);
 
-                SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-                String tanggallahir1 = sdf.format(tanggallahir);
-
-                Date tanggallahir2 = sdf.parse(tanggallahir1);
-                java.sql.Date sqlDate = new java.sql.Date(tanggallahir2.getTime());
-                pstatement.setDate(4, sqlDate);
+                java.sql.Date sqlDateTanggalLahir = new java.sql.Date(tanggallahir.getTime());
+                pstatement.setDate(4, sqlDateTanggalLahir);
 
                 pstatement.setString(5, nohp);
                 pstatement.setString(6, alamat);
@@ -154,17 +149,14 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
             if (conn != null) {
                 System.out.println("Connected to DB!\n");
 
-                SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-                String tanggallahir1 = sdf.format(tanggallahir);
-
-                Date tanggallahir2 = sdf.parse(tanggallahir1);
-                java.sql.Date sqlDate = new java.sql.Date(tanggallahir2.getTime());
+                
+                java.sql.Date sqlDateTanggalLahir = new java.sql.Date(tanggallahir.getTime());
 
                 String sql = "UPDATE `datapenyewa` set "
                         + "nama = '" + nama + "' , "
                         + "jeniskelamin = '" + gender + "' , "
                         + "tempatlahir = '" + tempatlahir + "' , "
-                        + "tanggallahir = '" + sqlDate + "' , "
+                        + "tanggallahir = '" + sqlDateTanggalLahir + "' , "
                         + "nohp = '" + nohp + "' , "
                         + "alamat = '" + alamat + "' ,"
                         + "jenispenyewa = '" + jenispenyewa + "' "
@@ -179,8 +171,6 @@ public class FrmDataPenyewa extends javax.swing.JFrame {
             }
         } catch (SQLException ex) {
             System.out.println(ex);
-        } catch (ParseException ex) {
-            Logger.getLogger(FrmDataPenyewa.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

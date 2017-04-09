@@ -193,19 +193,12 @@ public class FrmMain extends javax.swing.JFrame {
                 pstatement.setString(1, username);
                 pstatement.setInt(2, idnama);
                 pstatement.setInt(3, idbuku);
+                
+                java.sql.Date sqlDatePinjam = new java.sql.Date(tanggalpinjam.getTime());
+                java.sql.Date sqlDatePengembalian = new java.sql.Date(tanggalpengembalian.getTime());
 
-                SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-                String tanggalpinjam1 = sdf.format(tanggalpinjam);
-                String tanggalpengembalian1 = sdf.format(tanggalpengembalian);
-
-                Date tanggalpinjam2 = sdf.parse(tanggalpinjam1);
-                Date tanggalpengembalian2 = sdf.parse(tanggalpengembalian1);
-
-                java.sql.Date sqlDate = new java.sql.Date(tanggalpinjam2.getTime());
-                java.sql.Date sqlDate1 = new java.sql.Date(tanggalpengembalian2.getTime());
-
-                pstatement.setDate(4, sqlDate);
-                pstatement.setDate(5, sqlDate1);
+                pstatement.setDate(4, sqlDatePinjam);
+                pstatement.setDate(5, sqlDatePengembalian);
 
                 pstatement.executeUpdate();
                 System.out.println("Record insert.");

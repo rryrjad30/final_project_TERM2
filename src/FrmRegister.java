@@ -149,16 +149,16 @@ public class FrmRegister extends javax.swing.JFrame {
                 btnRegisterActionPerformed(evt);
             }
         });
-        getContentPane().add(btnRegister, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 390, 100, 30));
-        getContentPane().add(txtPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 340, 490, -1));
-        getContentPane().add(txtConfirmPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 270, 490, -1));
-        getContentPane().add(txtUsername, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 200, 490, -1));
+        getContentPane().add(btnRegister, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 380, 100, 30));
+        getContentPane().add(txtPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 340, 270, 25));
+        getContentPane().add(txtConfirmPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 270, 270, 25));
+        getContentPane().add(txtUsername, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 200, 270, 25));
 
         chkActive.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
         chkActive.setContentAreaFilled(false);
         chkActive.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         chkActive.setRequestFocusEnabled(false);
-        getContentPane().add(chkActive, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 360, 70, 70));
+        getContentPane().add(chkActive, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 380, 20, 25));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/register.jpg"))); // NOI18N
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 850, 620));
